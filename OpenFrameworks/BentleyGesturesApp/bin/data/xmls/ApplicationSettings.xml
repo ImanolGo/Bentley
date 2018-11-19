@@ -3,7 +3,7 @@
 
   <of_settings>
 
-      <window title="Bentley Gestures App" x="0" y="0" width="960" height="600" fullscreen="0" showCursor="1"/>
+      <window title="Bentley Gestures App" x="0" y="0" width="1280" height="720" fullscreen="0" showCursor="1"/>
       <debug showCursor="1" setVerbose="0" logToFile = "0"/>
       <network ip="127.0.0.1"  portOscSend="7890" portOscReceive="5678" dmxPort = "0"/>
 
