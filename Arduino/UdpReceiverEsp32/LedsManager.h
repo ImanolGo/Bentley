@@ -16,7 +16,7 @@
 #define COLOR_ORDER GRB
 #define NUM_CHANNELS 1
 #define NUM_LEDS 100
-#define MAX_BRIGHTNESS 100
+#define MAX_BRIGHTNESS 40
 #define TEST_DELAY 500
 #define DATA_PIN    5
 #define FPS_CHECK_TIME_MS 2000
@@ -53,23 +53,23 @@ class LedsManager{
     
     uint16_t scale;
     uint32_t speed;
-    uint8_t maxChanges;
-
+   
     CRGB leds[NUM_LEDS];
     
 };
 
 LedsManager::LedsManager()
 {
-    this->scale = 500;
-    this->speed = 8;
-    this->maxChanges = 24; 
+    this->scale = 2000;
+    this->speed = 30;
+   
 }
 
 void LedsManager::setup()
 {
     Serial.println("LedsManager::setup");
     this->setupLeds(); 
+    //this->setupLeds(); 
     this->setupColorPalettes();
 }
 
@@ -89,12 +89,8 @@ void LedsManager::setupLeds()
 
 void LedsManager::setupColorPalettes()
 {
-  this->currentPalette = CRGBPalette16(
-                                   CRGB::Black, CRGB::Black, CRGB::Black, CHSV(0, 255,4),
-                                   CHSV(0, 255, 8), CRGB::Red, CRGB::Red, CRGB::Red,                                   
-                                   CRGB::DarkOrange,CRGB::Orange, CRGB::Orange, CRGB::Orange,
-                                   CRGB::Yellow, CRGB::Yellow, CRGB::Gray, CRGB::Gray);
-
+  CRGB color =  CRGB::White;
+  this->setColorPalette(color);
   this->targetPalette = this->currentPalette;
 }
 
@@ -178,8 +174,8 @@ void LedsManager::noise16()
        uint16_t shift_y = millis() / 100;                        // the y position becomes slowly incremented
     
 
-       uint16_t real_x = (i + shift_x)*scale;                    // the x position of the noise field swings @ 17 bpm
-       uint16_t real_y = (i + shift_y)*scale;                    // the y position becomes slowly incremented
+       uint16_t real_x = i*scale;                    // the x position of the noise field swings @ 17 bpm
+       uint16_t real_y = 1;                    // the y position becomes slowly incremented
     
       uint8_t noise = inoise16(real_x, real_y, real_z)>>8;   // get the noise data and scale it down
       uint8_t bri = noise;                           // map LED color based on noise data
