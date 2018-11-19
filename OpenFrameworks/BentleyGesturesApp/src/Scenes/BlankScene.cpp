@@ -1,14 +1,14 @@
 /*
  *  BlankScene.cpp
- *  AmazonOfficeApp
+ *  Bentley Gestures App
  *
- *  Created by Imanol Gomez on 30/03/18.
+ *  Created by Imanol Gomez on 19/11/18.
  *
  */
 
 
 #include "BlankScene.h"
-#include "RectangleVisual.h"
+
 
 BlankScene::BlankScene(): ofxScene("Blank"){}
 

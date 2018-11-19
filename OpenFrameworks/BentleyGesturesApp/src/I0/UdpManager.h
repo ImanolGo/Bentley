@@ -55,6 +55,8 @@ public:
     
     void setLedsPerChannel(int& value) {m_ledsPerChannel=value;}
     
+    void sendColor(ofColor & color);
+    
     
 private:
     

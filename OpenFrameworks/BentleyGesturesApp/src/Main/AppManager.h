@@ -73,6 +73,8 @@ public:
     
     SceneManager&  getSceneManager() { return m_sceneManager; }
     
+    DmxManager&  getDmxManager() { return m_dmxManager; }
+    
     //==========================================================================
     
     void toggleDebugMode();
@@ -118,6 +120,7 @@ private:
     LeapMotionManager            m_leapMotionManager;            ///< Manages the leap motion and gestures
     SceneManager             m_sceneManager;             ///< Manages all the scenes
     UdpManager               m_udpManager;                ///< Manages the udp communications
+    DmxManager               m_dmxManager;                ///< Manages the dmx communications
    
    
     

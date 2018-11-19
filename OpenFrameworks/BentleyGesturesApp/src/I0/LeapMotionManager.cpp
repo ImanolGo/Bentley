@@ -89,18 +89,22 @@ void LeapMotionManager::processGesture()
     
         case 3:
             ofLogNotice() <<"LeapMotionManager::processGesture-> Swipe Right" ;
+            AppManager::getInstance().getSceneManager().changeScene("Cocoon");
             break;
             
         case 4:
             ofLogNotice() <<"LeapMotionManager::processGesture-> Swipe Left" ;
+            AppManager::getInstance().getSceneManager().changeScene("Enhance");
             break;
             
         case 5:
             ofLogNotice() <<"LeapMotionManager::processGesture-> Swipe Down" ;
+            AppManager::getInstance().getSceneManager().changeScene("Capture");
             break;
             
         case 6:
             ofLogNotice() <<"LeapMotionManager::processGesture-> Swipe Up" ;
+            AppManager::getInstance().getSceneManager().changeScene("Re-live");
             break;
             
         case 7:

@@ -43,24 +43,23 @@ class ColorManager: public Manager
         //! Draw the Color Manager
         void draw();
     
-        void setColor(ofColor& color, int index);
+        void setColor(ofColor& color);
     
-        ofColor getColor(int index);
+        ofColor getColor() {return m_currentColor;}
     
     private:
+    
+        void updateColor();
     
         void setupColors();
     
-        void drawColor();
-    
-        void drawPalette();
-    
-    
     private:
     
-        typedef  vector< ofColor> ColorPalette;  ///< defines a vector of ofColors
+    ofColor m_targetColor;
+    ofColor m_previousColor;
     
-        ColorPalette            m_colorPalette;
+    ofColor m_currentColor;
+    float m_alpha;
  
 };
 

@@ -16,9 +16,8 @@
 #include "AppManager.h"
 
 
-const int ColorManager::NUM_COLORS = 5;
 
-ColorManager::ColorManager(): Manager()
+ColorManager::ColorManager(): Manager(), m_alpha(1.0)
 {
 	//Intentionally left empty
 }
@@ -45,75 +44,48 @@ void ColorManager::setup()
 
 void ColorManager::setupColors()
 {
-    for(int i=0; i<NUM_COLORS; i++ )
-    {
-        m_colorPalette.push_back(ofColor::black);
-    }
+    m_currentColor = ofColor(0);
+    m_previousColor = ofColor(0);
+    m_targetColor = ofColor(0);
 }
 
 
 void ColorManager::update()
 {
-    //To Implement
+    this->updateColor();
 }
+
+void ColorManager::updateColor()
+{
+    if(m_alpha <=1.0){
+        m_alpha = m_alpha + ofGetLastFrameTime();
+        m_currentColor = m_previousColor.getLerped(m_targetColor, m_alpha);
+        //AppManager::getInstance().getDmxManager().onSetDmxLightColor(m_currentColor);
+        AppManager::getInstance().getUdpManager().sendColor(m_currentColor);
+        
+        //SendColors
+    }
+
+}
+
 
 
 void ColorManager::draw()
 {
-    this->drawPalette();
+   ///Empty
 }
 
-void ColorManager::drawColor()
+
+void ColorManager::setColor(ofColor& color)
 {
-    string name = "Color";
-    auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
     
+    m_targetColor = color;
+    m_previousColor = m_currentColor;
+    m_alpha = 0.0;
     
-    ofPushStyle();
-        ofFill();
-        ofSetColor(m_colorPalette.front());
-        ofDrawRectangle(0,0, rect->getWidth(), rect->getHeight());
-    ofPopStyle();
-}
-
-void ColorManager::drawPalette()
-{
-    string name = "Color";
-    auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
-    
-    float width = rect->getWidth()/m_colorPalette.size();
-    float height = rect->getHeight();
-    
-    ofPushStyle();
-    ofFill();
-    for(int i=0; i<m_colorPalette.size(); i++)
-    {
-        ofSetColor(m_colorPalette[i]);
-        ofDrawRectangle(i*width,0, width,height);
-    }
-    
-     ofPopStyle();
+    ofLogNotice() <<"ColorManager::setColor -> r = " << int(m_targetColor.r) << ", g = " <<  int(m_targetColor.g) << ", b = " <<  int(m_targetColor.b);
     
 }
 
-
-void ColorManager::setColor(ofColor& color, int index)
-{
-    if(index>=0 && index<m_colorPalette.size()){
-        m_colorPalette[index] = color;
-        ofLogNotice() <<"ColorManager::selected color index: " << index;
-        ofLogNotice() <<"ColorManager::selected color: " << (int) m_colorPalette[index].r << ", " <<  (int)m_colorPalette[index].g << ", " <<  (int)m_colorPalette[index].b;
-        //AppManager::getInstance().getSerialManager().sendColors(m_colorPalette);
-    }
-}
-
-ofColor ColorManager::getColor(int index)
-{
-    if(index>0 && index<m_colorPalette.size()){
-        return m_colorPalette[index];
-    }
-    
-    return ofColor::black;
-}
 
 

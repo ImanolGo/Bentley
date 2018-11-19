@@ -1,8 +1,8 @@
 /*
  *  SceneManager.h
- *  AmazonOfficeApp
+ *  Bentley Gestures App
  *
- *  Created by Imanol Gomez on 30/03/18.
+ *  Created by Imanol Gomez on 19/11/18.
  *
  */
 

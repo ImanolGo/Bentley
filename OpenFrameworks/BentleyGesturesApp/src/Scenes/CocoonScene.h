@@ -1,5 +1,5 @@
 /*
- *  BlankScene.h
+ *  CocoonScene.h
  *  Bentley Gestures App
  *
  *  Created by Imanol Gomez on 19/11/18.
@@ -10,13 +10,14 @@
 
 
 #include "ofxScene.h"
+#include "TextVisual.h"
 
-class BlankScene : public ofxScene {
+class CocoonScene : public ofxScene {
 
 public:
 
     //! Constructor
-    BlankScene();
+    CocoonScene();
     
     //! Set up the scene
     void setup();
@@ -38,5 +39,18 @@ public:
 
     //! Called when exit
     void willExit();
+    
+private:
+    
+    void setupText();
+    
+    void setupColor();
+    
+    void drawText();
+    
+private:
+    
+    TextVisual m_text;
+    ofColor m_color;
 };
 

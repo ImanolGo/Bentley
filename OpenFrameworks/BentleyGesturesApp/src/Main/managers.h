@@ -22,3 +22,4 @@
 #include "LeapMotionManager.h"
 #include "UdpManager.h"
 #include "SceneManager.h"
+#include "DmxManager.h"

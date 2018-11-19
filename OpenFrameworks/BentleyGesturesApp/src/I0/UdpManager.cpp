@@ -250,6 +250,31 @@ void UdpManager::parseMessage(char * buffer, int size)
       
 }
 
+void UdpManager::sendColor(ofColor & color)
+{
+    if(!m_connected){
+        return;
+    }
+    
+    int ledsPerPixel = 3;
+    int size = 1;
+    int channel=0;
+    string message="";
+    message+= m_dataHeader.f1; message+= m_dataHeader.f2; message+= m_dataHeader.f3;
+    m_dataHeader.size = ledsPerPixel*size;
+    unsigned char * s = (unsigned char*)& m_dataHeader.size;
+    message+= s[1] ;  message+=  s[0];
+    message+=m_dataHeader.command;
+    message+=channel;
+
+    message+=color.r;
+    message+=color.g;
+    message+=color.b;
+
+    m_udpConnection.Send(message.c_str(),message.length());
+    
+}
+
 void UdpManager::timerCompleteHandler( int &args )
 {
     m_timer.start(false);

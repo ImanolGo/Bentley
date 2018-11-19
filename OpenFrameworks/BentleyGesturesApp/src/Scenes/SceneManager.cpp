@@ -1,10 +1,11 @@
 /*
  *  SceneManager.cpp
- *  AmazonOfficeApp
+ *  Bentley Gestures App
  *
- *  Created by Imanol Gomez on 30/03/18.
+ *  Created by Imanol Gomez on 19/11/18.
  *
  */
+
 #include "ofMain.h"
 
 
@@ -47,6 +48,23 @@ void SceneManager::createScenes()
 	//m_mySceneManager.setTransitionDissolve();
     
     ofPtr<ofxScene> scene;
+    
+    //Create Cocoon Scene
+    scene = ofPtr<ofxScene> (new CocoonScene());
+    m_mySceneManager.addScene(scene);
+    
+    //Create Relive Scene
+    scene = ofPtr<ofxScene> (new ReliveScene());
+    m_mySceneManager.addScene(scene);
+    
+    //Create Capture Scene
+    scene = ofPtr<ofxScene> (new CaptureScene());
+    m_mySceneManager.addScene(scene);
+    
+    //Create Enhance Scene
+    scene = ofPtr<ofxScene> (new EnhanceScene());
+    m_mySceneManager.addScene(scene);
+    
     
     //Create Blank Scene
     scene = ofPtr<ofxScene> (new BlankScene());

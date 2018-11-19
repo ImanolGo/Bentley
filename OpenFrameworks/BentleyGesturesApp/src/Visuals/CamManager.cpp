@@ -66,7 +66,13 @@ void CamManager::setupCamera()
         }
     }
     
-    m_vidGrabber.setDeviceID(0);
+    if(devices.size()>1){
+        m_vidGrabber.setDeviceID(1);
+    }
+    else{
+         m_vidGrabber.setDeviceID(0);
+    }
+   
     //m_vidGrabber.setDesiredFrameRate(60);
     m_vidGrabber.setup(m_camWidth, m_camHeight);
     m_vidGrabber.videoSettings();

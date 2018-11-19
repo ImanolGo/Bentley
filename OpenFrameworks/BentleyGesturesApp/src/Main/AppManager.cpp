@@ -86,6 +86,7 @@ void AppManager::setupManagers()
     m_colorManager.setup();
     m_camManager.setup();
     m_leapMotionManager.setup();
+    m_dmxManager.setup();
     m_udpManager.setup();
     m_keyboardManager.setup();
     m_sceneManager.setup();
@@ -104,6 +105,7 @@ void AppManager::update()
     m_camManager.update();
     m_colorManager.update();
     m_leapMotionManager.update();
+    m_dmxManager.update();
     m_udpManager.update();
     m_sceneManager.update();
     m_layoutManager.update();

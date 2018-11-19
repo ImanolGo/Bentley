@@ -23,6 +23,10 @@
 		083F5FAF21A305F80048CAF0 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083F5FA821A305F80048CAF0 /* imgui.cpp */; };
 		083F5FB021A305F80048CAF0 /* imgui_widgets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083F5FA921A305F80048CAF0 /* imgui_widgets.cpp */; };
 		083F5FB321A30AD60048CAF0 /* GuiTheme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083F5FB221A30AD60048CAF0 /* GuiTheme.cpp */; };
+		083F5FB721A32E8E0048CAF0 /* CocoonScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083F5FB521A32E8E0048CAF0 /* CocoonScene.cpp */; };
+		083F5FBA21A337B50048CAF0 /* EnhanceScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083F5FB821A337B50048CAF0 /* EnhanceScene.cpp */; };
+		083F5FBF21A338550048CAF0 /* ReliveScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083F5FBB21A338550048CAF0 /* ReliveScene.cpp */; };
+		083F5FC021A338550048CAF0 /* CaptureScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083F5FBC21A338550048CAF0 /* CaptureScene.cpp */; };
 		12451834526FB5CD4EA0D0DF /* ofxSceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B778D8F951EC700B066390 /* ofxSceneManager.cpp */; };
 		144EADA7E25307CB20927D7C /* LeapMotionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 865BC95D7F60301DDE962932 /* LeapMotionManager.cpp */; };
 		1965AB21858EECB4F8E6C951 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 2B342D03BD4BFF202775BFAC /* README.md */; };
@@ -129,6 +133,14 @@
 		083F5FAC21A305F80048CAF0 /* imstb_textedit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imstb_textedit.h; path = Addons/ofxImGui/libs/imgui/src/imstb_textedit.h; sourceTree = "<group>"; };
 		083F5FB121A30AC90048CAF0 /* LayoutManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LayoutManager.h; path = Layout/LayoutManager.h; sourceTree = "<group>"; };
 		083F5FB221A30AD60048CAF0 /* GuiTheme.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GuiTheme.cpp; path = Layout/GuiTheme.cpp; sourceTree = "<group>"; };
+		083F5FB521A32E8E0048CAF0 /* CocoonScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CocoonScene.cpp; path = Scenes/CocoonScene.cpp; sourceTree = "<group>"; };
+		083F5FB621A32E8E0048CAF0 /* CocoonScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CocoonScene.h; path = Scenes/CocoonScene.h; sourceTree = "<group>"; };
+		083F5FB821A337B50048CAF0 /* EnhanceScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EnhanceScene.cpp; path = Scenes/EnhanceScene.cpp; sourceTree = "<group>"; };
+		083F5FB921A337B50048CAF0 /* EnhanceScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnhanceScene.h; path = Scenes/EnhanceScene.h; sourceTree = "<group>"; };
+		083F5FBB21A338550048CAF0 /* ReliveScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ReliveScene.cpp; path = Scenes/ReliveScene.cpp; sourceTree = "<group>"; };
+		083F5FBC21A338550048CAF0 /* CaptureScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CaptureScene.cpp; path = Scenes/CaptureScene.cpp; sourceTree = "<group>"; };
+		083F5FBD21A338550048CAF0 /* CaptureScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CaptureScene.h; path = Scenes/CaptureScene.h; sourceTree = "<group>"; };
+		083F5FBE21A338550048CAF0 /* ReliveScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReliveScene.h; path = Scenes/ReliveScene.h; sourceTree = "<group>"; };
 		08ABF62AC22730155011D6C2 /* ebcdic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ebcdic.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/ebcdic.h; sourceTree = SOURCE_ROOT; };
 		09BB1D7613A1F9D8E8B11D7A /* KeyboardManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KeyboardManager.h; path = src/I0/KeyboardManager.h; sourceTree = SOURCE_ROOT; };
 		09BF88DE61DD538130187C8F /* ofxaddons_thumbnail.png */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = ofxaddons_thumbnail.png; path = src/Addons/ofxLeapMotion2/ofxaddons_thumbnail.png; sourceTree = SOURCE_ROOT; };
@@ -1012,6 +1024,14 @@
 			children = (
 				3C4EA15C90BCFE1FFC1245B1 /* BlankScene.cpp */,
 				94B476E65081D2D5CE6D1228 /* BlankScene.h */,
+				083F5FB821A337B50048CAF0 /* EnhanceScene.cpp */,
+				083F5FB921A337B50048CAF0 /* EnhanceScene.h */,
+				083F5FBC21A338550048CAF0 /* CaptureScene.cpp */,
+				083F5FBD21A338550048CAF0 /* CaptureScene.h */,
+				083F5FBB21A338550048CAF0 /* ReliveScene.cpp */,
+				083F5FBE21A338550048CAF0 /* ReliveScene.h */,
+				083F5FB521A32E8E0048CAF0 /* CocoonScene.cpp */,
+				083F5FB621A32E8E0048CAF0 /* CocoonScene.h */,
 				1A14124BF720E4CA8987CC24 /* SceneManager.cpp */,
 				76C4479895B14357D331E849 /* SceneManager.h */,
 				8C488F38001D542DA27140DF /* scenes.h */,
@@ -1484,6 +1504,7 @@
 				892F7E41B95E8A8D4D3A013D /* Leap.lib in Sources */,
 				687309921650B2AB71EEBB0D /* Leapd.dll in Sources */,
 				D24178250E63BB7E85560F69 /* Leapd.lib in Sources */,
+				083F5FBF21A338550048CAF0 /* ReliveScene.cpp in Sources */,
 				2292C6049BC5283FF8E619A6 /* msvcp120.dll in Sources */,
 				2FC4A23E98252B97D8A0D05F /* msvcp120d.dll in Sources */,
 				BBE0579A7FEAEAD748CA99DE /* msvcr120.dll in Sources */,
@@ -1508,9 +1529,11 @@
 				F7EA3801298F5E54967C119B /* ImageVisual3D.cpp in Sources */,
 				DEBDF1F781CA34214BEBD185 /* RectangleVisual.cpp in Sources */,
 				DB05E98D002D6650AA23E87B /* TextVisual.cpp in Sources */,
+				083F5FBA21A337B50048CAF0 /* EnhanceScene.cpp in Sources */,
 				E66F471FC218F559192473CB /* VideoVisual.cpp in Sources */,
 				083F5FA021A305DA0048CAF0 /* EngineGLFW.cpp in Sources */,
 				9D9E0E996DA1B9AC9952C889 /* ViewManager.cpp in Sources */,
+				083F5FB721A32E8E0048CAF0 /* CocoonScene.cpp in Sources */,
 				875651AF8693D3DE4CC23485 /* VisualEffects.cpp in Sources */,
 				B790DA4F42194210B9259E42 /* VisualEffectsManager.cpp in Sources */,
 				D06788355B16E38FA42D8E78 /* DmxManager.cpp in Sources */,
@@ -1525,6 +1548,7 @@
 				DA22DA3A4F2E611DF50078F2 /* main.cpp in Sources */,
 				58BCEB4034B30CB4A3456FC7 /* SettingsManager.cpp in Sources */,
 				083F5F9E21A305DA0048CAF0 /* Helpers.cpp in Sources */,
+				083F5FC021A338550048CAF0 /* CaptureScene.cpp in Sources */,
 				2BF29CBD5F6758C8B2152081 /* BlankScene.cpp in Sources */,
 				083F5FAF21A305F80048CAF0 /* imgui.cpp in Sources */,
 				8B8821FB4158456E8185A22B /* SceneManager.cpp in Sources */,

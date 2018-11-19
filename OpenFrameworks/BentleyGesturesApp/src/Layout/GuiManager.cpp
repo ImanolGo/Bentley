@@ -53,7 +53,7 @@ void GuiManager::setupGuiParameters()
 {
     
     m_gui.setup(new GuiTheme());
-    ofxImGui::Settings().windowPos  = ofVec2f(50,50);
+    ofxImGui::Settings().windowPos  = ofVec2f(500,500);
     ofxImGui::Settings().windowSize = ofVec2f(300,ofGetHeight());
     
     //ImGui::GetIO().MouseDrawCursor = false;
@@ -82,7 +82,7 @@ void GuiManager::setupGuiParameters()
 void GuiManager::update()
 {
     //m_gui.update();
-    m_gui.setTheme(new ofxImGui::DefaultTheme());
+    m_gui.setTheme(new GuiTheme());
 }
 
 
@@ -102,6 +102,8 @@ void GuiManager::drawGui()
     m_gui.begin();
     
         auto mainSettings = ofxImGui::Settings();
+        mainSettings.windowPos  = ofVec2f(0,0);
+        mainSettings.windowSize = ofVec2f(300,ofGetHeight());
         if (ofxImGui::BeginWindow("GUI", mainSettings, false))
         {
             ImGui::Text("%.1f FPS (%.3f ms/frame)", ofGetFrameRate(), 1000.0f / ImGui::GetIO().Framerate);
