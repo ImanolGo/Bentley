@@ -41,6 +41,10 @@ public:
     
     void draw();
     
+    void drawHands();
+    
+    void drawCamera();
+    
     
 private:
     
@@ -50,18 +54,25 @@ private:
     
     void updateGestures();
     
+    void updateHands();
+    
     void updateFbos();
     
     void processGesture();
     
-    void drawCameraFbo();
-    
+    void drawLeapHands();
     
 private:
     
     ofxLeapMotion   m_leap;
     ofFbo           m_cameraFbo;
+    ofFbo           m_handsFbo;
     int             m_currentGesture;
+    
+    vector <ofxLeapMotionSimpleHand> m_simpleHands;
+    
+    vector <int>                    m_fingersFound;
+    ofEasyCam                       m_cam;
     
 };
 

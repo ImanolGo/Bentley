@@ -31,6 +31,13 @@ enum ScreenMode{
     DRAW_SCENE
 };
 
+enum CameraMode{
+    WEBCAM = 0,
+    LEAPCAM,
+    HANDS
+};
+
+
 class LayoutManager: public Manager
 {
     
@@ -66,7 +73,9 @@ public:
     
     void end(string& name);
     
-    void toggleDrawMode(int mode) {m_drawMode = mode;}
+    void setDrawMode(int mode) {m_drawMode = mode;}
+    
+    void setCameraMode(int mode) {m_cameraMode = mode;}
     
     void toggleDrawMode();
     
@@ -138,6 +147,7 @@ private:
     FboMap              m_fbos;
     
     int                 m_drawMode;
+    int                 m_cameraMode;
 
 };
 

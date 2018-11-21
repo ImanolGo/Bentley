@@ -21,8 +21,8 @@
 const int LayoutManager::MARGIN = 2;
 const int LayoutManager::FRAME_MARGIN = 2;
 
-const string LayoutManager::LAYOUT_FONT =  "fonts/open-sans/OpenSans-Semibold.ttf";
-const string LayoutManager::LAYOUT_FONT_LIGHT =  "fonts/open-sans/OpenSans-Light.ttf";
+const string LayoutManager::LAYOUT_FONT =  "fonts/roboto/Roboto-Medium.ttf";
+const string LayoutManager::LAYOUT_FONT_LIGHT =  "fonts/roboto/Roboto-Light.ttf";
 
 LayoutManager::LayoutManager(): Manager(), m_drawMode(0)
 {
@@ -160,8 +160,16 @@ void LayoutManager::updateCameraFbo()
 {
     string name = "Camera";
     this->begin(name);
-    //AppManager::getInstance().getCamManager().draw();
-    AppManager::getInstance().getLeapMotionManager().draw();
+    
+    switch (m_cameraMode)
+    {
+        case WEBCAM:  AppManager::getInstance().getCamManager().draw(); break;
+        case DRAW_CAMERA: AppManager::getInstance().getLeapMotionManager().draw(); break;
+        case DRAW_SCENE:  AppManager::getInstance().getLeapMotionManager().drawHands(); break;
+        default: AppManager::getInstance().getCamManager().draw(); break;
+    }
+    
+    
     this->end(name);
 }
 

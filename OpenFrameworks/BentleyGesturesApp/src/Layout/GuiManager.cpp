@@ -42,6 +42,7 @@ void GuiManager::setup()
     
     
     this->setupGuiParameters();
+    this->setupCameraGui();
     this->loadGuiValues();
 
     
@@ -56,9 +57,11 @@ void GuiManager::setupGuiParameters()
     
     //specify a font to use
     ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->AddFontFromFileTTF(&ofToDataPath("fonts/open-sans/OpenSans-Semibold.ttf")[0], 20.f);
+    io.Fonts->AddFontFromFileTTF(&ofToDataPath("fonts/roboto/Roboto-Regular.ttf")[0], 18.f);
     
+    //ImGui::GetIO().FontGlobalScale = 1.0 / 2.0;
     
+    //finally setup the addon ofxImGui::Gui setup;
     m_gui.setup(new GuiTheme());
     ofxImGui::Settings().windowPos  = ofVec2f(500,500);
     ofxImGui::Settings().windowSize = ofVec2f(300,ofGetHeight());
@@ -67,12 +70,18 @@ void GuiManager::setupGuiParameters()
 
 
 
-
+void GuiManager::setupCameraGui()
+{
+    m_cameraGroup.setName("Camera");
+    m_cameraMode.set("Camera Mode", 0);
+    m_cameraGroup.add(m_cameraMode);
+}
 
 void GuiManager::update()
 {
     //m_gui.update();
     m_gui.setTheme(new GuiTheme());
+    AppManager::getInstance().getLayoutManager().setCameraMode(m_cameraMode);
 }
 
 
@@ -98,7 +107,16 @@ void GuiManager::drawGui()
         {
             ImGui::Text("%.1f FPS (%.3f ms/frame)", ofGetFrameRate(), 1000.0f / ImGui::GetIO().Framerate);
             
+            if (ofxImGui::BeginTree(m_cameraGroup, mainSettings))
+            {
+                static const std::vector<std::string> labels = { "WebCam", "LeapCam", "Hands" };
+                
+                ofxImGui::AddRadio(m_cameraMode, labels, 3);
+                ofxImGui::EndTree(mainSettings);
+            }
+            
         }
+    
         ofxImGui::EndWindow(mainSettings);
     m_gui.end();
     

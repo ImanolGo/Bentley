@@ -67,6 +67,8 @@ private:
     void drawRectangle();
     
     void drawGui();
+    
+    void setupCameraGui();
         
     
 private:
@@ -75,6 +77,9 @@ private:
         
     
     ofParameterGroup      m_parameters;
+    
+    ofParameterGroup m_cameraGroup;
+    ofParameter<int> m_cameraMode;
 
     
     bool        m_showGui;  //It defines the whether the gui should be shown or not
