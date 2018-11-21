@@ -83,6 +83,7 @@ public:
         reset();
         resetMapping();
         ourController = new Leap::Controller();
+    
     }
     
     void reset(){
@@ -111,6 +112,7 @@ public:
     void open(){
         reset();
         ourController->addListener(*this);
+        ourController->setPolicyFlags(Leap::Controller::POLICY_IMAGES);
     }
     
     // TODO: adding leap gesture support - JRW
@@ -235,6 +237,23 @@ public:
             }
         }
     }
+    
+    void getImage(ofImage& retImage, int index) {
+        Frame frame = ourController->frame();
+        
+        ImageList images = frame.images();
+        if(index >= 0 && index < images.count()) {
+            Image image = images[index];
+            
+            const unsigned char* image_buffer = image.data();
+            
+            //Draw the raw image data as a greyscale bitmap
+            //ofLogError() << image.width();
+            //ofLogError() <<  image.height();
+            retImage.setFromPixels(image_buffer, image.width(), image.height(), OF_IMAGE_GRAYSCALE);
+        }
+    }
+    
     
     //--------------------------------------------------------------
     virtual void onInit(const Controller& controller){

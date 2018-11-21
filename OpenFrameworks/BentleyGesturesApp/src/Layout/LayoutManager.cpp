@@ -160,7 +160,8 @@ void LayoutManager::updateCameraFbo()
 {
     string name = "Camera";
     this->begin(name);
-    AppManager::getInstance().getCamManager().draw();
+    //AppManager::getInstance().getCamManager().draw();
+    AppManager::getInstance().getLeapMotionManager().draw();
     this->end(name);
 }
 

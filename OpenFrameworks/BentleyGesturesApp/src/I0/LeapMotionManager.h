@@ -39,19 +39,28 @@ public:
     //! updates the leap motion
     void update();
     
+    void draw();
+    
     
 private:
     
     void setupLeapMotion();
     
+    void setupFbos();
+    
     void updateGestures();
     
+    void updateFbos();
+    
     void processGesture();
-
+    
+    void drawCameraFbo();
+    
     
 private:
     
     ofxLeapMotion   m_leap;
+    ofFbo           m_cameraFbo;
     int             m_currentGesture;
     
 };

@@ -116,7 +116,7 @@ void CamManager::drawCamera()
         frame.height = frame.width/ratio;
     }
     
-    frame.x = rect->getWidth()*0.5 + frame.width*0.5;
+    frame.x = rect->getWidth()*0.5 - frame.width*0.5;
     frame.y = rect->getHeight()*0.5 - frame.height*0.5;
     
     //video.getWidth(),0,-video.getWidth(),video.getHeight()

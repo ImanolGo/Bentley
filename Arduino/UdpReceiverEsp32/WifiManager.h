@@ -86,8 +86,11 @@ WifiManager::WifiManager(LedsManager* ledsManager)
     this->ledsManager=ledsManager;
    
 
-    ssid = "Don't worry, be happy!";
-    pass = "whyistheskysohigh?";
+//    ssid = "Don't worry, be happy!";
+//    pass = "whyistheskysohigh?";
+
+    ssid = "TPH Operations";
+    pass = "TheFUTURE!Sno3";
 
 //    ssid     =  "TP-LINK_54E4";
 //    pass = "27155332";

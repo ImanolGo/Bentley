@@ -33,6 +33,7 @@ void LeapMotionManager::setup()
     Manager::setup();
     
     this->setupLeapMotion();
+    this->setupFbos();
     
     ofLogNotice() <<"LeapMotionManager::initialized" ;
 }
@@ -45,6 +46,27 @@ void LeapMotionManager::setupLeapMotion()
 }
 
 
+void LeapMotionManager::setupFbos()
+{
+    if(m_cameraFbo.isAllocated()){
+        return;
+    }
+    
+    ofImage imRight,imLeft;
+    m_leap.getImage(imRight,0);
+    m_leap.getImage(imLeft,1);
+    
+    if(!imRight.isAllocated() ||  !imLeft.isAllocated() ){
+        return;
+    }
+  
+    m_cameraFbo.allocate(imLeft.getWidth() + imRight.getWidth(), imLeft.getHeight(), GL_RGB);
+    m_cameraFbo.begin(); ofClear(0); m_cameraFbo.end();
+    
+    ofLogNotice() <<"LeapMotionManager::setupFbos: m_cameraFbo-> width = " <<  m_cameraFbo.getWidth() << ", height = " << m_cameraFbo.getHeight();
+}
+
+
 
 
 
@@ -53,6 +75,7 @@ void LeapMotionManager::update()
 {
     this->updateGestures();
     this->processGesture();
+    this->updateFbos();
 }
 
 
@@ -61,6 +84,61 @@ void LeapMotionManager::updateGestures()
     m_leap.updateGestures();  // check for gesture updates
     m_leap.markFrameAsOld();  //IMPORTANT! - tell ofxLeapMotion that the frame is no longer new.
 }
+
+void LeapMotionManager::updateFbos()
+{
+    if(!m_cameraFbo.isAllocated()){
+        this->setupFbos();
+    }
+    else{
+        ofImage imRight,imLeft;
+        m_leap.getImage(imRight,0);
+        m_leap.getImage(imLeft,1);
+        
+        m_cameraFbo.begin();
+            imLeft.draw(0, 0);
+            imRight.draw(imLeft.getWidth(), 0);
+        m_cameraFbo.end();
+    }
+   
+}
+
+
+void LeapMotionManager::draw()
+{
+    this->drawCameraFbo();
+}
+
+void LeapMotionManager::drawCameraFbo()
+{
+    if(!m_cameraFbo.isAllocated()){
+        return;
+    }
+    
+    string name = "Camera";
+    ofRectangle frame;
+    auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
+    float ratio = m_cameraFbo.getWidth()/ m_cameraFbo.getHeight();
+    frame.height = rect->getHeight();
+    frame.width = frame.height*ratio;
+    
+    if( frame.width > rect->getWidth() ){
+        frame.width = rect->getWidth();
+        frame.height = frame.width/ratio;
+    }
+    
+    frame.x = rect->getWidth()*0.5 - frame.width*0.5;
+    frame.y = rect->getHeight()*0.5 - frame.height*0.5;
+    
+    //m_cameraFbo.draw(0,0, rect->getWidth(), rect->getHeight());
+    m_cameraFbo.draw(frame);
+    
+//    ofImage imRight,imLeft;
+//    m_leap.getImage(imRight,0);
+//    m_leap.getImage(imLeft,1);
+//    imRight.draw(0, 0, rect->getWidth(), rect->getHeight()) ;
+}
+
 
 void LeapMotionManager::processGesture()
 {
