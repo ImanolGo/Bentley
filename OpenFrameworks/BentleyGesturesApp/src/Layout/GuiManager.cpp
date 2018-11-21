@@ -51,28 +51,18 @@ void GuiManager::setup()
 
 void GuiManager::setupGuiParameters()
 {
+    //create an actual ImGui context before setting up the addon
+    ImGui::CreateContext();
+    
+    //specify a font to use
+    ImGuiIO& io = ImGui::GetIO();
+    io.Fonts->AddFontFromFileTTF(&ofToDataPath("fonts/open-sans/OpenSans-Semibold.ttf")[0], 20.f);
+    
     
     m_gui.setup(new GuiTheme());
     ofxImGui::Settings().windowPos  = ofVec2f(500,500);
     ofxImGui::Settings().windowSize = ofVec2f(300,ofGetHeight());
-    
-    //ImGui::GetIO().MouseDrawCursor = false;
-    
-//    //m_gui.setAssetPath( ofFilePath::getCurrentExeDir() + "/../Resources/data");
-//    m_gui.setAssetPath(ofToDataPath("fonts/"));
-//    //m_gui.setAssetPath("../Resources/data/fonts/");
-//    m_gui.setTheme(new GuiTheme());
-//
-//
-//   // int margin =  LayoutManager::MARGIN;
-//    m_gui.setAutoDraw(false);
-//    //auto pos = m_gui.getPosition();
-//    //m_gui.setPosition(pos.x + margin, pos.y + margin);
-//    m_gui.addHeader(GUI_SETTINGS_NAME, false);
-//
-//    m_gui.addFRM(0.1);
-//
-//    m_gui.addBreak();
+
 }
 
 
@@ -99,8 +89,8 @@ void GuiManager::draw()
 void GuiManager::drawGui()
 {
     ofEnableAlphaBlending();
+   
     m_gui.begin();
-    
         auto mainSettings = ofxImGui::Settings();
         mainSettings.windowPos  = ofVec2f(0,0);
         mainSettings.windowSize = ofVec2f(300,ofGetHeight());
