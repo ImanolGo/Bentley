@@ -24,3 +24,4 @@
 #include "LedsManager.h"
 #include "ModelManager.h"
 #include "ColorManager.h"
+#include "RealSenseManager.h"

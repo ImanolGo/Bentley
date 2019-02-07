@@ -120,7 +120,7 @@ void GuiManager::drawGui()
             
             if (ofxImGui::BeginTree(m_cameraGroup, mainSettings))
             {
-                static const std::vector<std::string> labels = { "WebCam", "LeapCam", "Hands" };
+                static const std::vector<std::string> labels = { "Depth", "IR", "Color" };
                 
                 ofxImGui::AddRadio(m_cameraMode, labels, 3);
                 ofxImGui::EndTree(mainSettings);

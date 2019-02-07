@@ -32,9 +32,9 @@ enum ScreenMode{
 };
 
 enum CameraMode{
-    WEBCAM = 0,
-    LEAPCAM,
-    HANDS
+    DEPTH = 0,
+    IR,
+    COLOR
 };
 
 
@@ -117,6 +117,8 @@ private:
     void updateSceneFbo();
     
     void updateLedsFbo();
+    
+    void updateLeapFbo();
     
     void drawFbos();
     

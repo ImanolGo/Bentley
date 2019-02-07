@@ -79,6 +79,9 @@ public:
     
     //! Returns the color manager
     ColorManager&  getColorManager() { return m_colorManager; }
+    
+    //! Returns the RealSense manager
+    RealSenseManager&  getRealSenseManager() { return m_realSenseManager; }
 
     
     //==========================================================================
@@ -127,6 +130,7 @@ private:
     SceneManager             m_sceneManager;             ///< Manages all the scenes
     UdpManager               m_udpManager;               ///< Manages the udp communications
     LedsManager              m_ledsManager;              ///< Manages the leds
+    RealSenseManager         m_realSenseManager;         ///< Manages the real sense camera
     
     ColorManager             m_colorManager;             ///< Manages the color palettes
     

@@ -245,7 +245,7 @@ void LeapMotionManager::drawCamera()
         return;
     }
     
-    string name = "Camera";
+    string name = "Leap";
     ofRectangle frame;
     auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
     float ratio = m_cameraFbo.getWidth()/ m_cameraFbo.getHeight();

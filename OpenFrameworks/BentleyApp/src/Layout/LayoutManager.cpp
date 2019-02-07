@@ -167,21 +167,31 @@ void LayoutManager::updateFbos()
     this->updateCameraFbo();
     this->updateSceneFbo();
     this->updateLedsFbo();
+    this->updateLeapFbo();
+}
+
+void LayoutManager::updateLeapFbo()
+{
+    string name = "Leap";
+    this->begin(name);
+    ofClear(0);
+        AppManager::getInstance().getLeapMotionManager().draw();
+    this->end(name);
 }
 
 void LayoutManager::updateCameraFbo()
 {
     string name = "Camera";
     this->begin(name);
+    ofClear(0);
     
     switch (m_cameraMode)
     {
-        case WEBCAM:  AppManager::getInstance().getCamManager().draw(); break;
-        case DRAW_CAMERA: AppManager::getInstance().getLeapMotionManager().draw(); break;
-        case DRAW_SCENE:  AppManager::getInstance().getLeapMotionManager().drawHands(); break;
-        default: AppManager::getInstance().getCamManager().draw(); break;
+        case DEPTH:  AppManager::getInstance().getRealSenseManager().drawDepth(); break;
+        case IR: AppManager::getInstance().getRealSenseManager().drawIR(); break;
+        case COLOR:  AppManager::getInstance().getRealSenseManager().drawColor(); break;
+        default: AppManager::getInstance().getRealSenseManager().draw(); break;
     }
-    
     
     this->end(name);
 }

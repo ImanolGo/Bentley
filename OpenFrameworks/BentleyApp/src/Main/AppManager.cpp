@@ -84,7 +84,8 @@ void AppManager::setupManagers()
     m_visualEffectsManager.setup();
     m_layoutManager.setup();
     m_colorManager.setup();
-    m_camManager.setup();
+    //m_camManager.setup();
+    m_realSenseManager.setup();
     m_leapMotionManager.setup();
     m_udpManager.setup();
     m_ledsManager.setup();
@@ -105,7 +106,8 @@ void AppManager::update()
     m_guiManager.update();
     m_visualEffectsManager.update();
     m_viewManager.update();
-    m_camManager.update();
+    //m_camManager.update();
+    m_realSenseManager.update();
     m_leapMotionManager.update();
     m_udpManager.update();
     m_colorManager.update();

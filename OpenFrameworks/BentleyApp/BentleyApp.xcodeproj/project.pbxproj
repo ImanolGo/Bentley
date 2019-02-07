@@ -21,6 +21,10 @@
 		08BCEE52220B518D00C6D074 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08BCEE45220B518D00C6D074 /* ofxBaseGui.cpp */; };
 		08BCEE55220C328E00C6D074 /* ColorManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08BCEE54220C328E00C6D074 /* ColorManager.cpp */; };
 		08BCEE57220C3EB200C6D074 /* libLeap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 640989FCC1BA2B85ACB28C55 /* libLeap.dylib */; };
+		08BCEE5D220CC68200C6D074 /* RealSenseManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08BCEE5B220CC68100C6D074 /* RealSenseManager.cpp */; };
+		08BCEE60220CCC3F00C6D074 /* librealsense2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 568DA125D89C04F4D0B25CA8 /* librealsense2.a */; };
+		08BCEE61220CCC5A00C6D074 /* libusb-1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DDB2D749B47687B45C8C28B /* libusb-1.0.a */; };
+		08BCEE62220CCC7C00C6D074 /* librealsense-file.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ACB2FD2331F4358E69DA1265 /* librealsense-file.a */; };
 		08C2F6947E69C234CCCBB2EE /* EngineGLFW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CC728D821F21EB13047258 /* EngineGLFW.cpp */; };
 		0DF7C91B4D457B46CCBF90C5 /* Helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D62EA0C49693193D1322AEC /* Helpers.cpp */; };
 		12451834526FB5CD4EA0D0DF /* ofxSceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3B778D8F951EC700B066390 /* ofxSceneManager.cpp */; };
@@ -100,7 +104,6 @@
 		E02150C4C5FB4EE374F3F12D /* CaptureScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 723FD287661467101E8E8654 /* CaptureScene.cpp */; };
 		E66D4AA699285C5235310587 /* Screenshot.png in Sources */ = {isa = PBXBuildFile; fileRef = 8B167F4D5FB5E74F79A5D3D9 /* Screenshot.png */; };
 		E66F471FC218F559192473CB /* VideoVisual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 478D509B2DE7CC0EC16A7E2A /* VideoVisual.cpp */; };
-		E9B2E14D79F1DA8C35AAA469 /* realsense2.lib in Sources */ = {isa = PBXBuildFile; fileRef = 5ABB15CA96D8B50A807E1D39 /* realsense2.lib */; };
 		EB2372CEF0C9D14317E0AC9F /* Led.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8817977EC402ECDACAF805F2 /* Led.cpp */; };
 		EF38AFCA0A32329E4AD294F1 /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = A8ADB297F7CC2187FA05FD60 /* readme.md */; };
 		F7EA3801298F5E54967C119B /* ImageVisual3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3DD6F074B2A9C65331157B2C /* ImageVisual3D.cpp */; };
@@ -152,6 +155,8 @@
 		08BCEE48220B518D00C6D074 /* ofxPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxPanel.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxGui/src/ofxPanel.h; sourceTree = "<group>"; };
 		08BCEE53220C328E00C6D074 /* ColorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorManager.h; path = Visuals/ColorManager.h; sourceTree = "<group>"; };
 		08BCEE54220C328E00C6D074 /* ColorManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorManager.cpp; path = Visuals/ColorManager.cpp; sourceTree = "<group>"; };
+		08BCEE5B220CC68100C6D074 /* RealSenseManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RealSenseManager.cpp; path = Visuals/RealSenseManager.cpp; sourceTree = "<group>"; };
+		08BCEE5C220CC68200C6D074 /* RealSenseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RealSenseManager.h; path = Visuals/RealSenseManager.h; sourceTree = "<group>"; };
 		0940234358464FB1AAA79D18 /* imstb_truetype.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = imstb_truetype.h; path = src/Addons/ofxImGui/libs/imgui/src/imstb_truetype.h; sourceTree = SOURCE_ROOT; };
 		09BB1D7613A1F9D8E8B11D7A /* KeyboardManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KeyboardManager.h; path = src/I0/KeyboardManager.h; sourceTree = SOURCE_ROOT; };
 		09BF88DE61DD538130187C8F /* ofxaddons_thumbnail.png */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = ofxaddons_thumbnail.png; path = src/Addons/ofxLeapMotion2/ofxaddons_thumbnail.png; sourceTree = SOURCE_ROOT; };
@@ -241,7 +246,6 @@
 		57B4E6ADE994C67B65181521 /* opensslconf_osx.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = opensslconf_osx.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/opensslconf_osx.h; sourceTree = SOURCE_ROOT; };
 		5885517F7CA4141C11CFC4F7 /* ofxEasing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxEasing.h; path = src/Addons/ofxEasing/src/ofxEasing.h; sourceTree = SOURCE_ROOT; };
 		58DF296F59A2F9FC0ED8A4D4 /* ofxUDPManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxUDPManager.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxNetwork/src/ofxUDPManager.h; sourceTree = SOURCE_ROOT; };
-		5ABB15CA96D8B50A807E1D39 /* realsense2.lib */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = realsense2.lib; path = src/Addons/ofxLibRealSense2/libs/librealsense2/lib/vs/x64/realsense2.lib; sourceTree = SOURCE_ROOT; };
 		5B0893F781F08F573B840048 /* opensslv.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = opensslv.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/opensslv.h; sourceTree = SOURCE_ROOT; };
 		5DDB2D749B47687B45C8C28B /* libusb-1.0.a */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = "libusb-1.0.a"; path = "src/Addons/ofxLibRealSense2/libs/libusb/lib/osx/libusb-1.0.a"; sourceTree = SOURCE_ROOT; };
 		5E9D2846D40707541CBB8F4D /* srtp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = srtp.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/srtp.h; sourceTree = SOURCE_ROOT; };
@@ -588,6 +592,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08BCEE62220CCC7C00C6D074 /* librealsense-file.a in Frameworks */,
+				08BCEE61220CCC5A00C6D074 /* libusb-1.0.a in Frameworks */,
+				08BCEE60220CCC3F00C6D074 /* librealsense2.a in Frameworks */,
 				08BCEE57220C3EB200C6D074 /* libLeap.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -895,14 +902,6 @@
 			name = imgui;
 			sourceTree = "<group>";
 		};
-		5C4A31A056AD9D204AE617C7 /* x64 */ = {
-			isa = PBXGroup;
-			children = (
-				5ABB15CA96D8B50A807E1D39 /* realsense2.lib */,
-			);
-			name = x64;
-			sourceTree = "<group>";
-		};
 		5C51B245B724B3480A2FBC1C /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -1043,7 +1042,6 @@
 			isa = PBXGroup;
 			children = (
 				84E9C017ABBE8C592047314A /* osx */,
-				F9B70DF16C967A4BB08ACEF0 /* vs */,
 			);
 			name = lib;
 			sourceTree = "<group>";
@@ -1282,6 +1280,8 @@
 		C02C33831C66F04FEBAE29DE /* Visuals */ = {
 			isa = PBXGroup;
 			children = (
+				08BCEE5B220CC68100C6D074 /* RealSenseManager.cpp */,
+				08BCEE5C220CC68200C6D074 /* RealSenseManager.h */,
 				08BCEE54220C328E00C6D074 /* ColorManager.cpp */,
 				08BCEE53220C328E00C6D074 /* ColorManager.h */,
 				4BDFC78B417C4E2FDD48BAC3 /* CamManager.cpp */,
@@ -1705,14 +1705,6 @@
 			name = ofxFastFboReader;
 			sourceTree = "<group>";
 		};
-		F9B70DF16C967A4BB08ACEF0 /* vs */ = {
-			isa = PBXGroup;
-			children = (
-				5C4A31A056AD9D204AE617C7 /* x64 */,
-			);
-			name = vs;
-			sourceTree = "<group>";
-		};
 		FC3E4746EA643C7C589494A0 /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -1859,7 +1851,6 @@
 				8D2ADFFB984113D7EE25406C /* realsense2.dll in Sources */,
 				9D2F205E49C279CB6A8C7584 /* librealsense-file.a in Sources */,
 				C3D0FE106FC32563B57F9DF2 /* librealsense2.a in Sources */,
-				E9B2E14D79F1DA8C35AAA469 /* realsense2.lib in Sources */,
 				9CB4A05F53BF6329752A8053 /* libusb-1.0.a in Sources */,
 				6E89254FEE03C28F60DD4D3C /* README.md in Sources */,
 				534A25D6A82E46B213BC2731 /* ofxLibRealSense2.cpp in Sources */,
@@ -1876,6 +1867,7 @@
 				C6B3BFC2668F137F745DC3C6 /* CameraAnimationsManager.cpp in Sources */,
 				8C9DFFBD826A20F752ED0CD6 /* CameraManager.cpp in Sources */,
 				DC16DA963E4E5873F0AE7C9E /* LightManager.cpp in Sources */,
+				08BCEE5D220CC68200C6D074 /* RealSenseManager.cpp in Sources */,
 				6F36C225B48477DFCCA6FB64 /* ResourceManager.cpp in Sources */,
 				3A6C7D72771284673CBE247D /* ImageVisual.cpp in Sources */,
 				F7EA3801298F5E54967C119B /* ImageVisual3D.cpp in Sources */,
@@ -2059,6 +2051,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/src/Addons/ofxLeapMotion2/libs/lib/osx",
+					"$(PROJECT_DIR)/src/Addons/ofxLibRealSense2/libs/librealsense2/lib/osx",
+					"$(PROJECT_DIR)/src/Addons/ofxLibRealSense2/libs/libusb/lib/osx",
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -2290,6 +2284,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/src/Addons/ofxLeapMotion2/libs/lib/osx",
+					"$(PROJECT_DIR)/src/Addons/ofxLibRealSense2/libs/librealsense2/lib/osx",
+					"$(PROJECT_DIR)/src/Addons/ofxLibRealSense2/libs/libusb/lib/osx",
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
@@ -2369,6 +2365,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/src/Addons/ofxLeapMotion2/libs/lib/osx",
+					"$(PROJECT_DIR)/src/Addons/ofxLibRealSense2/libs/librealsense2/lib/osx",
+					"$(PROJECT_DIR)/src/Addons/ofxLibRealSense2/libs/libusb/lib/osx",
 				);
 				OTHER_LDFLAGS = (
 					"$(OF_CORE_LIBS)",
