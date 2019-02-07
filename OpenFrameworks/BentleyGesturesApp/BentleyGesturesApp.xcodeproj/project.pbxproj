@@ -33,44 +33,35 @@
 		1AF15FCF93D2DDD6D4285C8E /* AppManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056FC61E30B9810903B814D /* AppManager.cpp */; };
 		20A0C8EB6B723606E4A0E1C9 /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = DFDFD76432A8D3A30D3628D3 /* readme.md */; };
 		2103A064E150C83390C6389A /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = C668B43B2D2B17E39C1AE628 /* README.md */; };
-		2292C6049BC5283FF8E619A6 /* msvcp120.dll in Sources */ = {isa = PBXBuildFile; fileRef = 1F22A47297B6DFF314F78898 /* msvcp120.dll */; };
 		2BF29CBD5F6758C8B2152081 /* BlankScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C4EA15C90BCFE1FFC1245B1 /* BlankScene.cpp */; };
-		2FC4A23E98252B97D8A0D05F /* msvcp120d.dll in Sources */ = {isa = PBXBuildFile; fileRef = 1B5CAC54A5B5388BDEB06FA3 /* msvcp120d.dll */; };
 		32239F08DF1090F25F72FD4C /* ofxaddons_thumbnail.png in Sources */ = {isa = PBXBuildFile; fileRef = 09BF88DE61DD538130187C8F /* ofxaddons_thumbnail.png */; };
 		3973CDAE42951D6870403712 /* ofxTCPServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E644E310FC3774D8C56FA22D /* ofxTCPServer.cpp */; };
 		3A6C7D72771284673CBE247D /* ImageVisual.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F661FE0411AA0AC01E34CB7 /* ImageVisual.cpp */; };
-		4306B3AAA7D4115A5CA664CC /* libLeap.so in Sources */ = {isa = PBXBuildFile; fileRef = 1088009B0BF6BA01C31D7DAB /* libLeap.so */; };
 		48F94177806B5CB8D3C0F283 /* CameraAnimations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A05F1DCF8180DEEC9FBAE585 /* CameraAnimations.cpp */; };
 		5152A5DBF51A461014A1F631 /* KeyboardManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3A260C79069FA7DEF9728CEC /* KeyboardManager.cpp */; };
 		57E88700F295A21AA461D751 /* ofxLeapMotion2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4DBC139BF76E90A674C0977 /* ofxLeapMotion2.cpp */; };
 		58BCEB4034B30CB4A3456FC7 /* SettingsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73D7AA4CF4895FC3DEEC2978 /* SettingsManager.cpp */; };
 		5D33A9513B2A4C6DBD3188C7 /* GuiManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4907E8B0250B798D3E6F09A1 /* GuiManager.cpp */; };
 		60559E276513B524F97DFBED /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EF9E076AAA82CA1FE5FCDEFB /* ofxTCPClient.cpp */; };
-		687309921650B2AB71EEBB0D /* Leapd.dll in Sources */ = {isa = PBXBuildFile; fileRef = 6CDB88B5AEF958678B030ADC /* Leapd.dll */; };
-		688D02AB6BB26342A1B9362A /* Leap.dll in Sources */ = {isa = PBXBuildFile; fileRef = 3DCA97D81F1E58BD9A46BC7D /* Leap.dll */; };
 		6F36C225B48477DFCCA6FB64 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5FA64D51DA6D1619944A259C /* ResourceManager.cpp */; };
 		875651AF8693D3DE4CC23485 /* VisualEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCB9CB9C1093718FA5F131FA /* VisualEffects.cpp */; };
-		892F7E41B95E8A8D4D3A013D /* Leap.lib in Sources */ = {isa = PBXBuildFile; fileRef = E37FCF39AD9067CCD6211AF3 /* Leap.lib */; };
 		8A28D6F85BD674B3A81C0468 /* CamManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BDFC78B417C4E2FDD48BAC3 /* CamManager.cpp */; };
 		8B8821FB4158456E8185A22B /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A14124BF720E4CA8987CC24 /* SceneManager.cpp */; };
 		8C9DFFBD826A20F752ED0CD6 /* CameraManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89DFBB918E3BCAFB0C93CAF3 /* CameraManager.cpp */; };
 		8CF0269A51B53AF174235BF6 /* ofxSimpleTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B12110942BA191806A2DDE7B /* ofxSimpleTimer.cpp */; };
 		92E6E40D1C91E0A1B6024AE6 /* BentleyGesturesApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 471BFE0CED55687ED1B8C312 /* BentleyGesturesApp.cpp */; };
 		93510377552D47B6620A7586 /* LayoutManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4229475864D5EBC7913C8351 /* LayoutManager.cpp */; };
-		986122918C84EC2417C277E3 /* msvcr120d.dll in Sources */ = {isa = PBXBuildFile; fileRef = 45420574A8E170CF8947385A /* msvcr120d.dll */; };
 		9998AEBE876ED8AE67E82587 /* license.md in Sources */ = {isa = PBXBuildFile; fileRef = EF5A805DE3B91078A0F6661A /* license.md */; };
 		9D9E0E996DA1B9AC9952C889 /* ViewManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FE37A31C904F445222B25FC /* ViewManager.cpp */; };
 		A75BBF064DC05F62EFEAC770 /* addon_config.mk in Sources */ = {isa = PBXBuildFile; fileRef = 1DF24C9132D38CF1BF8118DA /* addon_config.mk */; };
 		B2CE56CE3D8D2186D5DC5908 /* LICENSE in Sources */ = {isa = PBXBuildFile; fileRef = 8331702C73641DA1EFA00EDC /* LICENSE */; };
 		B55845AEA0868B24D708FABF /* UdpManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 241222999A71644B3F2A32DE /* UdpManager.cpp */; };
 		B790DA4F42194210B9259E42 /* VisualEffectsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDDA11B665FA62A298B7C39 /* VisualEffectsManager.cpp */; };
-		BBE0579A7FEAEAD748CA99DE /* msvcr120.dll in Sources */ = {isa = PBXBuildFile; fileRef = 24841A10F205EF88633E7A52 /* msvcr120.dll */; };
 		BBFACCBA10A36932A0ADE1FB /* ofxXmlPoco.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 749D7EA584FA8813F845560E /* ofxXmlPoco.cpp */; };
 		C6B3BFC2668F137F745DC3C6 /* CameraAnimationsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C01FEEAD29823C01C4EEC27 /* CameraAnimationsManager.cpp */; };
 		CC1783B83457FEEC0F1845EA /* ofxUDPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9B67943281BE78BF1988A9E1 /* ofxUDPManager.cpp */; };
 		CC29C4F54AB4C7B1940C9EC2 /* ofxTCPManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9AA4F7131D8F201E97981F8 /* ofxTCPManager.cpp */; };
 		D06788355B16E38FA42D8E78 /* DmxManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11A3091670607658B5A4605E /* DmxManager.cpp */; };
-		D24178250E63BB7E85560F69 /* Leapd.lib in Sources */ = {isa = PBXBuildFile; fileRef = B0CC5FEBA743E3C1E4460698 /* Leapd.lib */; };
 		D54D9EC97E4CFE0CDDC9AE7D /* ofxNetworkUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79BD947E4299AC2C326A0FA6 /* ofxNetworkUtils.cpp */; };
 		D91CDED9F2461315CCC691F0 /* ColorManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DC99CA5F1B41186B7E03855 /* ColorManager.cpp */; };
 		DA22DA3A4F2E611DF50078F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6E3F47F486843AA062205007 /* main.cpp */; };
@@ -150,7 +141,6 @@
 		0CE7DEA52CC245CE6C63277F /* rc2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rc2.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/rc2.h; sourceTree = SOURCE_ROOT; };
 		0CEF1C138D95DAE245324C14 /* e_os2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = e_os2.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/e_os2.h; sourceTree = SOURCE_ROOT; };
 		0F4CAABAE6B5BE20BB8F4DA7 /* conf_api.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = conf_api.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/conf_api.h; sourceTree = SOURCE_ROOT; };
-		1088009B0BF6BA01C31D7DAB /* libLeap.so */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = libLeap.so; path = src/Addons/ofxLeapMotion2/libs/lib/linux/libLeap.so; sourceTree = SOURCE_ROOT; };
 		11A3091670607658B5A4605E /* DmxManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DmxManager.cpp; path = src/I0/DmxManager.cpp; sourceTree = SOURCE_ROOT; };
 		11C490A0CA5771C60AE54B4B /* ImageVisual.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ImageVisual.h; path = src/Engine/Visuals/ImageVisual.h; sourceTree = SOURCE_ROOT; };
 		13BC6402152FADED828AE434 /* obj_mac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = obj_mac.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/obj_mac.h; sourceTree = SOURCE_ROOT; };
@@ -160,14 +150,11 @@
 		19B13BBA92D43EDB484883D8 /* asn1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = asn1.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/asn1.h; sourceTree = SOURCE_ROOT; };
 		1A14124BF720E4CA8987CC24 /* SceneManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SceneManager.cpp; path = src/Scenes/SceneManager.cpp; sourceTree = SOURCE_ROOT; };
 		1ABE42B3E5C413D77BCB76E4 /* LeapMath.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = LeapMath.h; path = src/Addons/ofxLeapMotion2/libs/include/LeapMath.h; sourceTree = SOURCE_ROOT; };
-		1B5CAC54A5B5388BDEB06FA3 /* msvcp120d.dll */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = msvcp120d.dll; path = src/Addons/ofxLeapMotion2/libs/lib/winvs/msvcp120d.dll; sourceTree = SOURCE_ROOT; };
 		1D7B4D07648F9CB293716166 /* ImageVisual3D.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ImageVisual3D.h; path = src/Engine/Visuals/ImageVisual3D.h; sourceTree = SOURCE_ROOT; };
 		1DC99CA5F1B41186B7E03855 /* ColorManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ColorManager.cpp; path = src/Visuals/ColorManager.cpp; sourceTree = SOURCE_ROOT; };
 		1DF24C9132D38CF1BF8118DA /* addon_config.mk */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = addon_config.mk; path = src/Addons/ofxLeapMotion2/addon_config.mk; sourceTree = SOURCE_ROOT; };
-		1F22A47297B6DFF314F78898 /* msvcp120.dll */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = msvcp120.dll; path = src/Addons/ofxLeapMotion2/libs/lib/winvs/msvcp120.dll; sourceTree = SOURCE_ROOT; };
 		20BE6805C50EA9D3906EBA99 /* asn1_mac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = asn1_mac.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/asn1_mac.h; sourceTree = SOURCE_ROOT; };
 		241222999A71644B3F2A32DE /* UdpManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = UdpManager.cpp; path = src/I0/UdpManager.cpp; sourceTree = SOURCE_ROOT; };
-		24841A10F205EF88633E7A52 /* msvcr120.dll */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = msvcr120.dll; path = src/Addons/ofxLeapMotion2/libs/lib/winvs/msvcr120.dll; sourceTree = SOURCE_ROOT; };
 		271FDDD4D304596D49C54548 /* ec.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ec.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/ec.h; sourceTree = SOURCE_ROOT; };
 		28C018E54F68DDBC30C85848 /* mdc2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = mdc2.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/mdc2.h; sourceTree = SOURCE_ROOT; };
 		2A2B7E7FDC1CFF4A547CC661 /* VisualEffects.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = VisualEffects.h; path = src/Engine/Visuals/VisualEffects.h; sourceTree = SOURCE_ROOT; };
@@ -184,10 +171,8 @@
 		3B418C1B3C1975E433751E06 /* opensslconf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = opensslconf.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/opensslconf.h; sourceTree = SOURCE_ROOT; };
 		3C01FEEAD29823C01C4EEC27 /* CameraAnimationsManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = CameraAnimationsManager.cpp; path = src/Engine/3D/CameraAnimationsManager.cpp; sourceTree = SOURCE_ROOT; };
 		3C4EA15C90BCFE1FFC1245B1 /* BlankScene.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BlankScene.cpp; path = src/Scenes/BlankScene.cpp; sourceTree = SOURCE_ROOT; };
-		3DCA97D81F1E58BD9A46BC7D /* Leap.dll */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = Leap.dll; path = src/Addons/ofxLeapMotion2/libs/lib/winvs/Leap.dll; sourceTree = SOURCE_ROOT; };
 		3DD6F074B2A9C65331157B2C /* ImageVisual3D.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImageVisual3D.cpp; path = src/Engine/Visuals/ImageVisual3D.cpp; sourceTree = SOURCE_ROOT; };
 		4229475864D5EBC7913C8351 /* LayoutManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = LayoutManager.cpp; path = src/Layout/LayoutManager.cpp; sourceTree = SOURCE_ROOT; };
-		45420574A8E170CF8947385A /* msvcr120d.dll */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = msvcr120d.dll; path = src/Addons/ofxLeapMotion2/libs/lib/winvs/msvcr120d.dll; sourceTree = SOURCE_ROOT; };
 		46FADFE3BED3D31A5385A87A /* ofxTCPServer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxTCPServer.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxNetwork/src/ofxTCPServer.h; sourceTree = SOURCE_ROOT; };
 		471BFE0CED55687ED1B8C312 /* BentleyGesturesApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BentleyGesturesApp.cpp; path = src/Main/BentleyGesturesApp.cpp; sourceTree = SOURCE_ROOT; };
 		478D509B2DE7CC0EC16A7E2A /* VideoVisual.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = VideoVisual.cpp; path = src/Engine/Visuals/VideoVisual.cpp; sourceTree = SOURCE_ROOT; };
@@ -220,7 +205,6 @@
 		68A02C9D01ED911C09E9874B /* ViewManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ViewManager.h; path = src/Engine/Visuals/ViewManager.h; sourceTree = SOURCE_ROOT; };
 		68A14178F8B40DBB6D6F3761 /* objects.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = objects.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/objects.h; sourceTree = SOURCE_ROOT; };
 		6A7072C1FCD277F4DCCB7C44 /* ossl_typ.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ossl_typ.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/ossl_typ.h; sourceTree = SOURCE_ROOT; };
-		6CDB88B5AEF958678B030ADC /* Leapd.dll */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = Leapd.dll; path = src/Addons/ofxLeapMotion2/libs/lib/winvs/Leapd.dll; sourceTree = SOURCE_ROOT; };
 		6D69C8E3D87AEE2D41C7B159 /* cmac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cmac.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/cmac.h; sourceTree = SOURCE_ROOT; };
 		6E3F47F486843AA062205007 /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = main.cpp; path = src/Main/main.cpp; sourceTree = SOURCE_ROOT; };
 		727A28EC656575D916A01807 /* ofxLeapMotion2.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxLeapMotion2.h; path = src/Addons/ofxLeapMotion2/src/ofxLeapMotion2.h; sourceTree = SOURCE_ROOT; };
@@ -261,7 +245,6 @@
 		A1D5946421775D3D0B019405 /* ripemd.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ripemd.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/ripemd.h; sourceTree = SOURCE_ROOT; };
 		A6B0A5F2B207429C96DFC3CC /* dtls1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = dtls1.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/dtls1.h; sourceTree = SOURCE_ROOT; };
 		A9AA4F7131D8F201E97981F8 /* ofxTCPManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxTCPManager.cpp; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxNetwork/src/ofxTCPManager.cpp; sourceTree = SOURCE_ROOT; };
-		B0CC5FEBA743E3C1E4460698 /* Leapd.lib */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = Leapd.lib; path = src/Addons/ofxLeapMotion2/libs/lib/winvs/Leapd.lib; sourceTree = SOURCE_ROOT; };
 		B12110942BA191806A2DDE7B /* ofxSimpleTimer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxSimpleTimer.cpp; path = src/Addons/ofxSimpleTimer/src/ofxSimpleTimer.cpp; sourceTree = SOURCE_ROOT; };
 		B28F1D26E9D67FC453749285 /* dh.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = dh.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/dh.h; sourceTree = SOURCE_ROOT; };
 		B3356F1B69F5C86AEFB4E907 /* asn1t.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = asn1t.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/asn1t.h; sourceTree = SOURCE_ROOT; };
@@ -299,7 +282,6 @@
 		DE2B0569E290CF7BFB3FF329 /* buffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = buffer.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/buffer.h; sourceTree = SOURCE_ROOT; };
 		DFDFD76432A8D3A30D3628D3 /* readme.md */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = readme.md; path = src/Addons/ofxDmx4All/readme.md; sourceTree = SOURCE_ROOT; };
 		E25E1CFED7CCABB2E08D2DBE /* kdf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = kdf.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/kdf.h; sourceTree = SOURCE_ROOT; };
-		E37FCF39AD9067CCD6211AF3 /* Leap.lib */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = Leap.lib; path = src/Addons/ofxLeapMotion2/libs/lib/winvs/Leap.lib; sourceTree = SOURCE_ROOT; };
 		E42962AC2163EDD300A6A9E2 /* ofCamera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ofCamera.cpp; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/libs/openFrameworks/3d/ofCamera.cpp; sourceTree = SOURCE_ROOT; };
 		E42962AD2163EDD300A6A9E2 /* ofMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofMesh.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/libs/openFrameworks/3d/ofMesh.h; sourceTree = SOURCE_ROOT; };
 		E42962AE2163EDD300A6A9E2 /* ofNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofNode.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/libs/openFrameworks/3d/ofNode.h; sourceTree = SOURCE_ROOT; };
@@ -512,14 +494,6 @@
 				0EFE45161A4E28BDE46D84D0 /* src */,
 			);
 			name = ofxPoco;
-			sourceTree = "<group>";
-		};
-		0184891E180F799222A53736 /* linux */ = {
-			isa = PBXGroup;
-			children = (
-				1088009B0BF6BA01C31D7DAB /* libLeap.so */,
-			);
-			name = linux;
 			sourceTree = "<group>";
 		};
 		04CF151D41A459F7CC77E110 /* src */ = {
@@ -895,9 +869,7 @@
 		9054E522592768E38FFB2F8B /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				0184891E180F799222A53736 /* linux */,
 				6612B3C42DF0BC7DAF3C6012 /* osx */,
-				A64A7B19515F580A34330237 /* winvs */,
 			);
 			name = lib;
 			sourceTree = "<group>";
@@ -925,21 +897,6 @@
 				F7D513F7C92E3C60F81B1A61 /* ResourceManager.h */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		A64A7B19515F580A34330237 /* winvs */ = {
-			isa = PBXGroup;
-			children = (
-				3DCA97D81F1E58BD9A46BC7D /* Leap.dll */,
-				E37FCF39AD9067CCD6211AF3 /* Leap.lib */,
-				6CDB88B5AEF958678B030ADC /* Leapd.dll */,
-				B0CC5FEBA743E3C1E4460698 /* Leapd.lib */,
-				1F22A47297B6DFF314F78898 /* msvcp120.dll */,
-				1B5CAC54A5B5388BDEB06FA3 /* msvcp120d.dll */,
-				24841A10F205EF88633E7A52 /* msvcr120.dll */,
-				45420574A8E170CF8947385A /* msvcr120d.dll */,
-			);
-			name = winvs;
 			sourceTree = "<group>";
 		};
 		AB7CA19E522801B3E16BBF86 /* ofxSceneManager */ = {
@@ -1497,18 +1454,9 @@
 				20A0C8EB6B723606E4A0E1C9 /* readme.md in Sources */,
 				EC1B347AB509D8B861EAACAB /* ofxDmx4All.cpp in Sources */,
 				A75BBF064DC05F62EFEAC770 /* addon_config.mk in Sources */,
-				4306B3AAA7D4115A5CA664CC /* libLeap.so in Sources */,
 				00FCCE344C80753CCC54E15B /* libLeap.dylib in Sources */,
 				083F5FAE21A305F80048CAF0 /* imgui_demo.cpp in Sources */,
-				688D02AB6BB26342A1B9362A /* Leap.dll in Sources */,
-				892F7E41B95E8A8D4D3A013D /* Leap.lib in Sources */,
-				687309921650B2AB71EEBB0D /* Leapd.dll in Sources */,
-				D24178250E63BB7E85560F69 /* Leapd.lib in Sources */,
 				083F5FBF21A338550048CAF0 /* ReliveScene.cpp in Sources */,
-				2292C6049BC5283FF8E619A6 /* msvcp120.dll in Sources */,
-				2FC4A23E98252B97D8A0D05F /* msvcp120d.dll in Sources */,
-				BBE0579A7FEAEAD748CA99DE /* msvcr120.dll in Sources */,
-				986122918C84EC2417C277E3 /* msvcr120d.dll in Sources */,
 				083F5F9A21A305DA0048CAF0 /* EngineVk.cpp in Sources */,
 				B2CE56CE3D8D2186D5DC5908 /* LICENSE in Sources */,
 				32239F08DF1090F25F72FD4C /* ofxaddons_thumbnail.png in Sources */,

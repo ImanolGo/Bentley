@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+
+  <of_settings>
+
+      <window title="Bentley Gestures App" x="0" y="0" width="1280" height="720" fullscreen="0" showCursor="1"/>
+      <debug showCursor="1" setVerbose="0" logToFile = "0"/>
+      <network ip="127.0.0.1"  portUdpSend="7000" portUdpReceive="7001" dmxPort = "0"/>
+
+  </of_settings>
+
+  <textures>
+
+    <texture name="Brush" path="images/general/brush.png"/>
+
+  </textures>
+
+  <colors>
+
+    <color name="BackgroundColor" r="40" g="40" b="43" a="255"/>
+    <color name="CenterBackgroundColor" r="85" g="78" b="68" a="255"/>
+    <color name="EdgeBackgroundColor" r="30" g="30" b="30" a="255"/>
+    <color  name="FrameRectangle" r="90" g="95" b="103" a="255"/>
+
+
+  </colors>
+
+</settings>
