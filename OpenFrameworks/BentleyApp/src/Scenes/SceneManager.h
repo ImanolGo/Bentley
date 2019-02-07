@@ -11,6 +11,7 @@
 #include "Manager.h"
 #include "ofxSceneManager.h"
 #include "ofxSimpleTimer.h"
+#include "ofxFastFboReader.h"
 
 
 //========================== class SceneManager ==============================
@@ -95,6 +96,9 @@ private:
     //! updates the fbo
     void updateFbo();
     
+    //! updates the fbo
+    void updatePixels();
+    
     void sendSceneChange();
 
 private:
@@ -103,6 +107,7 @@ private:
     ofFbo                    m_fbo;
     ofxSimpleTimer           m_sceneTimer;
     float                    m_alpha;
+    ofxFastFboReader         m_reader;
     
     vector<string>           m_sceneList;
     string                   m_currentSceneName;

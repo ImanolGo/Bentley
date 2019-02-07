@@ -71,6 +71,16 @@ void LayoutManager::setupFbos()
     fbo->begin(); ofClear(0);  fbo->end();
     m_fbos["Scene"] = fbo;
     
+    fbo = ofPtr<ofFbo>(new ofFbo());
+    fbo->allocate(width, height, GL_RGBA);
+    fbo->begin(); ofClear(0);  fbo->end();
+    m_fbos["Leds"] = fbo;
+    
+    fbo = ofPtr<ofFbo>(new ofFbo());
+    fbo->allocate(width, height, GL_RGBA);
+    fbo->begin(); ofClear(0);  fbo->end();
+    m_fbos["Leap"] = fbo;
+    
 }
 
 
@@ -100,24 +110,26 @@ void LayoutManager::resetWindowRects()
     float width = AppManager::getInstance().getSettingsManager().getAppWidth();
     float height  = AppManager::getInstance().getSettingsManager().getAppHeight();
     float ratio = width/ height;
-    float frame_width = ofGetWidth() - AppManager::getInstance().getGuiManager().getWidth() - 3*MARGIN;
+    float frame_width = ofGetWidth() - (AppManager::getInstance().getGuiManager().getWidth() +  AppManager::getInstance().getGuiManager().getPosition().x) - 3*MARGIN;
     float frame_height= ofGetWindowHeight();
     
     
-    int i = 0;
+    int n = 0;
     for (auto& rect : m_windowRects)
     {
-        rect.second->height = frame_height/m_windowRects.size() - 2*MARGIN;
-        rect.second->width = frame_width;
+        rect.second->height = frame_height/2 - 2*MARGIN;
+        rect.second->width = frame_width/2  - 2*MARGIN;
         
 //        if(rect.second->width > frame_width  - 3*MARGIN){
 //            rect.second->width = frame_width  - 3*MARGIN;
 //            rect.second->height = rect.second->width/ratio;
 //        }
         
-        rect.second->x = AppManager::getInstance().getGuiManager().getWidth()  + 2*MARGIN;
-        rect.second->y = i*rect.second->height + 2*i*MARGIN  + MARGIN;
-        i++;
+        int i = n%2;
+        int j = n/2;
+        rect.second->x = AppManager::getInstance().getGuiManager().getWidth()  + i*rect.second->width + 10*MARGIN;
+        rect.second->y = j*rect.second->height + 2*j*MARGIN  + MARGIN;
+        n++;
     }
 }
 
@@ -154,6 +166,7 @@ void LayoutManager::updateFbos()
 {
     this->updateCameraFbo();
     this->updateSceneFbo();
+    this->updateLedsFbo();
 }
 
 void LayoutManager::updateCameraFbo()
@@ -181,6 +194,16 @@ void LayoutManager::updateSceneFbo()
     this->begin(name);
     ofClear(0);
     AppManager::getInstance().getSceneManager().draw();
+    this->end(name);
+}
+
+void LayoutManager::updateLedsFbo()
+{
+ 
+    string name = "Leds";
+    this->begin(name);
+    ofClear(0);
+    AppManager::getInstance().getModelManager().draw();
     this->end(name);
 }
 

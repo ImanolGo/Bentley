@@ -116,6 +116,8 @@ private:
     
     void updateSceneFbo();
     
+    void updateLedsFbo();
+    
     void drawFbos();
     
     void drawRectangles();

@@ -35,7 +35,7 @@ void LedsManager::setup()
 
 	Manager::setup();
     
-    //this->createLedPositions();
+    this->createLedPositions();
     this->setupShader();
     
     ofLogNotice() <<"LedsManager::initialized" ;
@@ -78,10 +78,10 @@ void LedsManager::createLedPositions()
 {
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
-    int size = 40;
+    int size = 100;
     
     int id = 0;
-    for(int i = 0; i<size/4; i++){
+    for(int i = 0; i<3*size/4; i++){
         for(int j = 0; j<size; j++)
         {
             ofPoint pos (j,i) ;
@@ -96,6 +96,11 @@ void LedsManager::createLedPositions()
     m_is3D = this->getIs3D();
     this->normalizeLeds();
     this->centreLeds();
+    
+    int total = (int)m_points.size();
+    m_vbo.setVertexData(&m_points[0], total, GL_DYNAMIC_DRAW);
+    m_vbo.setNormalData(&m_sizes[0], total, GL_DYNAMIC_DRAW);
+    m_vbo.setColorData(&m_colors[0], m_points.size(), GL_DYNAMIC_DRAW);
     
 }
 
@@ -270,14 +275,14 @@ void LedsManager::createLed(const ofPoint& position, int& id)
 {
     //ofPtr<Led> led = ofPtr<Led> (new Led ( position, id ) );
     //float size = AppManager::getInstance().getGuiManager().getLedsSize();
-    float size = 10;
+    float size = 2;
 //    led->setWidth(size);
 //    m_leds.push_back(led);
     
 //    ofLogNotice() <<"LedsManager::createLed -> id " << led->getId() << ", x = "  << led->getPosition().x << ", y = "  << led->getPosition().y << ", z = " << led->getPosition().z ;
     
     m_points.push_back(position);
-    m_sizes.push_back(ofVec3f(10*size));
+    m_sizes.push_back(ofVec3f(size));
     m_colors.push_back(ofFloatColor(0,0,0));
     
 }

@@ -25,7 +25,7 @@ class GuiManager: public Manager
 {
     static const string GUI_SETTINGS_FILE_NAME;
     static const string GUI_SETTINGS_NAME;
-   // static const int GUI_WIDTH;
+    static const int GUI_WIDTH;
     
 public:
     
@@ -52,13 +52,13 @@ public:
     
     void showGui(bool show){m_showGui=show;}
     
-    int getWidth() {return ofxImGui::Settings().windowSize.x;}
+    int getWidth() {return GUI_WIDTH;}
     
     int getHeight() {return ofxImGui::Settings().windowSize.y;}
     
     ofPoint  getPosition() {return ofxImGui::Settings().windowPos;}
 
-
+     float getLedsSize() const {return m_ledsSize;}
     
 private:
     
@@ -69,6 +69,8 @@ private:
     void drawGui();
     
     void setupCameraGui();
+    
+    void setupLedsGui();
         
     
 private:
@@ -79,7 +81,9 @@ private:
     ofParameterGroup      m_parameters;
     
     ofParameterGroup m_cameraGroup;
+    ofParameterGroup m_ledsGroup;
     ofParameter<int> m_cameraMode;
+    ofParameter<float>      m_ledsSize;
 
     
     bool        m_showGui;  //It defines the whether the gui should be shown or not

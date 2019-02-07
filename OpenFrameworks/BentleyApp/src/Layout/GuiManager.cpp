@@ -17,7 +17,7 @@
 
 const string GuiManager::GUI_SETTINGS_FILE_NAME = "xmls/GuiSettings.xml";
 const string GuiManager::GUI_SETTINGS_NAME = "GUI";
-//const int GuiManager::GUI_WIDTH = 350;
+const int GuiManager::GUI_WIDTH = 340;
 
 
 GuiManager::GuiManager(): Manager(), m_showGui(true)
@@ -43,7 +43,9 @@ void GuiManager::setup()
     
     this->setupGuiParameters();
     this->setupCameraGui();
+    this->setupLedsGui();
     this->loadGuiValues();
+    //this->drawGui();
 
     
     ofLogNotice() <<"GuiManager::initialized";
@@ -63,18 +65,27 @@ void GuiManager::setupGuiParameters()
     
     //finally setup the addon ofxImGui::Gui setup;
     m_gui.setup(new GuiTheme());
-    ofxImGui::Settings().windowPos  = ofVec2f(500,500);
-    ofxImGui::Settings().windowSize = ofVec2f(300,ofGetHeight());
+    ofxImGui::Settings().windowPos  = ofVec2f(0,0);
+    ofxImGui::Settings().windowSize = ofVec2f(GUI_WIDTH,ofGetHeight());
 
 }
-
 
 
 void GuiManager::setupCameraGui()
 {
     m_cameraGroup.setName("Camera");
-    m_cameraMode.set("Camera Mode", 0);
+    m_cameraMode.set("Camera Mode", 1);
     m_cameraGroup.add(m_cameraMode);
+}
+
+void GuiManager::setupLedsGui()
+{
+    auto ledsManager = &AppManager::getInstance().getLedsManager();
+    
+    m_ledsGroup.setName("Leds");
+    m_ledsSize.set("Size", 1.0, 0.0, 5.0);
+    m_ledsSize.addListener(ledsManager, &LedsManager::setSize);
+    m_ledsGroup.add(m_ledsSize);
 }
 
 void GuiManager::update()
@@ -90,7 +101,7 @@ void GuiManager::draw()
     if(!m_showGui)
         return;
     
-    //this->drawRectangle();
+    this->drawRectangle();
     this->drawGui();
 }
 
@@ -101,8 +112,8 @@ void GuiManager::drawGui()
    
     m_gui.begin();
         auto mainSettings = ofxImGui::Settings();
-        mainSettings.windowPos  = ofVec2f(0,0);
-        mainSettings.windowSize = ofVec2f(300,ofGetHeight());
+        ofxImGui::Settings().windowPos  = ofVec2f(-LayoutManager::MARGIN,-LayoutManager::MARGIN);
+        ofxImGui::Settings().windowSize = ofVec2f(GUI_WIDTH,ofGetHeight());
         if (ofxImGui::BeginWindow("GUI", mainSettings, false))
         {
             ImGui::Text("%.1f FPS (%.3f ms/frame)", ofGetFrameRate(), 1000.0f / ImGui::GetIO().Framerate);
@@ -112,6 +123,12 @@ void GuiManager::drawGui()
                 static const std::vector<std::string> labels = { "WebCam", "LeapCam", "Hands" };
                 
                 ofxImGui::AddRadio(m_cameraMode, labels, 3);
+                ofxImGui::EndTree(mainSettings);
+            }
+            
+            if (ofxImGui::BeginTree(m_ledsGroup, mainSettings))
+            {
+                ofxImGui::AddParameter(m_ledsSize);
                 ofxImGui::EndTree(mainSettings);
             }
             
@@ -163,10 +180,9 @@ void GuiManager::toggleGui()
 
 void GuiManager::drawRectangle()
 {
-    int margin =  LayoutManager::MARGIN;
     ofPushStyle();
     ofSetColor(15);
-    ofDrawRectangle( this->getPosition().x - margin, 0, this->getWidth() + 2*margin, ofGetHeight());
+    ofDrawRectangle( 0, 0, this->getWidth(), ofGetHeight());
     ofPopStyle();
 }
 

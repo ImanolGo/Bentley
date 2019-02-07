@@ -118,6 +118,7 @@ void SceneManager::update()
 {
     this->updateScenes();
     this->updateFbo();
+    this->updatePixels();
     //this->updateTimer();
 }
 
@@ -132,6 +133,15 @@ void SceneManager::updateFbo()
         ofDisableAlphaBlending();
         ofPopStyle();
     m_fbo.end();
+}
+
+
+void SceneManager::updatePixels()
+{
+    ofPixels pixels;
+    m_reader.readToPixels(m_fbo, pixels);
+    //m_exportFbo.readToPixels(pixels);
+    AppManager::getInstance().getLedsManager().setPixels(pixels);
 }
 
 
