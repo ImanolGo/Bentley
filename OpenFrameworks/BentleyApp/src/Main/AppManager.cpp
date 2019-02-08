@@ -43,6 +43,7 @@ void AppManager::setup()
     
     this->setupOF();
 	this->setupManagers();
+    ofSetVerticalSync(false);
     
     m_initialized = true;
     
@@ -82,6 +83,8 @@ void AppManager::setupManagers()
     m_resourceManager.setup();
     m_viewManager.setup();
     m_visualEffectsManager.setup();
+   
+    
     m_layoutManager.setup();
     m_colorManager.setup();
     //m_camManager.setup();
@@ -93,7 +96,9 @@ void AppManager::setupManagers()
     m_keyboardManager.setup();
     m_sceneManager.setup();
     
-    m_guiManager.setup();
+     m_guiManager.setup();
+    
+    
     
     
 }

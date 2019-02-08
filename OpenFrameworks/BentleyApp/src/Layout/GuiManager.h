@@ -52,13 +52,13 @@ public:
     
     void showGui(bool show){m_showGui=show;}
     
-    int getWidth() {return GUI_WIDTH;}
+    int getWidth() {return m_width;}
     
-    int getHeight() {return ofxImGui::Settings().windowSize.y;}
+    int getHeight() {return m_height;}
     
-    ofPoint  getPosition() {return ofxImGui::Settings().windowPos;}
+    ofPoint  getPosition() {return m_position;}
 
-     float getLedsSize() const {return m_ledsSize;}
+    float getLedsSize() const {return m_ledsSize;}
     
 private:
     
@@ -82,9 +82,14 @@ private:
     
     ofParameterGroup m_cameraGroup;
     ofParameterGroup m_ledsGroup;
+    ofParameterGroup m_realSenseGroup;
+    
     ofParameter<int> m_cameraMode;
     ofParameter<float>      m_ledsSize;
-
+    
+    float m_width, m_height;
+    ofPoint   m_position;
+    
     
     bool        m_showGui;  //It defines the whether the gui should be shown or not
 };

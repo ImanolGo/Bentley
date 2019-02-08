@@ -47,6 +47,8 @@ public:
     void drawIR();
     
     void drawColor();
+    
+    ofxGuiGroup *getGui() {return m_realSense.getGui();}
 
     
 private:

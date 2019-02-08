@@ -45,6 +45,7 @@ void GuiManager::setup()
     this->setupCameraGui();
     this->setupLedsGui();
     this->loadGuiValues();
+    
     //this->drawGui();
 
     
@@ -59,7 +60,7 @@ void GuiManager::setupGuiParameters()
     
     //specify a font to use
     ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->AddFontFromFileTTF(&ofToDataPath("fonts/roboto/Roboto-Regular.ttf")[0], 18.f);
+    io.Fonts->AddFontFromFileTTF(&ofToDataPath("fonts/roboto/Roboto-Regular.ttf")[0], 16.f);
     
     //ImGui::GetIO().FontGlobalScale = 1.0 / 2.0;
     
@@ -67,6 +68,9 @@ void GuiManager::setupGuiParameters()
     m_gui.setup(new GuiTheme());
     ofxImGui::Settings().windowPos  = ofVec2f(0,0);
     ofxImGui::Settings().windowSize = ofVec2f(GUI_WIDTH,ofGetHeight());
+    
+    m_width = 0;
+    m_height = 0;
 
 }
 
@@ -76,6 +80,14 @@ void GuiManager::setupCameraGui()
     m_cameraGroup.setName("Camera");
     m_cameraMode.set("Camera Mode", 1);
     m_cameraGroup.add(m_cameraMode);
+    
+    ofxGuiGroup* group = AppManager::getInstance().getRealSenseManager().getGui();
+    m_cameraGroup.add(group->getIntSlider("IR Exposure").getParameter());
+    m_cameraGroup.add(group->getFloatSlider("Min Depth").getParameter());
+    m_cameraGroup.add(group->getFloatSlider("Max Depth").getParameter());
+    m_cameraGroup.add(group->getToggle("Auto exposure").getParameter());
+    m_cameraGroup.add(group->getToggle("Emitter").getParameter());
+
 }
 
 void GuiManager::setupLedsGui()
@@ -111,9 +123,9 @@ void GuiManager::drawGui()
     ofEnableAlphaBlending();
    
     m_gui.begin();
-        auto mainSettings = ofxImGui::Settings();
-        ofxImGui::Settings().windowPos  = ofVec2f(-LayoutManager::MARGIN,-LayoutManager::MARGIN);
-        ofxImGui::Settings().windowSize = ofVec2f(GUI_WIDTH,ofGetHeight());
+        auto mainSettings  = ofxImGui::Settings();
+        //ofxImGui::Settings().windowPos  = ofVec2f(-LayoutManager::MARGIN,-LayoutManager::MARGIN);
+       // ofxImGui::Settings().windowSize = ofVec2f(GUI_WIDTH,ofGetHeight());
         if (ofxImGui::BeginWindow("GUI", mainSettings, false))
         {
             ImGui::Text("%.1f FPS (%.3f ms/frame)", ofGetFrameRate(), 1000.0f / ImGui::GetIO().Framerate);
@@ -123,6 +135,11 @@ void GuiManager::drawGui()
                 static const std::vector<std::string> labels = { "Depth", "IR", "Color" };
                 
                 ofxImGui::AddRadio(m_cameraMode, labels, 3);
+                ofxImGui::AddParameter(m_cameraGroup.getInt("IR Exposure"));
+                ofxImGui::AddParameter(m_cameraGroup.getFloat("Min Depth"));
+                ofxImGui::AddParameter(m_cameraGroup.getFloat("Max Depth"));
+                ofxImGui::AddParameter(m_cameraGroup.getBool("Auto exposure"));
+                ofxImGui::AddParameter(m_cameraGroup.getBool("Emitter"));
                 ofxImGui::EndTree(mainSettings);
             }
             
@@ -138,6 +155,10 @@ void GuiManager::drawGui()
     m_gui.end();
     
     ofDisableAlphaBlending();
+    
+    m_width = mainSettings.windowSize.x;
+    m_height = mainSettings.windowSize.y;
+    m_position = ofPoint(mainSettings.windowPos.x, mainSettings.windowPos.y);
 }
 
 
