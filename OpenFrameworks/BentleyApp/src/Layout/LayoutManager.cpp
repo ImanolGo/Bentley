@@ -24,7 +24,7 @@ const int LayoutManager::FRAME_MARGIN = 2;
 const string LayoutManager::LAYOUT_FONT =  "fonts/roboto/Roboto-Medium.ttf";
 const string LayoutManager::LAYOUT_FONT_LIGHT =  "fonts/roboto/Roboto-Light.ttf";
 
-LayoutManager::LayoutManager(): Manager(), m_drawMode(0)
+LayoutManager::LayoutManager(): Manager(), m_drawMode(0), m_cameraMode(0), m_leapMode(0)
 {
 	//Intentionally left empty
 }
@@ -174,8 +174,14 @@ void LayoutManager::updateLeapFbo()
 {
     string name = "Leap";
     this->begin(name);
-    ofClear(0);
-        AppManager::getInstance().getLeapMotionManager().draw();
+    //ofClear(0);
+    switch (m_leapMode)
+    {
+        case CAMERA:  AppManager::getInstance().getLeapMotionManager().drawCamera(); break;
+        case HANDS: AppManager::getInstance().getLeapMotionManager().drawHands(); break;
+        default: AppManager::getInstance().getRealSenseManager().draw(); break;
+    }
+    
     this->end(name);
 }
 
@@ -299,6 +305,8 @@ void LayoutManager::draw()
         case DRAW_NORMAL:  this->drawNormal(); break;
         case DRAW_CAMERA:  this->drawCamera(); break;
         case DRAW_SCENE:  this->drawScene(); break;
+        case DRAW_LEAP:  this->drawLeap(); break;
+        case DRAW_LEDS:  this->drawLeds(); break;
         default: this->drawNormal(); break;
     }
    
@@ -313,6 +321,18 @@ void LayoutManager::drawScene()
 {
     m_fbos["Scene"]->draw(0,0, ofGetWidth(), ofGetHeight());
 }
+
+void LayoutManager::drawLeap()
+{
+    m_fbos["Leap"]->draw(0,0, ofGetWidth(), ofGetHeight());
+}
+
+
+void LayoutManager::drawLeds()
+{
+    m_fbos["Leds"]->draw(0,0, ofGetWidth(), ofGetHeight());
+}
+
 
 void LayoutManager::drawNormal()
 {

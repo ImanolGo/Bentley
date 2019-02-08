@@ -70,6 +70,10 @@ private:
     
     void setupCameraGui();
     
+    void setupModesGui();
+    
+    void setupLeapGui();
+    
     void setupLedsGui();
         
     
@@ -80,11 +84,15 @@ private:
     
     ofParameterGroup      m_parameters;
     
+    ofParameterGroup m_modeGroup;
     ofParameterGroup m_cameraGroup;
+    ofParameterGroup m_leapGroup;
     ofParameterGroup m_ledsGroup;
     ofParameterGroup m_realSenseGroup;
     
     ofParameter<int> m_cameraMode;
+    ofParameter<int> m_leapMode;
+    ofParameter<int> m_viewMode;
     ofParameter<float>      m_ledsSize;
     
     float m_width, m_height;

@@ -17,7 +17,7 @@
 
 const string GuiManager::GUI_SETTINGS_FILE_NAME = "xmls/GuiSettings.xml";
 const string GuiManager::GUI_SETTINGS_NAME = "GUI";
-const int GuiManager::GUI_WIDTH = 340;
+const int GuiManager::GUI_WIDTH = 300;
 
 
 GuiManager::GuiManager(): Manager(), m_showGui(true)
@@ -42,8 +42,10 @@ void GuiManager::setup()
     
     
     this->setupGuiParameters();
+    this->setupModesGui();
     this->setupCameraGui();
     this->setupLedsGui();
+    this->setupLeapGui();
     this->loadGuiValues();
     
     //this->drawGui();
@@ -75,6 +77,20 @@ void GuiManager::setupGuiParameters()
 }
 
 
+void GuiManager::setupModesGui()
+{
+    m_modeGroup.setName("View");
+    m_viewMode.set("View Mode", 0);
+    m_modeGroup.add(m_viewMode);
+}
+
+void GuiManager::setupLeapGui()
+{
+    m_leapGroup.setName("Leap");
+    m_leapMode.set("Leap Mode", 0);
+    m_leapGroup.add(m_leapMode);
+}
+
 void GuiManager::setupCameraGui()
 {
     m_cameraGroup.setName("Camera");
@@ -105,6 +121,8 @@ void GuiManager::update()
     //m_gui.update();
     m_gui.setTheme(new GuiTheme());
     AppManager::getInstance().getLayoutManager().setCameraMode(m_cameraMode);
+    AppManager::getInstance().getLayoutManager().setDrawMode(m_viewMode);
+    AppManager::getInstance().getLayoutManager().setLeapMode(m_leapMode);
 }
 
 
@@ -130,11 +148,19 @@ void GuiManager::drawGui()
         {
             ImGui::Text("%.1f FPS (%.3f ms/frame)", ofGetFrameRate(), 1000.0f / ImGui::GetIO().Framerate);
             
+            if (ofxImGui::BeginTree(m_modeGroup, mainSettings))
+            {
+                static const std::vector<std::string> labels1 = { "Normal", "Camera", "Scene", "Leap", "Leds" };
+
+                ofxImGui::AddRadio(m_viewMode, labels1, 5);
+                ofxImGui::EndTree(mainSettings);
+            }
+            
             if (ofxImGui::BeginTree(m_cameraGroup, mainSettings))
             {
-                static const std::vector<std::string> labels = { "Depth", "IR", "Color" };
+                static const std::vector<std::string> labels2 = { "Depth", "IR", "Color" };
                 
-                ofxImGui::AddRadio(m_cameraMode, labels, 3);
+                ofxImGui::AddRadio(m_cameraMode, labels2, 3);
                 ofxImGui::AddParameter(m_cameraGroup.getInt("IR Exposure"));
                 ofxImGui::AddParameter(m_cameraGroup.getFloat("Min Depth"));
                 ofxImGui::AddParameter(m_cameraGroup.getFloat("Max Depth"));
@@ -146,6 +172,13 @@ void GuiManager::drawGui()
             if (ofxImGui::BeginTree(m_ledsGroup, mainSettings))
             {
                 ofxImGui::AddParameter(m_ledsSize);
+                ofxImGui::EndTree(mainSettings);
+            }
+            
+            if (ofxImGui::BeginTree(m_leapGroup, mainSettings))
+            {
+                static const std::vector<std::string> labels3 = { "Camera", "Hands"};
+                ofxImGui::AddRadio(m_leapMode, labels3, 2);
                 ofxImGui::EndTree(mainSettings);
             }
             

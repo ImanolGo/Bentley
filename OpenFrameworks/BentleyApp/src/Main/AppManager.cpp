@@ -43,7 +43,7 @@ void AppManager::setup()
     
     this->setupOF();
 	this->setupManagers();
-    ofSetVerticalSync(false);
+    //ofSetVerticalSync(false);
     
     m_initialized = true;
     
@@ -96,7 +96,7 @@ void AppManager::setupManagers()
     m_keyboardManager.setup();
     m_sceneManager.setup();
     
-     m_guiManager.setup();
+    m_guiManager.setup();
     
     
     

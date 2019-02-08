@@ -28,7 +28,10 @@
 enum ScreenMode{
     DRAW_NORMAL = 0,
     DRAW_CAMERA,
-    DRAW_SCENE
+    DRAW_SCENE,
+    DRAW_LEAP,
+    DRAW_LEDS
+    
 };
 
 enum CameraMode{
@@ -36,6 +39,12 @@ enum CameraMode{
     IR,
     COLOR
 };
+
+enum LeapMode{
+    CAMERA = 0,
+    HANDS
+};
+
 
 
 class LayoutManager: public Manager
@@ -75,7 +84,11 @@ public:
     
     void setDrawMode(int mode) {m_drawMode = mode;}
     
+    void setLeapMode(int mode) {m_leapMode = mode;}
+    
     void setCameraMode(int mode) {m_cameraMode = mode;}
+    
+    
     
     void toggleDrawMode();
     
@@ -128,6 +141,10 @@ private:
     
     void drawScene();
     
+    void drawLeap();
+    
+    void drawLeds();
+    
     void drawNormal();
     
     void drawCamera();
@@ -152,6 +169,7 @@ private:
     
     int                 m_drawMode;
     int                 m_cameraMode;
+    int                 m_leapMode;
 
 };
 
