@@ -13,8 +13,6 @@
 #include "ofxLibRealSense2.hpp"
 #include "ofxCv.h"
 
-using namespace ofxCv;
-using namespace cv;
 
 
 //========================== class RealSenseManager ==============================
@@ -55,6 +53,8 @@ public:
     ofxGuiGroup *getGui() {return m_realSense.getGui();}
     
     bool isRealSenseActive() const {return m_isRealSenseActive;}
+    
+    ofParameterGroup& getParameters()  {return m_parameters;}
 
     
 private:
@@ -73,9 +73,23 @@ private:
 private:
     
     
-    ofxLibRealSense2 m_realSense;
-    ofxCv::ObjectFinder m_finder;
-    ofFbo               m_trackerFbo;
+    ofxLibRealSense2            m_realSense;
+    ofxCv::ObjectFinder         m_finder;
+    ofFbo                       m_trackerFbo;
+    ofxCv::RunningBackground    m_background;
+    ofxCv::ContourFinder        m_contourFinder;
+    ofImage                     m_thresholded;
+    
+    ofParameterGroup        m_parameters;
+    
+    ofParameter<bool>        m_resetBackground;
+    ofParameter<float>       m_learningTime;
+    ofParameter<float>       m_thresholdValue;
+    
+    ofParameter<float>       m_minArea;
+    ofParameter<float>       m_maxArea;
+    ofParameter<float>       m_threshold;
+    ofParameter<bool>        m_holes;
     
     bool m_isRealSenseActive;
     

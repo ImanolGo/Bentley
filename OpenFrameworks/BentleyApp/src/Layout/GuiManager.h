@@ -75,6 +75,8 @@ private:
     void setupLeapGui();
     
     void setupLedsGui();
+    
+    void setupOpenCVGui();
         
     
 private:
@@ -88,6 +90,7 @@ private:
     ofParameterGroup m_cameraGroup;
     ofParameterGroup m_leapGroup;
     ofParameterGroup m_ledsGroup;
+    ofParameterGroup m_openCvGroup;
     ofParameterGroup m_realSenseGroup;
     
     ofParameter<int> m_cameraMode;

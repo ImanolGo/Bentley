@@ -46,6 +46,7 @@ void GuiManager::setup()
     this->setupCameraGui();
     this->setupLedsGui();
     this->setupLeapGui();
+    this->setupOpenCVGui();
     this->loadGuiValues();
     
     //this->drawGui();
@@ -105,6 +106,12 @@ void GuiManager::setupCameraGui()
     m_cameraGroup.add(group->getToggle("Emitter").getParameter());
 
 }
+
+void GuiManager::setupOpenCVGui()
+{
+    m_openCvGroup = AppManager::getInstance().getRealSenseManager().getParameters();
+}
+
 
 void GuiManager::setupLedsGui()
 {
@@ -172,9 +179,17 @@ void GuiManager::drawGui()
         
             }
             
-            if (ofxImGui::BeginTree(m_ledsGroup, mainSettings))
+            if (ofxImGui::BeginTree(m_openCvGroup, mainSettings))
             {
-                ofxImGui::AddParameter(m_ledsSize);
+                //auto & group =
+                
+                ofxImGui::AddParameter(m_openCvGroup.getFloat("Learning Time"));
+                ofxImGui::AddParameter(m_openCvGroup.getFloat("Threshold Value"));
+                ofxImGui::AddParameter(m_openCvGroup.getFloat("Min area"));
+                ofxImGui::AddParameter(m_openCvGroup.getFloat("Max area"));
+                ofxImGui::AddParameter(m_openCvGroup.getFloat("Threshold"));
+                ofxImGui::AddParameter(m_openCvGroup.getBool("Holes"));
+                ofxImGui::AddParameter(m_openCvGroup.getBool("Reset Background"));
                 ofxImGui::EndTree(mainSettings);
             }
             
