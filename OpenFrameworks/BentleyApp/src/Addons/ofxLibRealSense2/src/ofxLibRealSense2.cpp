@@ -19,7 +19,7 @@ int ofxLibRealSense2::getDeviceCount()
 }
 
 
-void ofxLibRealSense2::setupDevice(int deviceID)
+bool ofxLibRealSense2::setupDevice(int deviceID)
 {
     // query device
     rs2::context ctx;
@@ -27,11 +27,11 @@ void ofxLibRealSense2::setupDevice(int deviceID)
     
     if(deviceList.size() <= 0) {
         ofSystemAlertDialog("RealSense device not found!");
-        return;
+        return false;
     }
     if (deviceID >= deviceList.size()) {
         ofSystemAlertDialog("Requested device id is invalid");
-        return;
+        return false;
     }
     
     _device = deviceList[deviceID];
@@ -43,6 +43,7 @@ void ofxLibRealSense2::setupDevice(int deviceID)
     _setupFinished = true;
     
     setupGUI(deviceSerial);
+    return true;
 }
 
 

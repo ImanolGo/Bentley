@@ -1,2 +1,4 @@
+ofxGui
 ofxNetwork
+ofxOpenCv
 ofxPoco

@@ -17,7 +17,7 @@ public:
     static int getDeviceCount();
     
 public:
-    void setupDevice(int deviceID);
+    bool setupDevice(int deviceID);
     void setupColor(int width, int height, int fps=60);
     void setupIR(int width, int height, int fps=60);
     void setupDepth(int width, int height, int fps=60);
@@ -40,6 +40,7 @@ public:
     bool colorEnabled() { return _colorEnabled; }
     bool irEnabled()    { return _irEnabled; }
     bool depthEnabled() { return _depthEnabled; }
+    bool isSetupFinished() { return _setupFinished; }
     
     ofxGuiGroup *getGui();
     

@@ -11,6 +11,10 @@
 
 #include "Manager.h"
 #include "ofxLibRealSense2.hpp"
+#include "ofxCv.h"
+
+using namespace ofxCv;
+using namespace cv;
 
 
 //========================== class RealSenseManager ==============================
@@ -49,22 +53,31 @@ public:
     void drawColor();
     
     ofxGuiGroup *getGui() {return m_realSense.getGui();}
+    
+    bool isRealSenseActive() const {return m_isRealSenseActive;}
 
     
 private:
     
     void setupCamera();
     
+    void setupCV();
+    
     void updateCamera();
     
-    void drawCamera();
+    void updateCV();
     
+    void drawCamera();
    
     
 private:
     
     
     ofxLibRealSense2 m_realSense;
+    ofxCv::ObjectFinder m_finder;
+    ofFbo               m_trackerFbo;
+    
+    bool m_isRealSenseActive;
     
 };
 

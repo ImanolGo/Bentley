@@ -158,15 +158,18 @@ void GuiManager::drawGui()
             
             if (ofxImGui::BeginTree(m_cameraGroup, mainSettings))
             {
-                static const std::vector<std::string> labels2 = { "Depth", "IR", "Color" };
-                
-                ofxImGui::AddRadio(m_cameraMode, labels2, 3);
-                ofxImGui::AddParameter(m_cameraGroup.getInt("IR Exposure"));
-                ofxImGui::AddParameter(m_cameraGroup.getFloat("Min Depth"));
-                ofxImGui::AddParameter(m_cameraGroup.getFloat("Max Depth"));
-                ofxImGui::AddParameter(m_cameraGroup.getBool("Auto exposure"));
-                ofxImGui::AddParameter(m_cameraGroup.getBool("Emitter"));
-                ofxImGui::EndTree(mainSettings);
+                if(AppManager::getInstance().getRealSenseManager().isRealSenseActive()){
+                    static const std::vector<std::string> labels2 = { "Depth", "IR", "Color" };
+                    
+                    ofxImGui::AddRadio(m_cameraMode, labels2, 3);
+                    ofxImGui::AddParameter(m_cameraGroup.getInt("IR Exposure"));
+                    ofxImGui::AddParameter(m_cameraGroup.getFloat("Min Depth"));
+                    ofxImGui::AddParameter(m_cameraGroup.getFloat("Max Depth"));
+                    ofxImGui::AddParameter(m_cameraGroup.getBool("Auto exposure"));
+                    ofxImGui::AddParameter(m_cameraGroup.getBool("Emitter"));
+                    ofxImGui::EndTree(mainSettings);
+                }
+        
             }
             
             if (ofxImGui::BeginTree(m_ledsGroup, mainSettings))
