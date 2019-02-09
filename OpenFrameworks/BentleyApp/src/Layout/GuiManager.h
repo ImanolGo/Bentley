@@ -79,7 +79,8 @@ private:
     void setupOpenCVGui();
     
     void setupProcessingGroup();
-        
+    
+    void updateSize(const ofxImGui::Settings& settings);
     
 private:
     

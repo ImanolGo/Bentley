@@ -227,6 +227,13 @@ void GuiManager::drawGui()
                 ofxImGui::EndTree(mainSettings);
             }
             
+            if (ofxImGui::BeginTree(m_ledsGroup, mainSettings))
+            {
+                ofxImGui::AddParameter(m_ledsSize);
+                ofxImGui::EndTree(mainSettings);
+            
+            }
+            
             if (ofxImGui::BeginTree(m_cameraGroup, mainSettings))
             {
                 if(AppManager::getInstance().getRealSenseManager().isRealSenseActive()){
@@ -286,11 +293,21 @@ void GuiManager::drawGui()
     
     ofDisableAlphaBlending();
     
-    m_width = mainSettings.windowSize.x;
-    m_height = mainSettings.windowSize.y;
-    m_position = ofPoint(mainSettings.windowPos.x, mainSettings.windowPos.y);
+    this->updateSize(mainSettings);
+    
+   
 }
 
+void GuiManager::updateSize(const ofxImGui::Settings& settings)
+{
+    if(m_width!= settings.windowSize.x){
+         m_width = settings.windowSize.x;
+         AppManager::getInstance().getLayoutManager().windowResized(ofGetWidth(), ofGetHeight());
+    }
+   
+    m_height = settings.windowSize.y;
+    m_position = ofPoint(settings.windowPos.x, settings.windowPos.y);
+}
 
 void GuiManager::saveGuiValues(string path)
 {
