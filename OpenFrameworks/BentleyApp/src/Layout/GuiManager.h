@@ -77,6 +77,8 @@ private:
     void setupLedsGui();
     
     void setupOpenCVGui();
+    
+    void setupProcessingGroup();
         
     
 private:
@@ -92,11 +94,21 @@ private:
     ofParameterGroup m_ledsGroup;
     ofParameterGroup m_openCvGroup;
     ofParameterGroup m_realSenseGroup;
+    ofParameterGroup m_postProcessingGroup;
     
     ofParameter<int> m_cameraMode;
     ofParameter<int> m_leapMode;
     ofParameter<int> m_viewMode;
     ofParameter<float>      m_ledsSize;
+    
+    ofParameter<float>      m_contrast;
+    ofParameter<float>      m_saturation;
+    ofParameter<float>      m_brightness;
+    ofParameter<float>      m_gamma;
+    ofParameter<float>      m_minInput;
+    ofParameter<float>      m_maxInput;
+    ofParameter<float>      m_minOutput;
+    ofParameter<float>      m_maxOutput;
     
     float m_width, m_height;
     ofPoint   m_position;

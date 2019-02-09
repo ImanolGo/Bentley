@@ -97,10 +97,6 @@ void AppManager::setupManagers()
     m_sceneManager.setup();
     
     m_guiManager.setup();
-    
-    
-    
-    
 }
 
 void AppManager::update()

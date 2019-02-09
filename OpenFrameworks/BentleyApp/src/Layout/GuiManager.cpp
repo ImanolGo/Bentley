@@ -47,6 +47,7 @@ void GuiManager::setup()
     this->setupLedsGui();
     this->setupLeapGui();
     this->setupOpenCVGui();
+    this->setupProcessingGroup();
     this->loadGuiValues();
     
     //this->drawGui();
@@ -104,12 +105,75 @@ void GuiManager::setupCameraGui()
     m_cameraGroup.add(group->getFloatSlider("Max Depth").getParameter());
     m_cameraGroup.add(group->getToggle("Auto exposure").getParameter());
     m_cameraGroup.add(group->getToggle("Emitter").getParameter());
-
+    
+    m_parameters.add(group->getIntSlider("IR Exposure").getParameter());
+    m_parameters.add(group->getFloatSlider("Min Depth").getParameter());
+    m_parameters.add(group->getFloatSlider("Max Depth").getParameter());
+    m_parameters.add(group->getToggle("Auto exposure").getParameter());
+    m_parameters.add(group->getToggle("Emitter").getParameter());
 }
 
 void GuiManager::setupOpenCVGui()
 {
     m_openCvGroup = AppManager::getInstance().getRealSenseManager().getParameters();
+    
+    m_parameters.add(m_openCvGroup.getFloat("Learning Time"));
+    m_parameters.add(m_openCvGroup.getFloat("Threshold Value"));
+    m_parameters.add(m_openCvGroup.getFloat("Min area"));
+    m_parameters.add(m_openCvGroup.getFloat("Max area"));
+    m_parameters.add(m_openCvGroup.getFloat("Threshold"));
+    m_parameters.add(m_openCvGroup.getBool("Holes"));
+    m_parameters.add(m_openCvGroup.getBool("Reset Background"));
+}
+
+void GuiManager::setupProcessingGroup()
+{
+    auto scenesManager = &AppManager::getInstance().getSceneManager();
+    
+    m_postProcessingGroup.setName("Post Processing");
+    
+    m_contrast.set("Contrast", 1.0, 0.0, 2.0);
+    m_contrast.addListener(scenesManager, &SceneManager::setContrast);
+    m_parameters.add(m_contrast);
+    m_postProcessingGroup.add(m_contrast);
+    
+    m_saturation.set("Saturation", 1.0, 0.0, 2.0);
+    m_saturation.addListener(scenesManager, &SceneManager::setSaturation);
+    m_parameters.add(m_saturation);
+    m_postProcessingGroup.add(m_saturation);
+    
+    m_brightness.set("Brightness", 1.0, 0.0, 2.0);
+    m_brightness.addListener(scenesManager, &SceneManager::setBrightness);
+    m_parameters.add(m_brightness);
+    m_postProcessingGroup.add(m_brightness);
+    
+    m_gamma.set("Gamma", 1.0, 0.0, 2.0);
+    m_gamma.addListener(scenesManager, &SceneManager::setGamma);
+    m_parameters.add(m_gamma);
+    m_postProcessingGroup.add(m_gamma);
+    
+    m_minInput.set("MinInput", 0.0, 0.0, 1.0);
+    m_minInput.addListener(scenesManager, &SceneManager::setMinInput);
+    m_parameters.add(m_minInput);
+    m_postProcessingGroup.add(m_minInput);
+    
+    m_maxInput.set("MaxInput", 1.0, 0.0, 1.0);
+    m_maxInput.addListener(scenesManager, &SceneManager::setMaxInput);
+    m_parameters.add(m_maxInput);
+    m_postProcessingGroup.add(m_maxInput);
+    
+    m_minOutput.set("MinOutput", 0.0, 0.0, 1.0);
+    m_minOutput.addListener(scenesManager, &SceneManager::setMinOutput);
+    m_parameters.add(m_minOutput);
+    m_postProcessingGroup.add(m_minOutput);
+    
+    m_maxOutput.set("MaxOutput", 1.0, 0.0, 1.0);
+    m_maxOutput.addListener(scenesManager, &SceneManager::setMaxOutput);
+    m_parameters.add(m_maxOutput);
+    m_postProcessingGroup.add(m_maxOutput);
+    
+  
+    
 }
 
 
@@ -193,6 +257,21 @@ void GuiManager::drawGui()
                 ofxImGui::EndTree(mainSettings);
             }
             
+            if (ofxImGui::BeginTree(m_postProcessingGroup, mainSettings))
+            {
+                //auto & group =
+                
+                ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Contrast"));
+                ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Saturation"));
+                ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Brightness"));
+                ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Gamma"));
+                ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MinInput"));
+                ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MaxInput"));
+                ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MinOutput"));
+                ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MaxOutput"));
+                ofxImGui::EndTree(mainSettings);
+            }
+            
             if (ofxImGui::BeginTree(m_leapGroup, mainSettings))
             {
                 static const std::vector<std::string> labels3 = { "Camera", "Hands"};
@@ -215,6 +294,8 @@ void GuiManager::drawGui()
 
 void GuiManager::saveGuiValues(string path)
 {
+    ofLogNotice() <<"GuiManager::saveGuiValues-> loading values from: " << GUI_SETTINGS_FILE_NAME;
+    
     ofXml xml;
     ofSerialize(xml, m_parameters);
     //xml.serialize(m_parameters);
@@ -227,10 +308,15 @@ void GuiManager::saveGuiValues(string path)
     }
     
     
+    
+    
 }
 
 void GuiManager::loadGuiValues(string path)
 {
+    
+    ofLogNotice() <<"GuiManager::loadGuiValues-> loading values from: " << GUI_SETTINGS_FILE_NAME;
+    
     ofXml xml;
     if(path.empty()){
          xml.load(GUI_SETTINGS_FILE_NAME);

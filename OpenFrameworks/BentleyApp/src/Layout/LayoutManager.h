@@ -88,8 +88,6 @@ public:
     
     void setCameraMode(int mode) {m_cameraMode = mode;}
     
-    
-    
     void toggleDrawMode();
     
     int getDrawMode() {return m_drawMode;}

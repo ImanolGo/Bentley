@@ -34,6 +34,7 @@ void SceneManager::setup()
 
     this->createScenes();
     this->setupFbo();
+    this->setupLevels();
    // this->setupTimer();
     this->initializeSceneList();
 
@@ -90,6 +91,14 @@ void SceneManager::setupFbo()
     m_fbo.begin(); ofClear(0); m_fbo.end();
 }
 
+void SceneManager::setupLevels()
+{
+    float width = AppManager::getInstance().getSettingsManager().getAppWidth();
+    float height = AppManager::getInstance().getSettingsManager().getAppHeight();
+    
+    m_levels.setup(width,height);
+}
+
 void SceneManager::setupTimer()
 {
     
@@ -124,12 +133,19 @@ void SceneManager::update()
 
 void SceneManager::updateFbo()
 {
+    m_levels.begin();
+        ofClear(0);
+        ofEnableAlphaBlending();
+         m_mySceneManager.draw();
+         ofDisableAlphaBlending();
+    m_levels.end();
+    
     m_fbo.begin();
         ofClear(0);
         ofPushStyle();
         ofSetColor(255);
         ofEnableAlphaBlending();
-            m_mySceneManager.draw();
+            m_levels.draw();
         ofDisableAlphaBlending();
         ofPopStyle();
     m_fbo.end();
