@@ -14,12 +14,14 @@
 
 #define LED_TYPE    WS2812B
 #define COLOR_ORDER GRB
-#define NUM_CHANNELS 1
-#define NUM_LEDS 100
-#define MAX_BRIGHTNESS 40
+#define NUM_CHANNELS 8
+#define NUM_LEDS 300
+#define MAX_BRIGHTNESS 100
 #define TEST_DELAY 500
-#define DATA_PIN    5
 #define FPS_CHECK_TIME_MS 2000
+
+constexpr int data_pins[NUM_CHANNELS] = {0,2,4,5,13,14,15,16};
+
 
 const byte channelwidth = 3; //3 channels per pixel
 
@@ -35,50 +37,44 @@ class LedsManager{
 
     void parseRGBReceived(unsigned char* pbuff, int count);
     void setAllColor(CRGB color);
-
-    void setAllBlack();
-    void setColor(CRGB color);
-    void setColorPalette(CRGB& color);
     
   private:
 
     void setupLeds();
-    void setupColorPalettes();
     void initTest();
     void checkFps();
-    void noise16();
 
-    CRGBPalette16 currentPalette;
-    CRGBPalette16 targetPalette;
-    
-    uint16_t scale;
-    uint32_t speed;
-   
-    CRGB leds[NUM_LEDS];
+    //int data_pins[NUM_CHANNELS];
+    //int clock_pins[NUM_CHANNELS];
+    CRGB leds[NUM_CHANNELS][NUM_LEDS];
     
 };
 
 LedsManager::LedsManager()
 {
-    this->scale = 2000;
-    this->speed = 30;
-   
+
 }
 
 void LedsManager::setup()
 {
     Serial.println("LedsManager::setup");
     this->setupLeds(); 
-    //this->setupLeds(); 
-    this->setupColorPalettes();
+    //this->initTest();
 }
 
 
 void LedsManager::setupLeds()
 {
 
-    //FastLED.addLeds<WS2812B,32, GRB>(leds[0], NUM_LEDS);
-   FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS);
+    FastLED.addLeds<LED_TYPE,data_pins[0], COLOR_ORDER>(leds[0], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE,data_pins[1], COLOR_ORDER>(leds[1], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE,data_pins[2], COLOR_ORDER>(leds[2], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE,data_pins[3], COLOR_ORDER>(leds[3], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE,data_pins[4], COLOR_ORDER>(leds[4], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE,data_pins[5], COLOR_ORDER>(leds[5], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE,data_pins[6], COLOR_ORDER>(leds[6], NUM_LEDS);
+    FastLED.addLeds<LED_TYPE,data_pins[7], COLOR_ORDER>(leds[7], NUM_LEDS);
+
  
    FastLED.setMaxPowerInVoltsAndMilliamps (5, 2100);
    //FastLED.setDither( 0 );
@@ -87,20 +83,9 @@ void LedsManager::setupLeds()
    Serial.println("LedsManager::setupLeds");
 }
 
-void LedsManager::setupColorPalettes()
-{
-  CRGB color =  CRGB::White;
-  this->setColorPalette(color);
-  this->targetPalette = this->currentPalette;
-}
-
-
 void LedsManager::update()
 {
-     this->checkFps();
-     this->noise16();
-    //nblendPaletteTowardPalette( this->currentPalette, this->targetPalette, this->maxChanges);
-    FastLED.show();
+    this->checkFps();
 }
 
 void LedsManager::parseRGBReceived(unsigned char* pbuff, int count) 
@@ -123,37 +108,27 @@ void LedsManager::parseRGBReceived(unsigned char* pbuff, int count)
      numLeds = NUM_LEDS;
   }
 
-    if(numLeds>0){
-       CRGB color =  CRGB( pbuff[HEADER_SIZE], pbuff[HEADER_SIZE + 1], pbuff[HEADER_SIZE + 2] );
-       this->setColorPalette(color);
-       
+ 
+    int channel = 0; //reset RGB channel assignment to 0 each time through loop.
+    for (int i = 0; i < numLeds; i++) //loop to assign 3 channels to each pixel
+    {
+        leds[output_channel][i] = CRGB(pbuff[HEADER_SIZE + channel], pbuff[HEADER_SIZE + (channel +1)], pbuff[HEADER_SIZE + (channel +2)]);
+        channel +=channelwidth; //increase last channel number by channel width
     }
-//    int channel = 0; //reset RGB channel assignment to 0 each time through loop.
-//    for (int i = 0; i < numLeds; i++) //loop to assign 3 channels to each pixel
-//    {
-//        leds[output_channel][i] = CRGB(pbuff[HEADER_SIZE + channel], pbuff[HEADER_SIZE + (channel +1)], pbuff[HEADER_SIZE + (channel +2)]);
-//        channel +=channelwidth; //increase last channel number by channel width
-//    }
   
   //adjust_gamma();
   
   FastLED.show(); //send data to pixels
 }
 
-
-void LedsManager::setColorPalette(CRGB& color)
+void LedsManager::setAllColor(CRGB color) 
 {
-  // this->targetPalette = CRGBPalette16(pal[0],pal[1],pal[2],pal[3]);
-    
-  fill_solid( this->targetPalette, 16, CRGB::Black);
-  //    // and set every fourth one to a color.
-    this->currentPalette[0] = color;
-    this->currentPalette[4] = color;
-    this->currentPalette[8] = color;
-    this->currentPalette[12] = color;
-
-  
-   //this->setColor(pal[0]);
+  for(int i=0; i<NUM_CHANNELS; i++)
+  {
+     fill_solid(leds[i],NUM_LEDS, color);
+  }
+ 
+  FastLED.show();
 }
 
 void LedsManager::checkFps()
@@ -165,40 +140,7 @@ void LedsManager::checkFps()
    }
 }
 
-void LedsManager::noise16()
-{
-    uint32_t real_z = millis() *this->speed;                          // the z position becomes quickly incremented
-    for (uint16_t i = 0; i < NUM_LEDS; i++) 
-    {
-       uint16_t shift_x = beatsin8(5);                           // the x position of the noise field swings @ 17 bpm
-       uint16_t shift_y = millis() / 100;                        // the y position becomes slowly incremented
-    
 
-       uint16_t real_x = i*scale;                    // the x position of the noise field swings @ 17 bpm
-       uint16_t real_y = 1;                    // the y position becomes slowly incremented
-    
-      uint8_t noise = inoise16(real_x, real_y, real_z)>>8;   // get the noise data and scale it down
-      uint8_t bri = noise;                           // map LED color based on noise data
-      uint8_t index   = noise;
-  
-      leds[i] = ColorFromPalette(this->currentPalette, index, bri, LINEARBLEND);   // With that value, look up the 8 bit colour palette value and assign it to the current LED.
-    
-    }
-}
-
-void LedsManager::setAllBlack()
-{ 
-  fill_solid(leds,NUM_LEDS, CRGB::Black);
-  FastLED.show();
- 
-}
-
-
-void LedsManager::setAllColor(CRGB color) 
-{
-  fill_solid(leds,NUM_LEDS, color);
-  FastLED.show();
-}
 void LedsManager::initTest() //runs at board boot to make sure pixels are working
 {
   FastLED.setBrightness(MAX_BRIGHTNESS);       // set to full power

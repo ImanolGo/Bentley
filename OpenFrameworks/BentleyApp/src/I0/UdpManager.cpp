@@ -19,7 +19,7 @@
 
 const int UdpManager::UDP_MESSAGE_LENGHT = 100;
 
-UdpManager::UdpManager(): Manager(), m_connected(false), m_ledsPerChannel(100)
+UdpManager::UdpManager(): Manager(), m_connected(false), m_ledsPerChannel(300)
 {
     //Intentionally left empty
 }
@@ -146,7 +146,7 @@ void UdpManager::setupIP()
 void UdpManager::update()
 {
     this->updateReveivePackage();
-    //this->updatePixels();
+    this->updatePixels();
    // m_timer.update();
     
 }
@@ -157,50 +157,61 @@ void UdpManager::updatePixels()
         return;
     }
     
-//
-//    const auto & leds = AppManager::getInstance().getLedsManager().getLeds();
-//    //    const int length = leds.size()*3;
-//    //    const char* pixels[length];
-//
-//
-//   // ofLogNotice() <<"UdpManager::updatePixels -> New Frame " << leds.size();
-//
-//    int ledsPerPixel = 3;
-//    int numChannels = leds.size()/m_ledsPerChannel + 1;
-//
-//    //ofLogNotice() <<"UdpManager::updatePixels -> numChannels " << numChannels;
-//
-//    for(int channel=0; channel<numChannels; channel++){
-//        int startIndex  = channel*m_ledsPerChannel;
-//        int endIndex  = (channel+1)*m_ledsPerChannel;
-//
-//        if(endIndex>leds.size()){
-//            endIndex = leds.size();
-//        }
-//
-//        string message="";
-//        message+= m_dataHeader.f1; message+= m_dataHeader.f2; message+= m_dataHeader.f3;
-//        int size = endIndex - startIndex;
-//        m_dataHeader.size = ledsPerPixel*size;
-//        unsigned char * s = (unsigned char*)& m_dataHeader.size;
-//        message+= s[1] ;  message+=  s[0];
-//        message+=m_dataHeader.command;
-//        message+=channel;
-//
-//        for(int i=startIndex; i<endIndex; i++){
-//            if(i>=leds.size()){
-//                break;
-//            }
-//            message+=leds[i]->getColor().r;
-//            message+=leds[i]->getColor().g;
-//            message+=leds[i]->getColor().b;
-//
-//        }
-//
-//        m_udpConnection.Send(message.c_str(),message.length());
-//    }
-//
-//
+    int ledsPerPixel = 3;
+
+    const auto & colors = AppManager::getInstance().getLedsManager().getColors();
+    const int length = colors.size()*ledsPerPixel;
+    const char* pixels[length];
+
+
+   // ofLogNotice() <<"UdpManager::updatePixels -> New Frame " << leds.size();
+
+    
+    int numChannels = colors.size()/m_ledsPerChannel + 1;
+
+    //ofLogNotice() <<"UdpManager::updatePixels -> numChannels " << numChannels;
+
+    for(int channel=0; channel<numChannels; channel++){
+        int startIndex  = channel*m_ledsPerChannel;
+        int endIndex  = (channel+1)*m_ledsPerChannel;
+
+        if(endIndex>colors.size()){
+            endIndex = colors.size();
+        }
+
+        string message="";
+        message+= m_dataHeader.f1; message+= m_dataHeader.f2; message+= m_dataHeader.f3;
+        int size = endIndex - startIndex;
+        m_dataHeader.size = ledsPerPixel*size;
+        unsigned char * s = (unsigned char*)& m_dataHeader.size;
+        message+= s[1] ;  message+=  s[0];
+        message+=m_dataHeader.command;
+        message+=channel;
+        
+        unsigned char r = 0;
+        unsigned char g = 0;
+        unsigned char b = 0;
+        
+
+        for(int i=startIndex; i<endIndex; i++){
+            if(i>=colors.size()){
+                break;
+            }
+            
+            r = colors[i].r * 255;
+            g = colors[i].g * 255;
+            b = colors[i].b * 255;
+            
+            message+=r;
+            message+=g;
+            message+=b;
+
+        }
+
+        m_udpConnection.Send(message.c_str(),message.length());
+    }
+
+
     
 }
 

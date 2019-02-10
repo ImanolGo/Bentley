@@ -4,7 +4,7 @@
   Leds UDP Receiver 
      
  Description:
- * Firmware receiving RGB LED pixel data over UDP packets.
+ * Firmware receiving a color and cerating animations.
 
  Software:
  * FastLED Library 

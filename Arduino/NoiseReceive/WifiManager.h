@@ -19,7 +19,7 @@
 #include "LedsManager.h"
 
 
-#define BUFFER_MAX 1024
+#define BUFFER_MAX 2048
 #define PACKET_SIZE 4
 #define DISCOVERY_TIMER 3000
 #define WIFI_TIMEOUT 3000              // checks WiFi every ...ms. Reset after this time, if WiFi cannot reconnect.
@@ -84,16 +84,17 @@ class WifiManager
 WifiManager::WifiManager(LedsManager* ledsManager)
 {
     this->ledsManager=ledsManager;
-    
-//    ssid = "TPH Operations";
-//    pass = "TheFUTURE!Sno3";
+   
 
     ssid = "Don't worry, be happy!";
     pass = "whyistheskysohigh?";
 
+//    ssid = "TPH Operations";
+//    pass = "TheFUTURE!Sno3";
+
 //    ssid     =  "TP-LINK_54E4";
 //    pass = "27155332";
-
+    
 
     wifiConnected = false;
 

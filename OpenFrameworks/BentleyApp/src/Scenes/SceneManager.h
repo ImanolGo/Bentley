@@ -50,7 +50,7 @@ public:
     void changeScene(string sceneName);
     
     //! Changes the scene according to a index
-    void changeScene(int sceneIndex);
+    void changeSceneIndex(int& sceneIndex);
     
     //! changes transition time
     void onTransitionTimeChange(float value);

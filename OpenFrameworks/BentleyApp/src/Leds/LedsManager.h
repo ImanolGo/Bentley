@@ -48,6 +48,8 @@ class LedsManager: public Manager
     
         const LedVector& getLeds() const {return m_leds;}
     
+        const vector <ofFloatColor>& getColors() const {return m_colors;}
+    
         void setPixels(ofPixelsRef pixels);
     
         void setLedColors(ofPixelsRef pixels);

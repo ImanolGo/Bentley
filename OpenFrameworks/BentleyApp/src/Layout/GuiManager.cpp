@@ -43,6 +43,7 @@ void GuiManager::setup()
     
     this->setupGuiParameters();
     this->setupModesGui();
+    this->setupScenesGui();
     this->setupCameraGui();
     this->setupLedsGui();
     this->setupLeapGui();
@@ -76,6 +77,22 @@ void GuiManager::setupGuiParameters()
     m_width = 0;
     m_height = 0;
 
+}
+
+
+
+void GuiManager::setupScenesGui()
+{
+     auto scenesManager = &AppManager::getInstance().getSceneManager();
+    
+    m_scenesGroup.setName("Scenes");
+    m_sceneMode.set("Scene", 0);
+    m_sceneMode.addListener(scenesManager, &SceneManager::changeSceneIndex);
+    m_scenesGroup.add(m_sceneMode);
+    
+    for(int i=0; i< scenesManager->getNumberScenes(); i++){
+        m_sceneNames.push_back(scenesManager->getSceneName(i));
+    }
 }
 
 
@@ -224,6 +241,12 @@ void GuiManager::drawGui()
                 static const std::vector<std::string> labels1 = { "Normal", "Camera", "Scene", "Leap", "Leds" };
 
                 ofxImGui::AddRadio(m_viewMode, labels1, 5);
+                ofxImGui::EndTree(mainSettings);
+            }
+            
+            if (ofxImGui::BeginTree(m_scenesGroup, mainSettings))
+            {
+                ofxImGui::AddCombo(m_sceneMode, m_sceneNames);
                 ofxImGui::EndTree(mainSettings);
             }
             

@@ -78,6 +78,8 @@ private:
     
     void setupOpenCVGui();
     
+    void setupScenesGui();
+    
     void setupProcessingGroup();
     
     void updateSize(const ofxImGui::Settings& settings);
@@ -95,12 +97,16 @@ private:
     ofParameterGroup m_ledsGroup;
     ofParameterGroup m_openCvGroup;
     ofParameterGroup m_realSenseGroup;
+    ofParameterGroup m_scenesGroup;
     ofParameterGroup m_postProcessingGroup;
     
     ofParameter<int> m_cameraMode;
     ofParameter<int> m_leapMode;
     ofParameter<int> m_viewMode;
+    ofParameter<int> m_sceneMode;
     ofParameter<float>      m_ledsSize;
+    
+    std::vector<std::string>    m_sceneNames;
     
     ofParameter<float>      m_contrast;
     ofParameter<float>      m_saturation;

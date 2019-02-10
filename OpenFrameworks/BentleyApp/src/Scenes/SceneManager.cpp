@@ -209,7 +209,7 @@ void SceneManager::changeScene(string sceneName)
     
 }
 
-void SceneManager::changeScene(int sceneIndex)
+void SceneManager::changeSceneIndex(int& sceneIndex)
 {
     
      m_mySceneManager.changeScene(sceneIndex);
