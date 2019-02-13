@@ -78,7 +78,7 @@ void LedsManager::createLedPositions()
 {
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
-    int size = 100;
+    int size = 10;
     
     int id = 0;
     for(int i = 0; i<size; i++){

@@ -1,2 +1,23 @@
 <?xml version="1.0"?>
-<group />
+<group>
+	<IR_Exposure>33000</IR_Exposure>
+	<Min_Depth>0</Min_Depth>
+	<Max_Depth>6</Max_Depth>
+	<Auto_exposure>1</Auto_exposure>
+	<Emitter>1</Emitter>
+	<Learning_Time>30</Learning_Time>
+	<Threshold_Value>10</Threshold_Value>
+	<Min_area>10</Min_area>
+	<Max_area>200</Max_area>
+	<Threshold>128</Threshold>
+	<Holes>0</Holes>
+	<Reset_Background>0</Reset_Background>
+	<Contrast>1</Contrast>
+	<Saturation>1</Saturation>
+	<Brightness>1</Brightness>
+	<Gamma>1</Gamma>
+	<MinInput>0</MinInput>
+	<MaxInput>1</MaxInput>
+	<MinOutput>0</MinOutput>
+	<MaxOutput>1</MaxOutput>
+</group>

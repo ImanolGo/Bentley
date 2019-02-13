@@ -59,14 +59,14 @@ void AppManager::setupOF()
     
      ofSetBackgroundAuto(true);
     
-    bool isOFDataFolderBundled = false;
-    if( ofFile::doesFileExist("../Resources/data", false) ){
-        isOFDataFolderBundled = true;
-    }
-    if( isOFDataFolderBundled ){
-        ofSetDataPathRoot(ofFilePath::getCurrentExeDir() + "/../Resources/data/"); // > = of0.10.0
-        //ofSetDataPathRoot("../Resources/data/"); // < = of0.9.8
-    }
+    // bool isOFDataFolderBundled = false;
+    // if( ofFile::doesFileExist("../Resources/data", false) ){
+    //     isOFDataFolderBundled = true;
+    // }
+    // if( isOFDataFolderBundled ){
+    //     ofSetDataPathRoot(ofFilePath::getCurrentExeDir() + "/../Resources/data/"); // > = of0.10.0
+    //     //ofSetDataPathRoot("../Resources/data/"); // < = of0.9.8
+    // }
     
     //ofLogNotice() << "AppManager::setupOF -> "<< ofFilePath::getCurrentExeDir() ;
     ofLogNotice() << "AppManager::setupOF -> OF data path is:  "<< ofToDataPath("",true);
