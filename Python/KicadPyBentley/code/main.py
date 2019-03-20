@@ -15,29 +15,10 @@ vias = []
 segments = []
 polygons = []
 
-def log(info):
-    if DEBUG:
-        print(info)
 
-def euclidean_distance(point1, point2):
-    total = 0
-
-    for count, (pos1, pos2) in enumerate(zip(point1, point2)):
-        total += (pos2 - pos1)**2
-
-    count += 1
-    total = total ** (1/count)
-
-    return total
-
-
-def ellipse(a, b):
-    h = ((a-b)**2) / ((a+b)**2)
-    result = 3.14159265358979323846 * (a+b) * (1 + 3 * h / (10 + (4 - 3 * h) ** 0.5))
-    return result
 
 def rdxf(filename):
-    log("Reading file: " + filename)
+    print("Reading file: " + filename)
     dxf = dxfgrabber.readfile(filename)
 
     total_length = 0
@@ -46,20 +27,20 @@ def rdxf(filename):
     # Info
     ########################################
 
-    log("DXF version: {}".format(dxf.dxfversion))
+    print("DXF version: {}".format(dxf.dxfversion))
 
     # dict of dxf header vars
-    log('header_var_coun: {}'.format(len(dxf.header)))
+    print('header_var_coun: {}'.format(len(dxf.header)))
 
     # collection of layer definitions
-    log('layer_count: {}'.format(len(dxf.layers)))
+    print('layer_count: {}'.format(len(dxf.layers)))
 
     # dict like collection of block definitions
-    log('block_definition_count'.format(len(dxf.blocks)))
+    print('block_definition_count'.format(len(dxf.blocks)))
 
     # list like collection of entities
-    log('entity_count: {}'.format(len(dxf.entities)))
-    log('')
+    print('entity_count: {}'.format(len(dxf.entities)))
+    print('')
 
    
 
@@ -72,9 +53,9 @@ def rdxf(filename):
 
         typename = e.dxftype
 
-        log('=' * 20)
-        log('DXF Entity: {}\n'.format(typename))
-        log('Layer: {}\n'.format(e.layer))
+        print('=' * 20)
+        print('DXF Entity: {}\n'.format(typename))
+        print('Layer: {}\n'.format(e.layer))
 
         if typename == 'LWPOLYLINE':
 
@@ -85,44 +66,32 @@ def rdxf(filename):
 
             for p in e.points:
 
-                log(p)
+                print(p)
 
                 if length is None:
                     length = 0
                     ppoint = p
                     continue
 
-                length += euclidean_distance(ppoint, p)
-                ppoint = p
-
-            log('Length = {}\n'.format(length))
-
-            total_length += length
-
         elif typename == 'LINE':
 
-            log('start point: {}\n'.format(e.start))
-            log('end point: {}\n'.format(e.end))
+            print('start point: {}\n'.format(e.start))
+            print('end point: {}\n'.format(e.end))
             start = [e.start[0]- 200, e.start[1] - 600]
             end = [e.end[0]- 200, e.end[1] - 600]
-
-            length = euclidean_distance(e.start, e.end)
-
-            log('Length = {}\n'.format(length))
             s = Segment( start=start, end=end, net=vo.code)
             segments.append(s)
 
-            total_length += length
-
+    
         elif typename == 'INSERT':
 
-           log('block reference: {}'.format(e.insert))
-           #log('rows: {}'.format(e.row_count))
+           print('block reference: {}'.format(e.insert))
+           #print('rows: {}'.format(e.row_count))
 
         elif typename == 'CIRCLE':
 
-            log('center: {}'.format(e.center))
-            log('radius: {}'.format(e.radius))
+            print('center: {}'.format(e.center))
+            print('radius: {}'.format(e.radius))
 
             layer_pair=('B.Cu', 'F.Cu')
 
@@ -153,14 +122,10 @@ def rdxf(filename):
             a = euclidean_distance((0, 0), e.majoraxis)
             b = a * e.ratio
 
-            log('center: {}'.format(e.center))
-            log('majoraxis: {}'.format(e.majoraxis))
-            log('a: {}'.format(a))
-            log('b: {}'.format(b))
-
-            length = ellipse(a, b)
-
-            log('distance: {}'.format(length))
+            print('center: {}'.format(e.center))
+            print('majoraxis: {}'.format(e.majoraxis))
+            print('a: {}'.format(a))
+            print('b: {}'.format(b))
 
             total_length += length
 
@@ -173,22 +138,25 @@ def rdxf(filename):
 
             print('Not Implemented')
 
-        log('=' * 20)
+        print('=' * 20)
 
     speed = 4
 
-    log('{} mm / {} mmps = {} s'.format(total_length, speed, total_length / speed))
+    print('{} mm / {} mmps = {} s'.format(total_length, speed, total_length / speed))
 
    
    
 
 if __name__ == '__main__':
 
-    base_filename = "18_holes.dxf"
+    base_folder = "../pcb/FrontGlassPCB/"
+    #filename = "vias.dxf"
+    filename = "1_lines.dxf"
+    path = base_folder + filename
     #pcbnew_easy.test()
-    rdxf(base_filename)
-    base_filename = "1_top copper.dxf" 
-    rdxf(base_filename)
+    rdxf(path)
+    # base_filename = "1_top copper.dxf" 
+    # rdxf(base_filename)
 
      # Create zones
     coords = [(0, 0), (10, 0), (10, 10), (0, 10)]
@@ -211,8 +179,9 @@ if __name__ == '__main__':
 
     r1 = Module.from_library('Resistor_SMD', 'R_0815_2038Metric')
     r1.at = [0, 0]
-
-    s1 = Segment( start=[-100000,-100000], end=[-100000,-100000], net=vo.code)
+    
+    # r1 = Module('M1')
+    # s1 = Segment( start=[-100000,-100000], end=[-100000,-100000], net=vo.code)
 
 
     pcb.title = 'A title'
@@ -228,4 +197,7 @@ if __name__ == '__main__':
     pcb.vias += vias
     pcb.zones += [gndplane_top]
     #pcb.polygons += polygons
-    pcb.to_file('ccc')
+    
+    filename = "FrontGlassPCB"
+    path =  base_folder + filename
+    pcb.to_file(path)
