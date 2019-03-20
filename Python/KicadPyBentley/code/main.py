@@ -59,7 +59,7 @@ def readViasLayer(filename, layer):
             vias.append(Via(at=coords, size=e.radius+0.2, drill=e.radius, net=vo.code))
 
 
-def readCopperLayer(filename, layer):
+def readCopperLayer(filename, layer, net):
     print("Reading file: " + filename)
     dxf = dxfgrabber.readfile(filename)
 
@@ -105,7 +105,7 @@ def readCopperLayer(filename, layer):
 
                 print('polyline: {}'.format(e.points[i]))
 
-                s = Segment( start=start, end=end, net=vo.code, layer = layer)
+                s = Segment( start=start, end=end, net=net, layer = layer)
                 segments.append(s)
 
             if e.is_closed == True:
@@ -113,7 +113,7 @@ def readCopperLayer(filename, layer):
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
                 print('polyline: {}'.format(e.points[index]))
-                s = Segment( start=start, end=end, net=vo.code, layer = layer)
+                s = Segment( start=start, end=end, net=net, layer = layer)
                 segments.append(s)
 
         elif typename == 'LINE':
@@ -122,7 +122,7 @@ def readCopperLayer(filename, layer):
             print('end point: {}\n'.format(e.end))
             start = [e.start[0], e.start[1] ]
             end = [e.end[0], e.end[1]]
-            s = Segment( start=start, end=end, net=vo.code, layer = layer)
+            s = Segment( start=start, end=end, net=net, layer = layer)
             segments.append(s)
 
 
@@ -136,7 +136,7 @@ def readCopperLayer(filename, layer):
 
                 print('polyline: {}'.format(e.points[i]))
 
-                s = Segment( start=start, end=end, net=vo.code, layer = layer)
+                s = Segment( start=start, end=end, net=net, layer = layer)
                 segments.append(s)
 
             if e.is_closed == True:
@@ -144,7 +144,7 @@ def readCopperLayer(filename, layer):
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
                 print('polyline: {}'.format(e.points[index]))
-                s = Segment( start=start, end=end, net=vo.code, layer = layer)
+                s = Segment( start=start, end=end, net=net, layer = layer)
                 segments.append(s)
 
         elif typename == 'SPLINE':
@@ -153,7 +153,7 @@ def readCopperLayer(filename, layer):
                 start = [e.fit_points[i][0], e.fit_points[i][1]]
                 end = [e.fit_points[i+1][0], e.fit_points[i+1][1]]
                 print('spline: {}'.format(e.fit_points[i]))
-                s = Segment( start=start, end=end, net=vo.code, layer = layer)
+                s = Segment( start=start, end=end, net=net, layer = layer)
                 segments.append(s)   
    
 def readOutlineLayer(filename, layer):
@@ -265,15 +265,23 @@ if __name__ == '__main__':
 
     filename = "1_lines.dxf"
     path = base_folder + filename
-    readCopperLayer(path, 'F.Cu')
+    readCopperLayer(path, 'F.Cu', vo.code)
 
     filename = "16_lines.dxf"
     path = base_folder + filename
-    readCopperLayer(path, 'B.Cu')
+    readCopperLayer(path, 'B.Cu', vi.code)
 
     filename = "20_board_outline.dxf"
     path = base_folder + filename
     readOutlineLayer(path, 'Edge.Cuts')
+
+    filename = "1_outlines.dxf"
+    path = base_folder + filename
+    readOutlineLayer(path, 'F.Paste')
+
+    filename = "16_outlines.dxf"
+    path = base_folder + filename
+    readOutlineLayer(path, 'B.Paste')
 
      # Create zones
     coords = [(0, 0), (10, 0), (10, 10), (0, 10)]
@@ -294,7 +302,10 @@ if __name__ == '__main__':
 
     nc1 = NetClass('default', trace_width=1, nets=['VI', 'VO', 'GND'])
 
-    r1 = Module.from_library('Resistor_SMD', 'R_0815_2038Metric')
+
+
+    r1 = Module.from_file(base_folder + 'R_0805.kicad_mod')
+    #r1 = Module.from_library('Resistor_SMD', 'R_0815_2038Metric')
     r1.at = [0, 0]
     
     # r1 = Module('M1')
