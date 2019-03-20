@@ -1,0 +1,8 @@
+__pycache__/
+dist/
+MANIFEST
+.cache/
+test.kicad_pcb
+test.pro
+*.pyc
+/build
