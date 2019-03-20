@@ -304,9 +304,13 @@ if __name__ == '__main__':
 
 
 
-    r1 = Module.from_file(base_folder + 'R_0805.kicad_mod')
-    #r1 = Module.from_library('Resistor_SMD', 'R_0815_2038Metric')
+    footprints_folder = "../pcb/Footprints/"
+    r1 = Module.from_file(footprints_folder + 'R_0402.kicad_mod')
     r1.at = [0, 0]
+    c1 = Module.from_file(footprints_folder + 'QFN-24-1EP_4x4mm_Pitch0.5mm.kicad_mod')
+    c1.at = [10, 0]
+    m1 = Module.from_file(footprints_folder + 'C_0603.kicad_mod')
+    m1.at = [20, 0]
     
     # r1 = Module('M1')
     # s1 = Segment( start=[-100000,-100000], end=[-100000,-100000], net=vo.code)
@@ -318,7 +322,7 @@ if __name__ == '__main__':
     pcb.num_nets = 5
     pcb.setup = Setup(grid_origin=[10, 10])
     pcb.layers = layers
-    pcb.modules += [r1]
+    pcb.modules += [r1, c1, m1]
     pcb.net_classes += [nc1]
     pcb.nets += [vi, vo, gnd]
     pcb.segments += segments
