@@ -14,14 +14,12 @@ pcb = Pcb()
 vias = []
 segments = []
 polygons = []
+lines = []
 
 
-
-def rdxf(filename):
+def readViasLayer(filename, layer):
     print("Reading file: " + filename)
     dxf = dxfgrabber.readfile(filename)
-
-    total_length = 0
 
     ########################################
     # Info
@@ -42,7 +40,47 @@ def rdxf(filename):
     print('entity_count: {}'.format(len(dxf.entities)))
     print('')
 
-   
+    ########################################
+    # Entities
+    ########################################
+    
+    for e in dxf.entities:
+
+        typename = e.dxftype
+
+        print('DXF Entity: {}\n'.format(typename))
+        print('Layer: {}\n'.format(e.layer))
+
+        if typename == 'CIRCLE':
+
+            print('center: {}'.format(e.center))
+            print('radius: {}'.format(e.radius))
+            coords = [e.center[0], e.center[1]]
+            vias.append(Via(at=coords, size=e.radius+0.2, drill=e.radius, net=vo.code))
+
+
+def readCopperLayer(filename, layer):
+    print("Reading file: " + filename)
+    dxf = dxfgrabber.readfile(filename)
+
+    ########################################
+    # Info
+    ########################################
+
+    print("DXF version: {}".format(dxf.dxfversion))
+
+    # dict of dxf header vars
+    print('header_var_coun: {}'.format(len(dxf.header)))
+
+    # collection of layer definitions
+    print('layer_count: {}'.format(len(dxf.layers)))
+
+    # dict like collection of block definitions
+    print('block_definition_count'.format(len(dxf.blocks)))
+
+    # list like collection of entities
+    print('entity_count: {}'.format(len(dxf.entities)))
+    print('')
 
 
     ########################################
@@ -61,102 +99,181 @@ def rdxf(filename):
 
             print('LWPolyline is closed? {}\n'.format(e.is_closed))
 
-            length = None
-            ppoint = (0, 0)
+            for i in range(len(e.points) - 1 ):
+                start = [e.points[i][0], e.points[i][1]]
+                end = [e.points[i+1][0], e.points[i+1][1]]
 
-            for p in e.points:
+                print('polyline: {}'.format(e.points[i]))
 
-                print(p)
+                s = Segment( start=start, end=end, net=vo.code, layer = layer)
+                segments.append(s)
 
-                if length is None:
-                    length = 0
-                    ppoint = p
-                    continue
+            if e.is_closed == True:
+                index = len(e.points) - 1
+                start = [e.points[index][0], e.points[index][1]]
+                end = [e.points[0][0], e.points[0][1]]
+                print('polyline: {}'.format(e.points[index]))
+                s = Segment( start=start, end=end, net=vo.code, layer = layer)
+                segments.append(s)
 
         elif typename == 'LINE':
 
             print('start point: {}\n'.format(e.start))
             print('end point: {}\n'.format(e.end))
-            start = [e.start[0]- 200, e.start[1] - 600]
-            end = [e.end[0]- 200, e.end[1] - 600]
-            s = Segment( start=start, end=end, net=vo.code)
+            start = [e.start[0], e.start[1] ]
+            end = [e.end[0], e.end[1]]
+            s = Segment( start=start, end=end, net=vo.code, layer = layer)
             segments.append(s)
 
-    
-        elif typename == 'INSERT':
-
-           print('block reference: {}'.format(e.insert))
-           #print('rows: {}'.format(e.row_count))
-
-        elif typename == 'CIRCLE':
-
-            print('center: {}'.format(e.center))
-            print('radius: {}'.format(e.radius))
-
-            layer_pair=('B.Cu', 'F.Cu')
-
-            coords = [e.center[0]- 200, e.center[1] - 600]
-            #v1 = Via(at=coords, size=.8, drill=.6, net=vo.code)
-            vias.append(Via(at=coords, size=.8, drill=e.radius, net=vo.code))
-
-
-            #pcb.add_track_via(coords, size =  e.radius)
 
         elif typename == 'POLYLINE':
 
             print('Polyline is closed? {}\n'.format(e.is_closed))
 
-            length = None
-            ppoint = (0, 0)
-            coords = []
             for i in range(len(e.points) - 1 ):
-                start = [e.points[i][0]- 200, e.points[i][1] - 600]
-                end = [e.points[i+1][0]- 200, e.points[i+1][1] - 600]
+                start = [e.points[i][0], e.points[i][1]]
+                end = [e.points[i+1][0], e.points[i+1][1]]
 
-                s = Segment( start=start, end=end, net=vo.code)
+                print('polyline: {}'.format(e.points[i]))
+
+                s = Segment( start=start, end=end, net=vo.code, layer = layer)
                 segments.append(s)
-        
 
-        elif typename == 'ELLIPSE':
-
-            a = euclidean_distance((0, 0), e.majoraxis)
-            b = a * e.ratio
-
-            print('center: {}'.format(e.center))
-            print('majoraxis: {}'.format(e.majoraxis))
-            print('a: {}'.format(a))
-            print('b: {}'.format(b))
-
-            total_length += length
+            if e.is_closed == True:
+                index = len(e.points) - 1
+                start = [e.points[index][0], e.points[index][1]]
+                end = [e.points[0][0], e.points[0][1]]
+                print('polyline: {}'.format(e.points[index]))
+                s = Segment( start=start, end=end, net=vo.code, layer = layer)
+                segments.append(s)
 
         elif typename == 'SPLINE':
-            # s = Segment( start=e.start, end=e.end, net=vo.code)
-            # segments.append(s)
-            pass
+            print('length: {}'.format(len(e.fit_points)))
+            for i in range(len(e.fit_points) - 1 ):
+                start = [e.fit_points[i][0], e.fit_points[i][1]]
+                end = [e.fit_points[i+1][0], e.fit_points[i+1][1]]
+                print('spline: {}'.format(e.fit_points[i]))
+                s = Segment( start=start, end=end, net=vo.code, layer = layer)
+                segments.append(s)   
+   
+def readOutlineLayer(filename, layer):
+    print("Reading file: " + filename)
+    dxf = dxfgrabber.readfile(filename)
 
-        else:
+    ########################################
+    # Info
+    ########################################
 
-            print('Not Implemented')
+    print("DXF version: {}".format(dxf.dxfversion))
+
+    # dict of dxf header vars
+    print('header_var_coun: {}'.format(len(dxf.header)))
+
+    # collection of layer definitions
+    print('layer_count: {}'.format(len(dxf.layers)))
+
+    # dict like collection of block definitions
+    print('block_definition_count'.format(len(dxf.blocks)))
+
+    # list like collection of entities
+    print('entity_count: {}'.format(len(dxf.entities)))
+    print('')
+
+
+    ########################################
+    # Entities
+    ########################################
+    
+    for e in dxf.entities:
+
+        typename = e.dxftype
 
         print('=' * 20)
+        print('DXF Entity: {}\n'.format(typename))
+        print('Layer: {}\n'.format(e.layer))
 
-    speed = 4
+        if typename == 'LWPOLYLINE':
 
-    print('{} mm / {} mmps = {} s'.format(total_length, speed, total_length / speed))
+            print('LWPolyline is closed? {}\n'.format(e.is_closed))
 
+            for i in range(len(e.points) - 1 ):
+                start = [e.points[i][0], e.points[i][1]]
+                end = [e.points[i+1][0], e.points[i+1][1]]
+
+                print('polyline: {}'.format(e.points[i]))
+
+                l = GrLine( start=start, end=end, layer = layer)
+                lines.append(l)
+
+            if e.is_closed == True:
+                index = len(e.points) - 1
+                start = [e.points[index][0], e.points[index][1]]
+                end = [e.points[0][0], e.points[0][1]]
+                print('polyline: {}'.format(e.points[index]))
+                l = GrLine( start=start, end=end, layer = layer)
+                lines.append(l)
+
+        elif typename == 'LINE':
+
+            print('start point: {}\n'.format(e.start))
+            print('end point: {}\n'.format(e.end))
+            start = [e.start[0], e.start[1] ]
+            end = [e.end[0], e.end[1]]
+            line = GrLine( start=start, end=end, layer = layer)
+            lines.append(l)
+
+
+        elif typename == 'POLYLINE':
+
+            print('Polyline is closed? {}\n'.format(e.is_closed))
+
+            for i in range(len(e.points) - 1 ):
+                start = [e.points[i][0], e.points[i][1]]
+                end = [e.points[i+1][0], e.points[i+1][1]]
+
+                print('polyline: {}'.format(e.points[i]))
+
+                l = GrLine( start=start, end=end, layer = layer)
+                lines.append(l)
+
+            if e.is_closed == True:
+                index = len(e.points) - 1
+                start = [e.points[index][0], e.points[index][1]]
+                end = [e.points[0][0], e.points[0][1]]
+                print('polyline: {}'.format(e.points[index]))
+                l = GrLine( start=start, end=end, layer = layer)
+                lines.append(l)
+
+        elif typename == 'SPLINE':
+            print('length: {}'.format(len(e.fit_points)))
+            for i in range(len(e.fit_points) - 1 ):
+                start = [e.fit_points[i][0], e.fit_points[i][1]]
+                end = [e.fit_points[i+1][0], e.fit_points[i+1][1]]
+                print('spline: {}'.format(e.fit_points[i]))
+                l = GrLine( start=start, end=end, layer = layer)
+                lines.append(l)  
    
-   
+
 
 if __name__ == '__main__':
 
     base_folder = "../pcb/FrontGlassPCB/"
-    #filename = "vias.dxf"
+
+    filename = "vias.dxf"
+    path = base_folder + filename
+    readViasLayer(path, 'F.Cu')
+
     filename = "1_lines.dxf"
     path = base_folder + filename
-    #pcbnew_easy.test()
-    rdxf(path)
-    # base_filename = "1_top copper.dxf" 
-    # rdxf(base_filename)
+    readCopperLayer(path, 'F.Cu')
+
+    filename = "16_lines.dxf"
+    path = base_folder + filename
+    readCopperLayer(path, 'B.Cu')
+
+    filename = "20_board_outline.dxf"
+    path = base_folder + filename
+    readOutlineLayer(path, 'Edge.Cuts')
 
      # Create zones
     coords = [(0, 0), (10, 0), (10, 10), (0, 10)]
@@ -196,6 +313,7 @@ if __name__ == '__main__':
     pcb.segments += segments
     pcb.vias += vias
     pcb.zones += [gndplane_top]
+    pcb.lines += lines
     #pcb.polygons += polygons
     
     filename = "FrontGlassPCB"
