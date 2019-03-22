@@ -15,6 +15,7 @@ vias = []
 segments = []
 polygons = []
 lines = []
+nets = [vi, vo, gnd]
 
 
 def readViasLayer(filename, layer):
@@ -56,7 +57,9 @@ def readViasLayer(filename, layer):
             print('center: {}'.format(e.center))
             print('radius: {}'.format(e.radius))
             coords = [e.center[0], e.center[1]]
-            vias.append(Via(at=coords, size=e.radius+0.2, drill=e.radius, net=vo.code))
+            net_ = Net()
+            nets.append(net_)
+            vias.append(Via(at=coords, size=e.radius+0.2, drill=e.radius, net=net_.code))
 
 
 def readCopperLayer(filename, layer, net):
@@ -105,7 +108,9 @@ def readCopperLayer(filename, layer, net):
 
                 print('polyline: {}'.format(e.points[i]))
 
-                s = Segment( start=start, end=end, net=net, layer = layer)
+                net_ = Net()
+                nets.append(net_)
+                s = Segment( start=start, end=end, net=net_.code, layer = layer)
                 segments.append(s)
 
             if e.is_closed == True:
@@ -113,7 +118,9 @@ def readCopperLayer(filename, layer, net):
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
                 print('polyline: {}'.format(e.points[index]))
-                s = Segment( start=start, end=end, net=net, layer = layer)
+                net_ = Net()
+                nets.append(net_)
+                s = Segment( start=start, end=end, net=net_.code, layer = layer)
                 segments.append(s)
 
         elif typename == 'LINE':
@@ -122,7 +129,9 @@ def readCopperLayer(filename, layer, net):
             print('end point: {}\n'.format(e.end))
             start = [e.start[0], e.start[1] ]
             end = [e.end[0], e.end[1]]
-            s = Segment( start=start, end=end, net=net, layer = layer)
+            net_ = Net()
+            nets.append(net_)
+            s = Segment( start=start, end=end, net=net_.code, layer = layer)
             segments.append(s)
 
 
@@ -136,7 +145,9 @@ def readCopperLayer(filename, layer, net):
 
                 print('polyline: {}'.format(e.points[i]))
 
-                s = Segment( start=start, end=end, net=net, layer = layer)
+                net_ = Net()
+                nets.append(net_)
+                s = Segment( start=start, end=end, net=net_.code, layer = layer)
                 segments.append(s)
 
             if e.is_closed == True:
@@ -144,7 +155,9 @@ def readCopperLayer(filename, layer, net):
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
                 print('polyline: {}'.format(e.points[index]))
-                s = Segment( start=start, end=end, net=net, layer = layer)
+                net_ = Net()
+                nets.append(net_)
+                s = Segment( start=start, end=end, net=net_.code, layer = layer)
                 segments.append(s)
 
         elif typename == 'SPLINE':
@@ -153,7 +166,9 @@ def readCopperLayer(filename, layer, net):
                 start = [e.fit_points[i][0], e.fit_points[i][1]]
                 end = [e.fit_points[i+1][0], e.fit_points[i+1][1]]
                 print('spline: {}'.format(e.fit_points[i]))
-                s = Segment( start=start, end=end, net=net, layer = layer)
+                net_ = Net()
+                nets.append(net_)
+                s = Segment( start=start, end=end, net=net_.code, layer = layer)
                 segments.append(s)   
    
 def readOutlineLayer(filename, layer):
@@ -311,6 +326,8 @@ if __name__ == '__main__':
     c1.at = [10, 0]
     m1 = Module.from_file(footprints_folder + 'C_0603.kicad_mod')
     m1.at = [20, 0]
+    m2 = Module.from_file(footprints_folder + 'CL-Z891.kicad_mod')
+    m2.at = [30, 0]
     
     # r1 = Module('M1')
     # s1 = Segment( start=[-100000,-100000], end=[-100000,-100000], net=vo.code)
@@ -319,12 +336,12 @@ if __name__ == '__main__':
     pcb.title = 'A title'
     pcb.comment1 = 'Comment 1'
     pcb.page_type = [20, 20]
-    pcb.num_nets = 5
+    pcb.num_nets = len(nets) + 2
     pcb.setup = Setup(grid_origin=[10, 10])
     pcb.layers = layers
-    pcb.modules += [r1, c1, m1]
+    pcb.modules += [r1, c1, m1, m2]
     pcb.net_classes += [nc1]
-    pcb.nets += [vi, vo, gnd]
+    pcb.nets += nets
     pcb.segments += segments
     pcb.vias += vias
     pcb.zones += [gndplane_top]
