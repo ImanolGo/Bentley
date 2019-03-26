@@ -61,6 +61,7 @@ def readViasLayer(filename, layer):
             print('center: {}'.format(e.center))
             print('radius: {}'.format(e.radius))
             coords = [e.center[0], e.center[1]]
+            coords[1] = -coords[1]
             net_ = Net()
             nets.append(net_)
             vias.append(Via(at=coords, size=e.radius+0.2, drill=e.radius, net=net_.code))
@@ -112,6 +113,8 @@ def readCopperLayer(filename, layer, net):
                 start = [e.points[i][0], e.points[i][1]]
                 end = [e.points[i+1][0], e.points[i+1][1]]
 
+                start[1] = -start[1]
+                end[1] = -end[1]
                 print('polyline: {}'.format(e.points[i]))
 
                 net_ = Net()
@@ -123,6 +126,8 @@ def readCopperLayer(filename, layer, net):
                 index = len(e.points) - 1
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
+                start[1] = -start[1]
+                end[1] = -end[1]
                 print('polyline: {}'.format(e.points[index]))
                 net_ = Net()
                 nets.append(net_)
@@ -135,6 +140,8 @@ def readCopperLayer(filename, layer, net):
             print('end point: {}\n'.format(e.end))
             start = [e.start[0], e.start[1] ]
             end = [e.end[0], e.end[1]]
+            start[1] = -start[1]
+            end[1] = -end[1]
             net_ = Net()
             nets.append(net_)
             s = Segment( start=start, end=end, net=net_.code, layer = layer)
@@ -150,7 +157,8 @@ def readCopperLayer(filename, layer, net):
                 end = [e.points[i+1][0], e.points[i+1][1]]
 
                 print('polyline: {}'.format(e.points[i]))
-
+                start[1] = -start[1]
+                end[1] = -end[1]
                 net_ = Net()
                 nets.append(net_)
                 s = Segment( start=start, end=end, net=net_.code, layer = layer)
@@ -160,6 +168,8 @@ def readCopperLayer(filename, layer, net):
                 index = len(e.points) - 1
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
+                start[1] = -start[1]
+                end[1] = -end[1]
                 print('polyline: {}'.format(e.points[index]))
                 net_ = Net()
                 nets.append(net_)
@@ -171,6 +181,8 @@ def readCopperLayer(filename, layer, net):
             for i in range(len(e.fit_points) - 1 ):
                 start = [e.fit_points[i][0], e.fit_points[i][1]]
                 end = [e.fit_points[i+1][0], e.fit_points[i+1][1]]
+                start[1] = -start[1]
+                end[1] = -end[1]
                 print('spline: {}'.format(e.fit_points[i]))
                 net_ = Net()
                 nets.append(net_)
@@ -222,6 +234,8 @@ def readOutlineLayer(filename, layer):
             for i in range(len(e.points) - 1 ):
                 start = [e.points[i][0], e.points[i][1]]
                 end = [e.points[i+1][0], e.points[i+1][1]]
+                start[1] = -start[1]
+                end[1] = -end[1]
 
                 print('polyline: {}'.format(e.points[i]))
 
@@ -232,6 +246,8 @@ def readOutlineLayer(filename, layer):
                 index = len(e.points) - 1
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
+                start[1] = -start[1]
+                end[1] = -end[1]
                 print('polyline: {}'.format(e.points[index]))
                 l = GrLine( start=start, end=end, layer = layer)
                 lines.append(l)
@@ -242,6 +258,8 @@ def readOutlineLayer(filename, layer):
             print('end point: {}\n'.format(e.end))
             start = [e.start[0], e.start[1] ]
             end = [e.end[0], e.end[1]]
+            start[1] = -start[1]
+            end[1] = -end[1]
             line = GrLine( start=start, end=end, layer = layer)
             lines.append(l)
 
@@ -253,7 +271,8 @@ def readOutlineLayer(filename, layer):
             for i in range(len(e.points) - 1 ):
                 start = [e.points[i][0], e.points[i][1]]
                 end = [e.points[i+1][0], e.points[i+1][1]]
-
+                start[1] = -start[1]
+                end[1] = -end[1]
                 print('polyline: {}'.format(e.points[i]))
 
                 l = GrLine( start=start, end=end, layer = layer)
@@ -263,6 +282,8 @@ def readOutlineLayer(filename, layer):
                 index = len(e.points) - 1
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
+                start[1] = -start[1]
+                end[1] = -end[1]
                 print('polyline: {}'.format(e.points[index]))
                 l = GrLine( start=start, end=end, layer = layer)
                 lines.append(l)
@@ -272,6 +293,8 @@ def readOutlineLayer(filename, layer):
             for i in range(len(e.fit_points) - 1 ):
                 start = [e.fit_points[i][0], e.fit_points[i][1]]
                 end = [e.fit_points[i+1][0], e.fit_points[i+1][1]]
+                start[1] = -start[1]
+                end[1] = -end[1]
                 print('spline: {}'.format(e.fit_points[i]))
                 l = GrLine( start=start, end=end, layer = layer)
                 lines.append(l)  
@@ -320,7 +343,7 @@ def readFootprints(filename, side = 'Front'):
             if side == 'Back':
                 m.flip()
 
-            m.at = [float(row[1]),float(row[2])]
+            m.at = [float(row[1]),-float(row[2])]
             m.rotate(float(row[3]))
             modules.append(m)
             # print(row[0])
@@ -331,9 +354,8 @@ if __name__ == '__main__':
 
    
 
-    # filename = "vias.dxf"
-    # path = base_folder + filename
-    # readViasLayer(path, 'F.Cu')
+    filename = "vias.dxf"
+    readViasLayer(filename, 'F.Cu')
 
     filename = "1_lines.dxf"
     #readEntity(filename)
