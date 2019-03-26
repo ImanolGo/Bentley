@@ -306,7 +306,7 @@ def readEntity(filename):
         typename = e.dxftype
         print('DXF Entity: {}\n'.format(typename))
 
-def readFootprints(filename):
+def readFootprints(filename, side = 'Front'):
 
     path = base_folder + filename
     print("Reading Footprint File: " + path)
@@ -317,6 +317,9 @@ def readFootprints(filename):
             footprint_path = footprints_folder + row[0] + '.kicad_mod'
             print("Reading Footprint: " + footprint_path)
             m = Module.from_file(footprint_path)
+            if side == 'Back':
+                m.flip()
+
             m.at = [float(row[1]),float(row[2])]
             m.rotate(float(row[3]))
             modules.append(m)
@@ -351,7 +354,7 @@ if __name__ == '__main__':
     # readOutlineLayer(path, 'B.Paste')
     # 
     filename = "RGE0024H.csv"
-    readFootprints(filename)
+    readFootprints(filename, 'Back')
 
      # Create zones
     coords = [(0, 0), (10, 0), (10, 10), (0, 10)]
