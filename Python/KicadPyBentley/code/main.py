@@ -1,4 +1,5 @@
 import dxfgrabber
+import csv
 from numpy import array
 from pykicad.pcb import *
 from pykicad.module import *
@@ -15,7 +16,10 @@ vias = []
 segments = []
 polygons = []
 lines = []
+modules = []
 nets = [vi, vo, gnd]
+base_folder = "../pcb/FrontGlassPCB/"
+footprints_folder = "../pcb/Footprints/"
 
 
 def readViasLayer(filename, layer):
@@ -63,8 +67,10 @@ def readViasLayer(filename, layer):
 
 
 def readCopperLayer(filename, layer, net):
-    print("Reading file: " + filename)
-    dxf = dxfgrabber.readfile(filename)
+    
+    path = base_folder + filename
+    print("Reading file: " + path)
+    dxf = dxfgrabber.readfile(path)
 
     ########################################
     # Info
@@ -172,8 +178,10 @@ def readCopperLayer(filename, layer, net):
                 segments.append(s)   
    
 def readOutlineLayer(filename, layer):
-    print("Reading file: " + filename)
-    dxf = dxfgrabber.readfile(filename)
+    
+    path = base_folder + filename
+    print("Reading file: " + path)
+    dxf = dxfgrabber.readfile(path)
 
     ########################################
     # Info
@@ -268,35 +276,82 @@ def readOutlineLayer(filename, layer):
                 l = GrLine( start=start, end=end, layer = layer)
                 lines.append(l)  
    
+def readEntity(filename):
+    
+    path = base_folder + filename
+    print("Reading file: " + path)
+    dxf = dxfgrabber.readfile(path)
+
+    ########################################
+    # Info
+    ########################################
+
+    print("DXF version: {}".format(dxf.dxfversion))
+
+    # dict of dxf header vars
+    print('header_var_coun: {}'.format(len(dxf.header)))
+
+    # collection of layer definitions
+    print('layer_count: {}'.format(len(dxf.layers)))
+
+    # dict like collection of block definitions
+    print('block_definition_count'.format(len(dxf.blocks)))
+
+    # list like collection of entities
+    print('entity_count: {}'.format(len(dxf.entities)))
+    print('')
+
+    for e in dxf.entities:
+
+        typename = e.dxftype
+        print('DXF Entity: {}\n'.format(typename))
+
+def readFootprints(filename):
+
+    path = base_folder + filename
+    print("Reading Footprint File: " + path)
+    with open(path) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            print(row)
+            footprint_path = footprints_folder + row[0] + '.kicad_mod'
+            print("Reading Footprint: " + footprint_path)
+            m = Module.from_file(footprint_path)
+            m.at = [float(row[1]),float(row[2])]
+            m.rotate(float(row[3]))
+            modules.append(m)
+            # print(row[0])
+            # print(row[0],row[1],row[2],)
 
 
 if __name__ == '__main__':
 
-    base_folder = "../pcb/FrontGlassPCB/"
+   
 
-    filename = "vias.dxf"
-    path = base_folder + filename
-    readViasLayer(path, 'F.Cu')
+    # filename = "vias.dxf"
+    # path = base_folder + filename
+    # readViasLayer(path, 'F.Cu')
 
     filename = "1_lines.dxf"
-    path = base_folder + filename
-    readCopperLayer(path, 'F.Cu', vo.code)
+    #readEntity(filename)
+    readCopperLayer(filename, 'F.Cu', "")
 
     filename = "16_lines.dxf"
-    path = base_folder + filename
-    readCopperLayer(path, 'B.Cu', vi.code)
+    readCopperLayer(filename, 'B.Cu', "")
 
     filename = "20_board_outline.dxf"
-    path = base_folder + filename
-    readOutlineLayer(path, 'Edge.Cuts')
+    readOutlineLayer(filename, 'Edge.Cuts')
 
-    filename = "1_outlines.dxf"
-    path = base_folder + filename
-    readOutlineLayer(path, 'F.Paste')
+    # filename = "1_outlines.dxf"
+    # path = base_folder + filename
+    # readOutlineLayer(path, 'F.Paste')
 
-    filename = "16_outlines.dxf"
-    path = base_folder + filename
-    readOutlineLayer(path, 'B.Paste')
+    # filename = "16_outlines.dxf"
+    # path = base_folder + filename
+    # readOutlineLayer(path, 'B.Paste')
+    # 
+    filename = "RGE0024H.csv"
+    readFootprints(filename)
 
      # Create zones
     coords = [(0, 0), (10, 0), (10, 10), (0, 10)]
@@ -319,7 +374,7 @@ if __name__ == '__main__':
 
 
 
-    footprints_folder = "../pcb/Footprints/"
+    
     r1 = Module.from_file(footprints_folder + 'R_0402.kicad_mod')
     r1.at = [0, 0]
     c1 = Module.from_file(footprints_folder + 'QFN-24-1EP_4x4mm_Pitch0.5mm.kicad_mod')
@@ -328,7 +383,11 @@ if __name__ == '__main__':
     m1.at = [20, 0]
     m2 = Module.from_file(footprints_folder + 'CL-Z891.kicad_mod')
     m2.at = [30, 0]
+    m3 = Module.from_file(footprints_folder + 'Texas_RGE0024H_EP2.7x2.7mm.kicad_mod')
+    m3.at = [40, 0]
     
+    if len(modules) == 0:
+        modules = [r1, c1, m1, m2, m3]
     # r1 = Module('M1')
     # s1 = Segment( start=[-100000,-100000], end=[-100000,-100000], net=vo.code)
 
@@ -339,7 +398,7 @@ if __name__ == '__main__':
     pcb.num_nets = len(nets) + 2
     pcb.setup = Setup(grid_origin=[10, 10])
     pcb.layers = layers
-    pcb.modules += [r1, c1, m1, m2]
+    pcb.modules += modules
     pcb.net_classes += [nc1]
     pcb.nets += nets
     pcb.segments += segments
