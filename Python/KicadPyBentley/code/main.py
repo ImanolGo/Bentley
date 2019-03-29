@@ -1,14 +1,7 @@
-# try:
-#     from .dxfgrabber import *     # "myapp" case
-#     print("Imported locally dxfgrabber")
-# except:
-#     import dxfgrabber    
-#       # "__main__" case
 
 import sys
 sys.path.append("libraries/dxfgrabber")
 sys.path.append("libraries/pykicad")
-
 
 import dxfgrabber
 from numpy import array
