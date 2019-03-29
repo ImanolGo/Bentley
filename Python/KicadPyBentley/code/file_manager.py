@@ -23,11 +23,17 @@ class FileManager:
         #subdirnames = [x[1] for x in os.walk(self.base_folder)]
         print(subdirs)
         #print(subdirnames)
-        for i in (1, len(subdirs) - 1):
-            print "FileManager::Reading folder -> " + subdirs[i]
-            self.readDxfFiles(subdirs[i])
-            self.readCsvFiles(subdirs[i])
-            self.savePcb(subdirs[i])
+        for subdir in subdirs:
+            print "FileManager::Reading folder -> " + subdir
+            self.readDxfFiles(subdir)
+            self.readCsvFiles(subdir)
+            self.savePcb(subdir)
+
+        # for i in (1, len(subdirs) - 1):
+        #     print "FileManager::Reading folder -> " + subdirs[i]
+        #     self.readDxfFiles(subdirs[i])
+        #     self.readCsvFiles(subdirs[i])
+        #     self.savePcb(subdirs[i])
 
     def savePcb(self, directory):
         filename = directory.split('/')[-1] 
@@ -58,7 +64,7 @@ class FileManager:
             readCSV = csv.reader(csvfile, delimiter=',')
             for row in readCSV:
                 name = row[1].lstrip(' ')
-                coords = [float(row[2]),float(row[3])]
+                coords = [float(row[2]),-float(row[3])]
                 angle = float(row[4])
                 side = row[5]
                 self.pcb.addFootprint(name,coords, angle, side)
