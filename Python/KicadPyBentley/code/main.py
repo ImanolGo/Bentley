@@ -1,10 +1,22 @@
+# try:
+#     from .dxfgrabber import *     # "myapp" case
+#     print("Imported locally dxfgrabber")
+# except:
+#     import dxfgrabber    
+#       # "__main__" case
+
+import sys
+sys.path.append("libraries/dxfgrabber")
+sys.path.append("libraries/pykicad")
+
+
 import dxfgrabber
-import csv
 from numpy import array
 from pykicad.pcb import *
 from pykicad.module import *
 
-DEBUG = True
+
+DEBUG = False
 
  # Define nets
 vi, vo, gnd = Net('VI'), Net('VO'), Net('GND')
@@ -21,6 +33,9 @@ nets = [vi, vo, gnd]
 base_folder = "../pcb/FrontGlassPCB/"
 footprints_folder = "../pcb/Footprints/"
 
+def log(info):
+    if DEBUG:
+        print(info)
 
 def readViasLayer(filename, layer):
     
@@ -32,20 +47,20 @@ def readViasLayer(filename, layer):
     # Info
     ########################################
 
-    print("DXF version: {}".format(dxf.dxfversion))
+    log("DXF version: {}".format(dxf.dxfversion))
 
     # dict of dxf header vars
-    print('header_var_coun: {}'.format(len(dxf.header)))
+    log('header_var_coun: {}'.format(len(dxf.header)))
 
     # collection of layer definitions
-    print('layer_count: {}'.format(len(dxf.layers)))
+    log('layer_count: {}'.format(len(dxf.layers)))
 
     # dict like collection of block definitions
-    print('block_definition_count'.format(len(dxf.blocks)))
+    log('block_definition_count'.format(len(dxf.blocks)))
 
     # list like collection of entities
-    print('entity_count: {}'.format(len(dxf.entities)))
-    print('')
+    log('entity_count: {}'.format(len(dxf.entities)))
+    log('')
 
     ########################################
     # Entities
@@ -55,15 +70,15 @@ def readViasLayer(filename, layer):
 
         typename = e.dxftype
 
-        print('DXF Entity: {}\n'.format(typename))
-        print('Layer: {}\n'.format(e.layer))
+        log('DXF Entity: {}\n'.format(typename))
+        log('Layer: {}\n'.format(e.layer))
 
         if typename == 'CIRCLE':
 
-            print('center: {}'.format(e.center))
-            print('radius: {}'.format(e.radius))
+            log('center: {}'.format(e.center))
+            log('radius: {}'.format(e.radius))
             coords = [e.center[0], e.center[1]]
-            #coords[1] = -coords[1]
+            coords[1] = -coords[1]
             net_ = Net()
             nets.append(net_)
             vias.append(Via(at=coords, size=e.radius+0.2, drill=e.radius, net=net_.code))
@@ -79,20 +94,20 @@ def readCopperLayer(filename, layer, net):
     # Info
     ########################################
 
-    print("DXF version: {}".format(dxf.dxfversion))
+    log("DXF version: {}".format(dxf.dxfversion))
 
     # dict of dxf header vars
-    print('header_var_coun: {}'.format(len(dxf.header)))
+    log('header_var_coun: {}'.format(len(dxf.header)))
 
     # collection of layer definitions
-    print('layer_count: {}'.format(len(dxf.layers)))
+    log('layer_count: {}'.format(len(dxf.layers)))
 
     # dict like collection of block definitions
-    print('block_definition_count'.format(len(dxf.blocks)))
+    log('block_definition_count'.format(len(dxf.blocks)))
 
     # list like collection of entities
-    print('entity_count: {}'.format(len(dxf.entities)))
-    print('')
+    log('entity_count: {}'.format(len(dxf.entities)))
+    log('')
 
 
     ########################################
@@ -103,21 +118,21 @@ def readCopperLayer(filename, layer, net):
 
         typename = e.dxftype
 
-        print('=' * 20)
-        print('DXF Entity: {}\n'.format(typename))
-        print('Layer: {}\n'.format(e.layer))
+        log('=' * 20)
+        log('DXF Entity: {}\n'.format(typename))
+        log('Layer: {}\n'.format(e.layer))
 
         if typename == 'LWPOLYLINE':
 
-            print('LWPolyline is closed? {}\n'.format(e.is_closed))
+            log('LWPolyline is closed? {}\n'.format(e.is_closed))
 
             for i in range(len(e.points) - 1 ):
                 start = [e.points[i][0], e.points[i][1]]
                 end = [e.points[i+1][0], e.points[i+1][1]]
 
-               #start[1] = -start[1]
- #               end[1] = -end[1]
-                print('polyline: {}'.format(e.points[i]))
+                start[1] = -start[1]
+                end[1] = -end[1]
+                log('polyline: {}'.format(e.points[i]))
 
                 net_ = Net()
                 nets.append(net_)
@@ -128,9 +143,9 @@ def readCopperLayer(filename, layer, net):
                 index = len(e.points) - 1
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
-               #start[1] = -start[1]
- #               end[1] = -end[1]
-                print('polyline: {}'.format(e.points[index]))
+                start[1] = -start[1]
+                end[1] = -end[1]
+                log('polyline: {}'.format(e.points[index]))
                 net_ = Net()
                 nets.append(net_)
                 s = Segment( start=start, end=end, net=net_.code, layer = layer)
@@ -138,12 +153,12 @@ def readCopperLayer(filename, layer, net):
 
         elif typename == 'LINE':
 
-            print('start point: {}\n'.format(e.start))
-            print('end point: {}\n'.format(e.end))
+            log('start point: {}\n'.format(e.start))
+            log('end point: {}\n'.format(e.end))
             start = [e.start[0], e.start[1] ]
             end = [e.end[0], e.end[1]]
-            # start[1] = -start[1]
-            # end[1] = -end[1]
+            start[1] = -start[1]
+            end[1] = -end[1]
             net_ = Net()
             nets.append(net_)
             s = Segment( start=start, end=end, net=net_.code, layer = layer)
@@ -152,15 +167,15 @@ def readCopperLayer(filename, layer, net):
 
         elif typename == 'POLYLINE':
 
-            print('Polyline is closed? {}\n'.format(e.is_closed))
+            log('Polyline is closed? {}\n'.format(e.is_closed))
 
             for i in range(len(e.points) - 1 ):
                 start = [e.points[i][0], e.points[i][1]]
                 end = [e.points[i+1][0], e.points[i+1][1]]
 
-                print('polyline: {}'.format(e.points[i]))
-               #start[1] = -start[1]
- #               end[1] = -end[1]
+                log('polyline: {}'.format(e.points[i]))
+                start[1] = -start[1]
+                end[1] = -end[1]
                 net_ = Net()
                 nets.append(net_)
                 s = Segment( start=start, end=end, net=net_.code, layer = layer)
@@ -170,22 +185,22 @@ def readCopperLayer(filename, layer, net):
                 index = len(e.points) - 1
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
-               #start[1] = -start[1]
- #               end[1] = -end[1]
-                print('polyline: {}'.format(e.points[index]))
+                start[1] = -start[1]
+                end[1] = -end[1]
+                log('polyline: {}'.format(e.points[index]))
                 net_ = Net()
                 nets.append(net_)
                 s = Segment( start=start, end=end, net=net_.code, layer = layer)
                 segments.append(s)
 
         elif typename == 'SPLINE':
-            print('length: {}'.format(len(e.fit_points)))
+            log('length: {}'.format(len(e.fit_points)))
             for i in range(len(e.fit_points) - 1 ):
                 start = [e.fit_points[i][0], e.fit_points[i][1]]
                 end = [e.fit_points[i+1][0], e.fit_points[i+1][1]]
-               #start[1] = -start[1]
- #               end[1] = -end[1]
-                print('spline: {}'.format(e.fit_points[i]))
+                start[1] = -start[1]
+                end[1] = -end[1]
+                log('spline: {}'.format(e.fit_points[i]))
                 net_ = Net()
                 nets.append(net_)
                 s = Segment( start=start, end=end, net=net_.code, layer = layer)
@@ -201,20 +216,20 @@ def readOutlineLayer(filename, layer):
     # Info
     ########################################
 
-    print("DXF version: {}".format(dxf.dxfversion))
+    log("DXF version: {}".format(dxf.dxfversion))
 
     # dict of dxf header vars
-    print('header_var_coun: {}'.format(len(dxf.header)))
+    log('header_var_coun: {}'.format(len(dxf.header)))
 
     # collection of layer definitions
-    print('layer_count: {}'.format(len(dxf.layers)))
+    log('layer_count: {}'.format(len(dxf.layers)))
 
     # dict like collection of block definitions
-    print('block_definition_count'.format(len(dxf.blocks)))
+    log('block_definition_count'.format(len(dxf.blocks)))
 
     # list like collection of entities
-    print('entity_count: {}'.format(len(dxf.entities)))
-    print('')
+    log('entity_count: {}'.format(len(dxf.entities)))
+    log('')
 
 
     ########################################
@@ -225,21 +240,21 @@ def readOutlineLayer(filename, layer):
 
         typename = e.dxftype
 
-        print('=' * 20)
-        print('DXF Entity: {}\n'.format(typename))
-        print('Layer: {}\n'.format(e.layer))
+        log('=' * 20)
+        log('DXF Entity: {}\n'.format(typename))
+        log('Layer: {}\n'.format(e.layer))
 
         if typename == 'LWPOLYLINE':
 
-            print('LWPolyline is closed? {}\n'.format(e.is_closed))
+            log('LWPolyline is closed? {}\n'.format(e.is_closed))
 
             for i in range(len(e.points) - 1 ):
                 start = [e.points[i][0], e.points[i][1]]
                 end = [e.points[i+1][0], e.points[i+1][1]]
-               #start[1] = -start[1]
- #               end[1] = -end[1]
+                start[1] = -start[1]
+                end[1] = -end[1]
 
-                print('polyline: {}'.format(e.points[i]))
+                log('polyline: {}'.format(e.points[i]))
 
                 l = GrLine( start=start, end=end, layer = layer)
                 lines.append(l)
@@ -248,34 +263,34 @@ def readOutlineLayer(filename, layer):
                 index = len(e.points) - 1
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
-               #start[1] = -start[1]
- #               end[1] = -end[1]
-                print('polyline: {}'.format(e.points[index]))
+                start[1] = -start[1]
+                end[1] = -end[1]
+                log('polyline: {}'.format(e.points[index]))
                 l = GrLine( start=start, end=end, layer = layer)
                 lines.append(l)
 
         elif typename == 'LINE':
 
-            print('start point: {}\n'.format(e.start))
-            print('end point: {}\n'.format(e.end))
+            log('start point: {}\n'.format(e.start))
+            log('end point: {}\n'.format(e.end))
             start = [e.start[0], e.start[1] ]
             end = [e.end[0], e.end[1]]
-            # start[1] = -start[1]
-            # end[1] = -end[1]
+            start[1] = -start[1]
+            end[1] = -end[1]
             line = GrLine( start=start, end=end, layer = layer)
             lines.append(l)
 
 
         elif typename == 'POLYLINE':
 
-            print('Polyline is closed? {}\n'.format(e.is_closed))
+            log('Polyline is closed? {}\n'.format(e.is_closed))
 
             for i in range(len(e.points) - 1 ):
                 start = [e.points[i][0], e.points[i][1]]
                 end = [e.points[i+1][0], e.points[i+1][1]]
-               #start[1] = -start[1]
- #               end[1] = -end[1]
-                print('polyline: {}'.format(e.points[i]))
+                start[1] = -start[1]
+                end[1] = -end[1]
+                log('polyline: {}'.format(e.points[i]))
 
                 l = GrLine( start=start, end=end, layer = layer)
                 lines.append(l)
@@ -284,20 +299,20 @@ def readOutlineLayer(filename, layer):
                 index = len(e.points) - 1
                 start = [e.points[index][0], e.points[index][1]]
                 end = [e.points[0][0], e.points[0][1]]
-               #start[1] = -start[1]
- #               end[1] = -end[1]
-                print('polyline: {}'.format(e.points[index]))
+                start[1] = -start[1]
+                end[1] = -end[1]
+                log('polyline: {}'.format(e.points[index]))
                 l = GrLine( start=start, end=end, layer = layer)
                 lines.append(l)
 
         elif typename == 'SPLINE':
-            print('length: {}'.format(len(e.fit_points)))
+            log('length: {}'.format(len(e.fit_points)))
             for i in range(len(e.fit_points) - 1 ):
                 start = [e.fit_points[i][0], e.fit_points[i][1]]
                 end = [e.fit_points[i+1][0], e.fit_points[i+1][1]]
-               #start[1] = -start[1]
- #               end[1] = -end[1]
-                print('spline: {}'.format(e.fit_points[i]))
+                start[1] = -start[1]
+                end[1] = -end[1]
+                log('spline: {}'.format(e.fit_points[i]))
                 l = GrLine( start=start, end=end, layer = layer)
                 lines.append(l)  
    
@@ -311,65 +326,65 @@ def readEntity(filename):
     # Info
     ########################################
 
-    print("DXF version: {}".format(dxf.dxfversion))
+    log("DXF version: {}".format(dxf.dxfversion))
 
     # dict of dxf header vars
-    print('header_var_coun: {}'.format(len(dxf.header)))
+    log('header_var_coun: {}'.format(len(dxf.header)))
 
     # collection of layer definitions
-    print('layer_count: {}'.format(len(dxf.layers)))
+    log('layer_count: {}'.format(len(dxf.layers)))
 
     # dict like collection of block definitions
-    print('block_definition_count'.format(len(dxf.blocks)))
+    log('block_definition_count'.format(len(dxf.blocks)))
 
     # list like collection of entities
-    print('entity_count: {}'.format(len(dxf.entities)))
-    print('')
+    log('entity_count: {}'.format(len(dxf.entities)))
+    log('')
 
     for e in dxf.entities:
 
         typename = e.dxftype
-        print('DXF Entity: {}\n'.format(typename))
+        log('DXF Entity: {}\n'.format(typename))
 
-def readFootprints(filename, side = 'Front'):
+def readFootprint(filename, side = 'Front', offset=0.0):
 
     path = base_folder + filename
     print("Reading Footprint File: " + path)
     with open(path) as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for row in readCSV:
-            print(row)
-            footprint_path = footprints_folder + row[0] + '.kicad_mod'
-            print("Reading Footprint: " + footprint_path)
-            m = Module.from_file(footprint_path)
+            footlog_path = footprints_folder + row[0] + '.kicad_mod'
+            log("Reading Footprint: " + footlog_path)
+            m = Module.from_file(footlog_path)
+            angle = float(row[3])
             if side == 'Back':
+                angle = -angle
                 m.flip()
 
-            m.at = [float(row[1]),float(row[2])]
-            #m.at = [float(row[1]),-float(row[2])]
-            angle = float(row[3]) 
-            m.rotate(-30)
+            m.at = [float(row[1]),-float(row[2])]
+
+            angle += offset
+            m.rotate(angle)
             modules.append(m)
-            # print(row[0])
-            # print(row[0],row[1],row[2],)
+            # log(row[0])
+            # log(row[0],row[1],row[2],)
 
 
 if __name__ == '__main__':
 
    
-
     filename = "vias.dxf"
     readViasLayer(filename, 'F.Cu')
 
-    filename = "1_lines.dxf"
-    #readEntity(filename)
-    readCopperLayer(filename, 'F.Cu', "")
+    # filename = "1_lines.dxf"
+    # #readEntity(filename)
+    # readCopperLayer(filename, 'F.Cu', "")
 
-    filename = "16_lines.dxf"
-    readCopperLayer(filename, 'B.Cu', "")
+    # filename = "16_lines.dxf"
+    # readCopperLayer(filename, 'B.Cu', "")
 
-    filename = "20_board_outline.dxf"
-    readOutlineLayer(filename, 'Edge.Cuts')
+    # filename = "20_board_outline.dxf"
+    # readOutlineLayer(filename, 'Edge.Cuts')
 
     # filename = "1_outlines.dxf"
     # path = base_folder + filename
@@ -380,7 +395,7 @@ if __name__ == '__main__':
     # readOutlineLayer(path, 'B.Paste')
     # 
     filename = "RGE0024H.csv"
-    readFootprints(filename, 'Back', -90)
+    #readFootprint(filename, 'Back', -90)
 
      # Create zones
     coords = [(0, 0), (10, 0), (10, 10), (0, 10)]
@@ -414,12 +429,9 @@ if __name__ == '__main__':
     m2.at = [30, 0]
     m3 = Module.from_file(footprints_folder + 'Texas_RGE0024H_EP2.7x2.7mm.kicad_mod')
     m3.at = [40, 0]
-    m4 = Module.from_file(footprints_folder + 'CL-341S_SQ2.kicad_mod')
-    m4.at = [50, 0]
-
     
     if len(modules) == 0:
-        modules = [r1, c1, m1, m2, m3, m4]
+        modules = [r1, c1, m1, m2, m3]
     # r1 = Module('M1')
     # s1 = Segment( start=[-100000,-100000], end=[-100000,-100000], net=vo.code)
 
@@ -441,4 +453,5 @@ if __name__ == '__main__':
     
     filename = "FrontGlassPCB"
     path =  base_folder + filename
+    print("Saving PCB: " + path)
     pcb.to_file(path)
