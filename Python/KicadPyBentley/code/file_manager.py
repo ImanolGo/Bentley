@@ -10,7 +10,7 @@ class FileManager:
 
     def __init__(self, base_folder, pcbManager):
         self.pcb = pcbManager
-        self.base_folder = base_folder + "pcbs/"
+        self.base_folder = os.path.join(base_folder, 'pcbs')
         self.__initializeAttributes()
         print "FileManager::Intitialized"
 

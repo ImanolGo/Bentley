@@ -1,10 +1,11 @@
-
+import os
 from pcb_manager import PcbManager
 from file_manager import FileManager
 
 DEBUG = False
+base_folder = os.path.join('..', 'pcb')
 
-base_folder = "../pcb/"
+print base_folder
 
 def log(info):
     if DEBUG:

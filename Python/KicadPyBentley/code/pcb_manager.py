@@ -59,7 +59,8 @@ class PcbManager:
         self.arcs.append(arc)
 
     def addFootprint(self, name, coords, angle, side = 'front', offset = 0.0):
-        footlog_path = self.base_folder + 'footprints/' + name + '.kicad_mod'
+        filename = name + '.kicad_mod'
+        footlog_path = os.path.join(self.base_folder, 'footprints', filename)
         m = Module.from_file(footlog_path)
         side = side.strip()
         if side == 'back':
@@ -86,8 +87,8 @@ class PcbManager:
         self.zones = []
         self.arcs = []
         self.polygons = []
-        self.modules = [Module.from_file(self.base_folder + 'footprints/' 'R_0402.kicad_mod')]
-
+        #self.modules = [Module.from_file(self.base_folder + 'footprints/' 'R_0402.kicad_mod')]
+        self.modules = []
 
     def save(self, filename):
         self.pcb.title = filename
