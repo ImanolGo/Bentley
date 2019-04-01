@@ -77,6 +77,10 @@ class PcbManager:
         zone = Zone(net_name, layer, coords, clearance)
         self.zones.append(zone)
 
+    def addPolygon(self, coords,layer='F.Cu'):
+        polygon = GrPolygon(coords, layer)
+        self.polygons.append(polygon)
+
     def clear(self):
         self.vias = []
         self.segments = []
@@ -86,7 +90,6 @@ class PcbManager:
         self.nets = [self.vi, self.vo, self.gnd]
         self.zones = []
         self.arcs = []
-        self.polygons = []
         #self.modules = [Module.from_file(self.base_folder + 'footprints/' 'R_0402.kicad_mod')]
         self.modules = []
 

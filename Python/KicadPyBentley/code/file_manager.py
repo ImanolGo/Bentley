@@ -30,15 +30,12 @@ class FileManager:
             self.readCsvFiles(subdir)
             self.savePcb(subdir)
 
-        # for i in (1, len(subdirs) - 1):
-        #     print "FileManager::Reading folder -> " + subdirs[i]
-        #     self.readDxfFiles(subdirs[i])
-        #     self.readCsvFiles(subdirs[i])
-        #     self.savePcb(subdirs[i])
-
     def savePcb(self, directory):
-        filename = directory.split('/')[-1] 
-        path = directory + '/' + filename + '.kicad_pcb'
+        #filename = directory.split('/')[-1] 
+        filename = os.path.basename(directory) + '.kicad_pcb'
+        print "FileManager::savePcb -> filename: " + filename 
+        path = os.path.join(directory, filename)
+       # path = directory + '/' + filename + '.kicad_pcb'
         self.pcb.save(path)
         self.pcb.clear()
 
@@ -47,7 +44,7 @@ class FileManager:
         files = []   
         files += [each for each in os.listdir(directory) if each.endswith('.dxf')]
         for file in files:
-            path = directory + '/' + file
+            path = os.path.join(directory, file)
             self.parseDfx(path)
 
     def readCsvFiles(self, directory):
@@ -55,7 +52,7 @@ class FileManager:
         files = []   
         files += [each for each in os.listdir(directory) if each.endswith(('.csv','.CSV'))]
         for file in files:
-            path = directory + '/' + file
+            path = os.path.join(directory, file)
             self.parseCsv(path)
 
 
@@ -81,47 +78,51 @@ class FileManager:
             typename = e.dxftype
             #print('FileManager::parseDfx -> Layer: {}\n'.format(e.layer))
 
-            viasStr = "VIAS"
-            edgeStr = "EDGE_CUTS"
-            fcu = "F_CU"
-            bcu = "B_CU"
-            name = "NAME"
-            bcu_plus = "B_CU_PLUS"
-            bcu_minus = "B_CU_MINUS"
-            fcu_plus = "F_CU_PLUS"
-            fcu_minus = "F_CU_MINUS"
+            viasStr = "vias"
+            edgeStr = "edge_cuts"
+            fcu = "f_cu"
+            bcu = "b_cu"
+            name = "name"
+            bcu_plus = "b_cu_plus"
+            bcu_minus = "b_cu_minus"
+            fcu_plus = "f_cu_plus"
+            fcu_minus = "f_cu_minus"
 
-            if name in e.layer:
+            layer = e.layer.lower()
+            #print "layer : " + layer
+
+            if name in layer:
                 pass
 
-            elif viasStr in e.layer:
+            elif viasStr in layer:
                 self.parseVia(e)
 
-            elif edgeStr in e.layer:
+            elif edgeStr in layer:
                 self.parseEdge(e)
 
-            elif bcu_plus in e.layer:
+            elif bcu_plus in layer:
                 self.parseZone(e, 'VI', 'B.Cu')
 
-            elif bcu_minus in e.layer:
+            elif bcu_minus in layer:
                 self.parseZone(e, 'GND', 'B.Cu')
 
-            elif fcu_plus in e.layer:
+            elif fcu_plus in layer:
                 self.parseZone(e, 'VI', 'F.Cu')
 
-            elif fcu_minus in e.layer:
+            elif fcu_minus in layer:
                 self.parseZone(e, 'GND', 'F.Cu')
 
-            elif fcu in e.layer:
+            elif fcu in layer:
                 self.parseTrack(e,'F.Cu')
 
-            elif bcu in e.layer:
+            elif bcu in layer:
                 self.parseTrack(e,'B.Cu')
 
 
     def parseVia(self, entity):
 
         typename = entity.dxftype
+        #print('FileManager::parseVia ->  type :' + typename)
         if typename == 'CIRCLE':
 
             coords = [entity.center[0], entity.center[1]]
@@ -140,7 +141,12 @@ class FileManager:
         #print('FileManager::parseZone -> added polyline -> ' + entity.dxftype)
         typename = entity.dxftype
         if typename == 'LWPOLYLINE' or typename == 'POLYLINE':
-            self.pcb.addZone(entity.points,net_name, layer)
+            #self.pcb.addZone(entity.points,net_name, layer)
+            coords = []
+            for coord in entity.points:
+                c = [coord[0], -coord[1]]
+                coords.append(c)
+            self.pcb.addPolygon(coords,layer)
 
     def parseTrack(self, entity, layer):
 
@@ -155,6 +161,24 @@ class FileManager:
             start[1] = -start[1]
             end[1] = -end[1]
             self.pcb.addSegment(start, end, layer)
+
+        elif typename == 'LWPOLYLINE' or typename == 'POLYLINE':
+
+            for i in range(len(entity.points) - 1 ):
+                start = [entity.points[i][0], entity.points[i][1]]
+                end = [entity.points[i+1][0], entity.points[i+1][1]]
+                start[1] = -start[1]
+                end[1] = -end[1]
+
+                self.pcb.addSegment(start, end, layer)
+
+            if entity.is_closed == True:
+                index = len(entity.points) - 1
+                start = [entity.points[index][0], entity.points[index][1]]
+                end = [entity.points[0][0], entity.points[0][1]]
+                start[1] = -start[1]
+                end[1] = -end[1]
+                self.pcb.addSegment(start, end, layer)
 
     def parseEdge(self, entity):
 
