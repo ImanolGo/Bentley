@@ -58,14 +58,15 @@ class PcbManager:
         arc = GrArc( start=start, end=end, angle = angle, layer = layer)
         self.arcs.append(arc)
 
-    def addFootprint(self, name, coords, angle, side = 'Front', offset = 0.0):
+    def addFootprint(self, name, coords, angle, side = 'front', offset = 0.0):
         footlog_path = self.base_folder + 'footprints/' + name + '.kicad_mod'
         m = Module.from_file(footlog_path)
-        if side == 'Back':
+        side = side.strip()
+        if side == 'back':
             angle = -angle
             m.flip()
             offset = -90
-
+    
         m.at = coords
         angle += offset
         m.rotate(angle)

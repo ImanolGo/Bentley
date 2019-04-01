@@ -23,7 +23,8 @@ class FileManager:
         #subdirnames = [x[1] for x in os.walk(self.base_folder)]
         print(subdirs)
         #print(subdirnames)
-        for subdir in subdirs:
+        for i in range(1, len(subdirs)):
+            subdir = subdirs[i]
             print "FileManager::Reading folder -> " + subdir
             self.readDxfFiles(subdir)
             self.readCsvFiles(subdir)
@@ -66,7 +67,9 @@ class FileManager:
                 name = row[1].lstrip(' ')
                 coords = [float(row[2]),-float(row[3])]
                 angle = float(row[4])
-                side = row[5]
+                side = row[5].lower()
+                side = side.strip()
+                #print "FileManager::parseCsv -> side " + side
                 self.pcb.addFootprint(name,coords, angle, side)
 
     def parseDfx(self, path):
@@ -123,8 +126,14 @@ class FileManager:
 
             coords = [entity.center[0], entity.center[1]]
             coords[1] = -coords[1]
+            coords[0] = coords[0]*entity.extrusion[2]
             self.pcb.addVia(coords, entity.radius)
-            #print('FileManager::parseVia -> added via')
+
+            #print('FileManager::parseDfx -> Layer: {}\n'.format(e.layer))
+            #
+            #print('FileManager::parseVia ->  coords: {}\n'.format(coords))
+            #print('FileManager::parseVia ->  extrusion: {}\n'.format(entity.extrusion[2]))
+
 
     def parseZone(self, entity, net_name, layer):
 
