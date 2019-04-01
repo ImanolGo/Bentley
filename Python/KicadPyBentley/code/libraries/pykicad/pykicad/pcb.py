@@ -1,5 +1,6 @@
 from pykicad.sexpr import *
 from pykicad.module import Module, Net, xy_schema
+import io
 
 
 class Segment(AST):
@@ -783,7 +784,7 @@ class Pcb(AST):
     def to_file(self, path):
         if not path.endswith('.kicad_pcb'):
             path += '.kicad_pcb'
-        with open(path, 'w+', encoding='utf-8') as f:
+        with io.open(path, 'w+', encoding='utf-8') as f:
             f.write(self.to_string())
 
     @classmethod
