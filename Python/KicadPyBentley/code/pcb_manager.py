@@ -42,7 +42,7 @@ class PcbManager:
     def addVia(self, coords, radius):
         net = Net()
         self.nets.append(net)
-        self.vias.append(Via(at=coords, size=radius+0.2, drill=radius, net=net.code))
+        self.vias.append(Via(at=coords, size=radius*1.5, drill=radius, net=net.code))
 
     def addSegment(self, start, end, layer, width = None):
         net = Net()
@@ -74,7 +74,7 @@ class PcbManager:
         self.modules.append(m)
 
     def addZone(self, coords, net_name='GND', layer='F.Cu', clearance=0.3):
-        zone = Zone(net_name = net_name, layer = layer, polygon = coords, clearance = clearance,filled_polygon = coords )
+        zone = Zone(net_name = net_name, layer = layer, polygon = coords, clearance = clearance,fill_mode = 'polygon' )
         self.zones.append(zone)
 
         coords,net_name, layer
