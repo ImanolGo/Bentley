@@ -113,11 +113,28 @@ class FileManager:
                 self.parseZone(e, 'GND', 'F.Cu')
 
             elif fcu in layer:
-                self.parseTrack(e,'F.Cu')
+                width = self.getTrackWidth(layer)
+                self.parseTrack(e,'F.Cu', width)
 
             elif bcu in layer:
-                self.parseTrack(e,'B.Cu')
+                width = self.getTrackWidth(layer)
+                self.parseTrack(e,'B.Cu', width)
 
+    def getTrackWidth(self, layer_name):
+        lines = layer_name.split('_')
+        size = len(lines) 
+        if size < 4:
+            return None
+
+        dec_str = lines[size-1]
+        dec_mult = 0.01
+        if len(dec_str) == 1:
+            dec_mult = 0.1
+
+        unit_val =  float(lines[size-2])
+        number = unit_val + float(dec_str)*dec_mult
+        #print number
+        return number
 
     def parseVia(self, entity):
 
@@ -146,13 +163,14 @@ class FileManager:
             for coord in entity.points:
                 c = [coord[0], -coord[1]]
                 coords.append(c)
-            self.pcb.addPolygon(coords,layer)
+            #self.pcb.addPolygon(coords,layer)
+            self.pcb.addZone(coords,net_name, layer)
 
-    def parseTrack(self, entity, layer):
+    def parseTrack(self, entity, layer, width = None):
 
         typename = entity.dxftype
     
-        #print('FileManager::parseTrack -> added segment -> layer: ' + layer + ', ' + entity.dxftype)
+       #print('FileManager::parseTrack -> added segment -> layer: ' + entity.layer + ', type = ' + typename + ', thickness = ' + str(width))
 
         if typename == 'LINE':
 
@@ -160,17 +178,19 @@ class FileManager:
             end = [entity.end[0], entity.end[1]]
             start[1] = -start[1]
             end[1] = -end[1]
-            self.pcb.addSegment(start, end, layer)
+            self.pcb.addSegment(start, end, layer, width)
 
         elif typename == 'LWPOLYLINE' or typename == 'POLYLINE':
+
+            #width = entity.width
 
             for i in range(len(entity.points) - 1 ):
                 start = [entity.points[i][0], entity.points[i][1]]
                 end = [entity.points[i+1][0], entity.points[i+1][1]]
                 start[1] = -start[1]
                 end[1] = -end[1]
-
-                self.pcb.addSegment(start, end, layer)
+            
+                self.pcb.addSegment(start, end, layer, width)
 
             if entity.is_closed == True:
                 index = len(entity.points) - 1
@@ -178,7 +198,7 @@ class FileManager:
                 end = [entity.points[0][0], entity.points[0][1]]
                 start[1] = -start[1]
                 end[1] = -end[1]
-                self.pcb.addSegment(start, end, layer)
+                self.pcb.addSegment(start, end, layer, width)
 
     def parseEdge(self, entity):
 
@@ -235,6 +255,8 @@ class FileManager:
             angle = entity.end_angle - entity.start_angle
 
             self.pcb.addArc(start, end, angle, layer) 
+
+
 
     
         

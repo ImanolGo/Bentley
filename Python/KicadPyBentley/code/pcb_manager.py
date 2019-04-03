@@ -44,14 +44,14 @@ class PcbManager:
         self.nets.append(net)
         self.vias.append(Via(at=coords, size=radius+0.2, drill=radius, net=net.code))
 
-    def addSegment(self, start, end, layer):
+    def addSegment(self, start, end, layer, width = None):
         net = Net()
         self.nets.append(net)
-        s = Segment( start=start, end=end, net=net.code, layer = layer)
+        s = Segment( start=start, end=end, net=net.code, layer = layer, width = width)
         self.segments.append(s)
 
-    def addLine(self, start, end, layer):
-        line = GrLine( start=start, end=end, layer = layer)
+    def addLine(self, start, end, layer, width=None):
+        line = GrLine( start=start, end=end, layer = layer, width = width)
         self.lines.append(line)
 
     def addArc(self, start, end, angle, layer):
@@ -74,8 +74,10 @@ class PcbManager:
         self.modules.append(m)
 
     def addZone(self, coords, net_name='GND', layer='F.Cu', clearance=0.3):
-        zone = Zone(net_name, layer, coords, clearance)
+        zone = Zone(net_name = net_name, layer = layer, polygon = coords, clearance = clearance,filled_polygon = coords )
         self.zones.append(zone)
+
+        coords,net_name, layer
 
     def addPolygon(self, coords,layer='F.Cu'):
         polygon = GrPolygon(coords, layer)
