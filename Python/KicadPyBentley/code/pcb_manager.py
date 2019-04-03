@@ -15,7 +15,7 @@ class PcbManager:
     def __initializeAttributes(self):
         
         # Define nets
-        self.vi, self.vo, self.gnd = Net('VI'), Net('VO'), Net('GND')
+        self.vi, self.vo, self.gnd = Net('VCC'), Net('VO'), Net('GND')
 
         # Create PCB
         self.pcb = Pcb()
@@ -42,7 +42,8 @@ class PcbManager:
     def addVia(self, coords, radius):
         net = Net()
         self.nets.append(net)
-        self.vias.append(Via(at=coords, size=radius*1.5, drill=radius, net=net.code))
+        diameter = 2*radius
+        self.vias.append(Via(at=coords, size=diameter*1.5, drill=diameter, net=net.code))
 
     def addSegment(self, start, end, layer, width = None):
         net = Net()
@@ -74,7 +75,7 @@ class PcbManager:
         self.modules.append(m)
 
     def addZone(self, coords, net_name='GND', layer='F.Cu', clearance=0.3):
-        zone = Zone(net_name = net_name, layer = layer, polygon = coords, clearance = clearance,fill_mode = 'polygon' )
+        zone = Zone(net_name = net_name, layer = layer, polygon = coords, clearance = clearance, filled_polygon = coords)
         self.zones.append(zone)
 
         coords,net_name, layer

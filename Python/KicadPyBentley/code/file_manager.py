@@ -101,13 +101,13 @@ class FileManager:
                 self.parseEdge(e)
 
             elif bcu_plus in layer:
-                self.parseZone(e, 'VI', 'B.Cu')
+                self.parseZone(e, 'VCC', 'B.Cu')
 
             elif bcu_minus in layer:
                 self.parseZone(e, 'GND', 'B.Cu')
 
             elif fcu_plus in layer:
-                self.parseZone(e, 'VI', 'F.Cu')
+                self.parseZone(e, 'VCC', 'F.Cu')
 
             elif fcu_minus in layer:
                 self.parseZone(e, 'GND', 'F.Cu')
