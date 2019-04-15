@@ -73,9 +73,10 @@ class PcbManager:
         m.at = coords
         angle += offset
         m.rotate(angle)
-        ref = self.addModuleName(name)
-        m.set_reference(ref)
-        m.set_value("")
+        value = self.addModuleName(name)
+        m.set_reference(name)
+        # m.name = ref
+        m.set_value(value)
         self.modules.append(m)
 
     def addModuleName(self, name):
