@@ -21,6 +21,7 @@ class PcbManager:
         self.pcb = Pcb()
         self.clear()
         self.net_classes = []
+    
 
     def _setupPcb(self):
         
@@ -72,7 +73,33 @@ class PcbManager:
         m.at = coords
         angle += offset
         m.rotate(angle)
+        ref = self.addModuleName(name)
+        m.set_reference(ref)
+        m.set_value("")
         self.modules.append(m)
+
+    def addModuleName(self, name):
+
+        name_ = ""
+        lowname = name.lower()
+        if "c_" in lowname:
+            name_ = "C" + str(len(self.capacitors)+1)
+            self.capacitors.append(name)
+        elif "r_" in lowname:
+            name_ = "R" + str(len(self.resistors)+1)
+            self.resistors.append(name)
+        elif "cl-" in lowname:
+            name_ = "LED" + str(len(self.diodes)+1)
+            self.diodes.append(name)
+        elif "cut_point" in lowname:
+            name_ = "J" + str(len(self.joints)+1)
+            self.joints.append(name)
+        else:
+            name_ = "U" + str(len(self.circuits)+1)
+            self.circuits.append(name)
+
+        return name_
+
 
     def addZone(self, coords, net_name='GND', layer='F.Cu', clearance=0.3):
         zone = Zone(net_name = net_name, layer = layer, polygon = coords, clearance = clearance, filled_polygon = coords)
@@ -95,6 +122,11 @@ class PcbManager:
         self.arcs = []
         #self.modules = [Module.from_file(self.base_folder + 'footprints/' 'R_0402.kicad_mod')]
         self.modules = []
+        self.resistors = []
+        self.diodes = []
+        self.capacitors = []
+        self.joints = []
+        self.circuits = []
 
     def save(self, filename):
         self.pcb.title = filename
