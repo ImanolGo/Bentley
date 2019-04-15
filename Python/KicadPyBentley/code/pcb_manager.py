@@ -94,6 +94,8 @@ class PcbManager:
         elif "cut_point" in lowname:
             name_ = "J" + str(len(self.joints)+1)
             self.joints.append(name)
+        elif "fiducial" in lowname:
+            name_ = ""
         else:
             name_ = "U" + str(len(self.circuits)+1)
             self.circuits.append(name)

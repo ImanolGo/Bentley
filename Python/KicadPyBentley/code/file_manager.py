@@ -87,6 +87,7 @@ class FileManager:
             bcu_minus = "b_cu_minus"
             fcu_plus = "f_cu_plus"
             fcu_minus = "f_cu_minus"
+            fiducial = "fiducial"
 
             layer = e.layer.lower()
             #print "layer : " + layer
@@ -120,6 +121,9 @@ class FileManager:
                 width = self.getTrackWidth(layer)
                 self.parseTrack(e,'B.Cu', width)
 
+            elif fiducial in layer:
+                self.parseFiducial(e)
+
     def getTrackWidth(self, layer_name):
         lines = layer_name.split('_')
         size = len(lines) 
@@ -135,6 +139,17 @@ class FileManager:
         number = unit_val + float(dec_str)*dec_mult
         #print number
         return number
+
+    def parseFiducial(self, entity):
+        typename = entity.dxftype
+        print('FileManager::parseFiducial ->  type :' + typename)
+        if typename == 'CIRCLE':
+
+            coords = [entity.center[0], entity.center[1]]
+            coords[1] = -coords[1]
+            coords[0] = coords[0]*entity.extrusion[2]
+
+            self.pcb.addFootprint("Fiducial_0.5mm_Dia_1mm_Outer",coords, 0.0)
 
     def parseVia(self, entity):
 
