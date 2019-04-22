@@ -228,11 +228,16 @@ void GuiManager::drawGui()
                 
                 if (ImGui::Button("Load Video Folder..."))
                 {
-                    auto dialogResult = ofSystemLoadDialog("Load Video Folder", false, ofToDataPath(""));
+                    auto dialogResult = ofSystemLoadDialog("Load Video Folder", true, ofToDataPath(""));
                     if (dialogResult.bSuccess)
                     {
                         m_videoPath = dialogResult.filePath;
                     }
+                }
+                
+                if (ImGui::Button("Next"))
+                {
+                    AppManager::getInstance().getVideoManager().next();
                 }
                 
                 ofxImGui::EndTree(mainSettings);

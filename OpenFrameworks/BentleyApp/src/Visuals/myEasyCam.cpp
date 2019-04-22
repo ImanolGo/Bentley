@@ -527,7 +527,7 @@ void myEasyCam::removeAllInteractions(){
 
 bool myEasyCam::isInside(float x, float y)
 {
-    string name = "Leds";
+    string name = "3D";
     auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
     
     return  rect->inside(x, y);
@@ -535,7 +535,7 @@ bool myEasyCam::isInside(float x, float y)
 
 glm::vec2 myEasyCam::getScaledPoint(float x, float y)
 {
-    string name = "Leds";
+    string name = "3D";
     auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
     x = ofMap(x,rect->getMinX(), rect->getMaxX(), 0.0, rect->getWidth());
     y = ofMap(y, rect->getMinY(), rect->getMaxY(), 0.0, rect->getHeight());

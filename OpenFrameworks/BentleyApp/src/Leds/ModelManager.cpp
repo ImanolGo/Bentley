@@ -56,9 +56,9 @@ void ModelManager::update()
 void ModelManager::draw()
 {
     string name = "3D";
-    auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
+    //auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
     
-    ofRectangle rect2 = ofRectangle(rect->x, rect->y, 0, 0);
+    //ofRectangle rect2 = ofRectangle(rect->x, rect->y, 0, 0);
     
     ofBackgroundGradient( ofColor(100), ofColor(15), OF_GRADIENT_CIRCULAR );
 
