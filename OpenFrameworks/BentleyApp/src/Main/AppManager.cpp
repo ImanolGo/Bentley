@@ -86,15 +86,12 @@ void AppManager::setupManagers()
    
     
     m_layoutManager.setup();
-    m_colorManager.setup();
-    //m_camManager.setup();
-    m_realSenseManager.setup();
-    m_leapMotionManager.setup();
-    m_udpManager.setup();
+    m_videoManager.setup();
+   // m_udpManager.setup();
     m_ledsManager.setup();
     m_modelManager.setup();
     m_keyboardManager.setup();
-    m_sceneManager.setup();
+   // m_sceneManager.setup();
     
     m_guiManager.setup();
 }
@@ -107,12 +104,9 @@ void AppManager::update()
     m_guiManager.update();
     m_visualEffectsManager.update();
     m_viewManager.update();
-    //m_camManager.update();
-    m_realSenseManager.update();
-    m_leapMotionManager.update();
-    m_udpManager.update();
-    m_colorManager.update();
-    m_sceneManager.update();
+    m_videoManager.update();
+   // m_udpManager.update();
+   // m_sceneManager.update();
     m_ledsManager.update();
     m_modelManager.update();
     m_layoutManager.update();
@@ -124,7 +118,6 @@ void AppManager::draw()
     
     if(!m_initialized)
         return;
-    
     
     ofBackground(17,17,17);
     m_layoutManager.draw();

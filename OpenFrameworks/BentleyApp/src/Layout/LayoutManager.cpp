@@ -24,7 +24,7 @@ const int LayoutManager::FRAME_MARGIN = 2;
 const string LayoutManager::LAYOUT_FONT =  "fonts/roboto/Roboto-Medium.ttf";
 const string LayoutManager::LAYOUT_FONT_LIGHT =  "fonts/roboto/Roboto-Light.ttf";
 
-LayoutManager::LayoutManager(): Manager(), m_drawMode(0), m_cameraMode(0), m_leapMode(0)
+LayoutManager::LayoutManager(): Manager(), m_drawMode(0)
 {
 	//Intentionally left empty
 }
@@ -64,22 +64,17 @@ void LayoutManager::setupFbos()
     ofPtr<ofFbo> fbo = ofPtr<ofFbo>(new ofFbo());
     fbo->allocate(width, height, GL_RGBA);
     fbo->begin(); ofClear(0);  fbo->end();
-    m_fbos["Camera"] = fbo;
+    m_fbos["3D"] = fbo;
     
     fbo = ofPtr<ofFbo>(new ofFbo());
     fbo->allocate(width, height, GL_RGBA);
     fbo->begin(); ofClear(0);  fbo->end();
-    m_fbos["Scene"] = fbo;
+    m_fbos["2D"] = fbo;
     
     fbo = ofPtr<ofFbo>(new ofFbo());
     fbo->allocate(width, height, GL_RGBA);
     fbo->begin(); ofClear(0);  fbo->end();
-    m_fbos["Leds"] = fbo;
-    
-    fbo = ofPtr<ofFbo>(new ofFbo());
-    fbo->allocate(width, height, GL_RGBA);
-    fbo->begin(); ofClear(0);  fbo->end();
-    m_fbos["Leap"] = fbo;
+    m_fbos["Video"] = fbo;
     
 }
 
@@ -110,27 +105,25 @@ void LayoutManager::resetWindowRects()
     float width = AppManager::getInstance().getSettingsManager().getAppWidth();
     float height  = AppManager::getInstance().getSettingsManager().getAppHeight();
     float ratio = width/ height;
-    float frame_width = ofGetWidth() - (AppManager::getInstance().getGuiManager().getWidth() +  AppManager::getInstance().getGuiManager().getPosition().x) - 3*MARGIN;
+    float frame_width = ofGetWindowWidth() - (AppManager::getInstance().getGuiManager().getWidth() +  AppManager::getInstance().getGuiManager().getPosition().x) - 3*MARGIN;
     float frame_height= ofGetWindowHeight();
     
     
-    int n = 0;
-    for (auto& rect : m_windowRects)
-    {
-        rect.second->height = frame_height/2 - 2*MARGIN;
-        rect.second->width = frame_width/2  - 2*MARGIN;
-        
-//        if(rect.second->width > frame_width  - 3*MARGIN){
-//            rect.second->width = frame_width  - 3*MARGIN;
-//            rect.second->height = rect.second->width/ratio;
-//        }
-        
-        int i = n%2;
-        int j = n/2;
-        rect.second->x = AppManager::getInstance().getGuiManager().getWidth()  + i*rect.second->width + 10*MARGIN;
-        rect.second->y = j*rect.second->height + 2*j*MARGIN  + MARGIN;
-        n++;
-    }
+    m_windowRects["3D"]->width = 2*frame_width/3 - 2*MARGIN;
+    m_windowRects["3D"]->height = frame_height - 2*MARGIN;
+    m_windowRects["3D"]->x = AppManager::getInstance().getGuiManager().getWidth()  + 2*MARGIN;
+    m_windowRects["3D"]->y = MARGIN;
+    
+    m_windowRects["2D"]->width = frame_width/3 - 2*MARGIN;
+    m_windowRects["2D"]->height = frame_height/2 - 2*MARGIN;
+    m_windowRects["2D"]->x = m_windowRects["3D"]->x + m_windowRects["3D"]->width + MARGIN;
+    m_windowRects["2D"]->y = MARGIN;
+    
+    m_windowRects["Video"]->width = m_windowRects["2D"]->width;
+    m_windowRects["Video"]->height = m_windowRects["2D"]->height;
+    m_windowRects["Video"]->x = m_windowRects["2D"]->x;
+    m_windowRects["Video"]->y = m_windowRects["2D"]->y + m_windowRects["2D"]->height + 2*MARGIN;
+    
 }
 
 void LayoutManager::resetFbos()
@@ -164,62 +157,37 @@ void LayoutManager::update()
 
 void LayoutManager::updateFbos()
 {
-    this->updateCameraFbo();
-    this->updateSceneFbo();
-    this->updateLedsFbo();
-    this->updateLeapFbo();
+    this->updateTwoDFbo();
+    this->updateThreeDFbo();
+    this->updateVideoFbo();
 }
 
-void LayoutManager::updateLeapFbo()
+void LayoutManager::updateTwoDFbo()
 {
-    string name = "Leap";
-    this->begin(name);
-    //ofClear(0);
-    switch (m_leapMode)
-    {
-        case CAMERA:  AppManager::getInstance().getLeapMotionManager().drawCamera(); break;
-        case HANDS: AppManager::getInstance().getLeapMotionManager().drawHands(); break;
-        default: AppManager::getInstance().getRealSenseManager().draw(); break;
-    }
-    
-    this->end(name);
-}
-
-void LayoutManager::updateCameraFbo()
-{
-    string name = "Camera";
+    string name = "2D";
     this->begin(name);
     ofClear(0);
-    
-    switch (m_cameraMode)
-    {
-        case DEPTH:  AppManager::getInstance().getRealSenseManager().drawDepth(); break;
-        case IR: AppManager::getInstance().getRealSenseManager().drawIR(); break;
-        case COLOR:  AppManager::getInstance().getRealSenseManager().drawColor(); break;
-        default: AppManager::getInstance().getRealSenseManager().draw(); break;
-    }
-    
+    AppManager::getInstance().getLedsManager().draw();
     this->end(name);
 }
 
 
 
-void LayoutManager::updateSceneFbo()
+void LayoutManager::updateThreeDFbo()
 {
-    string name = "Scene";
-    this->begin(name);
-    ofClear(0);
-    AppManager::getInstance().getSceneManager().draw();
-    this->end(name);
-}
-
-void LayoutManager::updateLedsFbo()
-{
- 
-    string name = "Leds";
+    string name = "3D";
     this->begin(name);
     ofClear(0);
     AppManager::getInstance().getModelManager().draw();
+    this->end(name);
+}
+
+void LayoutManager::updateVideoFbo()
+{
+    string name = "Video";
+    this->begin(name);
+    ofClear(0);
+    AppManager::getInstance().getVideoManager().draw();
     this->end(name);
 }
 
@@ -303,34 +271,33 @@ void LayoutManager::draw()
     switch (m_drawMode)
     {
         case DRAW_NORMAL:  this->drawNormal(); break;
-        case DRAW_CAMERA:  this->drawCamera(); break;
-        case DRAW_SCENE:  this->drawScene(); break;
-        case DRAW_LEAP:  this->drawLeap(); break;
-        case DRAW_LEDS:  this->drawLeds(); break;
+        case DRAW_3D:  this->drawThreeD(); break;
+        case DRAW_2D:  this->drawTwoD(); break;
+        case DRAW_VIDEO:  this->drawVideo(); break;
         default: this->drawNormal(); break;
     }
+    
+    void drawThreeD();
+    
+    void drawTwoD();
+    
+    void drawVideo();
    
 }
 
-void LayoutManager::drawCamera()
+void LayoutManager::drawThreeD()
 {	
-    m_fbos["Camera"]->draw(0,0, ofGetWidth(), ofGetHeight());
+    m_fbos["3D"]->draw(0,0, ofGetWidth(), ofGetHeight());
 }
 
-void LayoutManager::drawScene()
+void LayoutManager::drawTwoD()
 {
-    m_fbos["Scene"]->draw(0,0, ofGetWidth(), ofGetHeight());
+    m_fbos["2D"]->draw(0,0, ofGetWidth(), ofGetHeight());
 }
 
-void LayoutManager::drawLeap()
+void LayoutManager::drawVideo()
 {
-    m_fbos["Leap"]->draw(0,0, ofGetWidth(), ofGetHeight());
-}
-
-
-void LayoutManager::drawLeds()
-{
-    m_fbos["Leds"]->draw(0,0, ofGetWidth(), ofGetHeight());
+    m_fbos["Video"]->draw(0,0, ofGetWidth(), ofGetHeight());
 }
 
 
@@ -371,6 +338,7 @@ void LayoutManager::windowResized(int w, int h)
     this->resetWindowFrames();
     this->resetWindowTitles();
 }
+
 
 void LayoutManager::begin(string& name)
 {

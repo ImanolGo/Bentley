@@ -43,11 +43,8 @@ void GuiManager::setup()
     
     this->setupGuiParameters();
     this->setupModesGui();
-    this->setupScenesGui();
-    this->setupCameraGui();
     this->setupLedsGui();
-    this->setupLeapGui();
-    this->setupOpenCVGui();
+    this->setupVideoGui();
     this->setupProcessingGroup();
     this->loadGuiValues();
     
@@ -103,94 +100,69 @@ void GuiManager::setupModesGui()
     m_modeGroup.add(m_viewMode);
 }
 
-void GuiManager::setupLeapGui()
+
+void GuiManager::setupVideoGui()
 {
-    m_leapGroup.setName("Leap");
-    m_leapMode.set("Leap Mode", 0);
-    m_leapGroup.add(m_leapMode);
+    auto videoManager = &AppManager::getInstance().getVideoManager();
+    
+    m_videoPath.set("VideoPath", " ");
+    m_videoPath.addListener(videoManager, &VideoManager::loadVideos);
+    m_parameters.add(m_videoPath);
+    m_videoGroup.add(m_videoPath);
+    
 }
 
-void GuiManager::setupCameraGui()
-{
-    m_cameraGroup.setName("Camera");
-    m_cameraMode.set("Camera Mode", 1);
-    m_cameraGroup.add(m_cameraMode);
-    
-    ofxGuiGroup* group = AppManager::getInstance().getRealSenseManager().getGui();
-    m_cameraGroup.add(group->getIntSlider("IR Exposure").getParameter());
-    m_cameraGroup.add(group->getFloatSlider("Min Depth").getParameter());
-    m_cameraGroup.add(group->getFloatSlider("Max Depth").getParameter());
-    m_cameraGroup.add(group->getToggle("Auto exposure").getParameter());
-    m_cameraGroup.add(group->getToggle("Emitter").getParameter());
-    
-    m_parameters.add(group->getIntSlider("IR Exposure").getParameter());
-    m_parameters.add(group->getFloatSlider("Min Depth").getParameter());
-    m_parameters.add(group->getFloatSlider("Max Depth").getParameter());
-    m_parameters.add(group->getToggle("Auto exposure").getParameter());
-    m_parameters.add(group->getToggle("Emitter").getParameter());
-}
-
-void GuiManager::setupOpenCVGui()
-{
-    m_openCvGroup = AppManager::getInstance().getRealSenseManager().getParameters();
-    
-    m_parameters.add(m_openCvGroup.getFloat("Learning Time"));
-    m_parameters.add(m_openCvGroup.getFloat("Threshold Value"));
-    m_parameters.add(m_openCvGroup.getFloat("Min area"));
-    m_parameters.add(m_openCvGroup.getFloat("Max area"));
-    m_parameters.add(m_openCvGroup.getFloat("Threshold"));
-    m_parameters.add(m_openCvGroup.getBool("Holes"));
-    m_parameters.add(m_openCvGroup.getBool("Reset Background"));
-}
 
 void GuiManager::setupProcessingGroup()
 {
-    auto scenesManager = &AppManager::getInstance().getSceneManager();
+    auto videoManager = &AppManager::getInstance().getVideoManager();
     
     m_postProcessingGroup.setName("Post Processing");
     
     m_contrast.set("Contrast", 1.0, 0.0, 2.0);
-    m_contrast.addListener(scenesManager, &SceneManager::setContrast);
+    m_contrast.addListener(videoManager, &VideoManager::setContrast);
     m_parameters.add(m_contrast);
     m_postProcessingGroup.add(m_contrast);
     
     m_saturation.set("Saturation", 1.0, 0.0, 2.0);
-    m_saturation.addListener(scenesManager, &SceneManager::setSaturation);
+    m_saturation.addListener(videoManager, &VideoManager::setSaturation);
     m_parameters.add(m_saturation);
     m_postProcessingGroup.add(m_saturation);
     
     m_brightness.set("Brightness", 1.0, 0.0, 2.0);
-    m_brightness.addListener(scenesManager, &SceneManager::setBrightness);
+    m_brightness.addListener(videoManager, &VideoManager::setBrightness);
     m_parameters.add(m_brightness);
     m_postProcessingGroup.add(m_brightness);
     
     m_gamma.set("Gamma", 1.0, 0.0, 2.0);
-    m_gamma.addListener(scenesManager, &SceneManager::setGamma);
+    m_gamma.addListener(videoManager, &VideoManager::setGamma);
     m_parameters.add(m_gamma);
     m_postProcessingGroup.add(m_gamma);
     
+    m_blur.set("Gamma", 1.0, 0.0, 2.0);
+    m_blur.addListener(videoManager, &VideoManager::setBlurScale);
+    m_parameters.add(m_blur);
+    m_postProcessingGroup.add(m_blur);
+    
     m_minInput.set("MinInput", 0.0, 0.0, 1.0);
-    m_minInput.addListener(scenesManager, &SceneManager::setMinInput);
+    m_minInput.addListener(videoManager, &VideoManager::setMinInput);
     m_parameters.add(m_minInput);
     m_postProcessingGroup.add(m_minInput);
     
     m_maxInput.set("MaxInput", 1.0, 0.0, 1.0);
-    m_maxInput.addListener(scenesManager, &SceneManager::setMaxInput);
+    m_maxInput.addListener(videoManager, &VideoManager::setMaxInput);
     m_parameters.add(m_maxInput);
     m_postProcessingGroup.add(m_maxInput);
     
     m_minOutput.set("MinOutput", 0.0, 0.0, 1.0);
-    m_minOutput.addListener(scenesManager, &SceneManager::setMinOutput);
+    m_minOutput.addListener(videoManager, &VideoManager::setMinOutput);
     m_parameters.add(m_minOutput);
     m_postProcessingGroup.add(m_minOutput);
     
     m_maxOutput.set("MaxOutput", 1.0, 0.0, 1.0);
-    m_maxOutput.addListener(scenesManager, &SceneManager::setMaxOutput);
+    m_maxOutput.addListener(videoManager, &VideoManager::setMaxOutput);
     m_parameters.add(m_maxOutput);
     m_postProcessingGroup.add(m_maxOutput);
-    
-  
-    
 }
 
 
@@ -208,9 +180,9 @@ void GuiManager::update()
 {
     //m_gui.update();
     m_gui.setTheme(new GuiTheme());
-    AppManager::getInstance().getLayoutManager().setCameraMode(m_cameraMode);
+
     AppManager::getInstance().getLayoutManager().setDrawMode(m_viewMode);
-    AppManager::getInstance().getLayoutManager().setLeapMode(m_leapMode);
+
 }
 
 
@@ -236,18 +208,35 @@ void GuiManager::drawGui()
         {
             ImGui::Text("%.1f FPS (%.3f ms/frame)", ofGetFrameRate(), 1000.0f / ImGui::GetIO().Framerate);
             
-            if (ofxImGui::BeginTree(m_modeGroup, mainSettings))
-            {
-                static const std::vector<std::string> labels1 = { "Normal", "Camera", "Scene", "Leap", "Leds" };
-
-                ofxImGui::AddRadio(m_viewMode, labels1, 5);
-                ofxImGui::EndTree(mainSettings);
-            }
+//            if (ofxImGui::BeginTree(m_modeGroup, mainSettings))
+//            {
+//                static const std::vector<std::string> labels1 = { "Normal", "Camera", "Scene", "Leap", "Leds" };
+//
+//                ofxImGui::AddRadio(m_viewMode, labels1, 5);
+//                ofxImGui::EndTree(mainSettings);
+//            }
             
-            if (ofxImGui::BeginTree(m_scenesGroup, mainSettings))
+//            if (ofxImGui::BeginTree(m_scenesGroup, mainSettings))
+//            {
+//                ofxImGui::AddCombo(m_sceneMode, m_sceneNames);
+//                ofxImGui::EndTree(mainSettings);
+//            }
+            
+            if (ofxImGui::BeginTree(m_videoGroup, mainSettings))
             {
-                ofxImGui::AddCombo(m_sceneMode, m_sceneNames);
+                ofxImGui::AddParameter(m_videoPath);
+                
+                if (ImGui::Button("Load Video Folder..."))
+                {
+                    auto dialogResult = ofSystemLoadDialog("Load Video Folder", false, ofToDataPath(""));
+                    if (dialogResult.bSuccess)
+                    {
+                        m_videoPath = dialogResult.filePath;
+                    }
+                }
+                
                 ofxImGui::EndTree(mainSettings);
+                
             }
             
             if (ofxImGui::BeginTree(m_ledsGroup, mainSettings))
@@ -256,36 +245,7 @@ void GuiManager::drawGui()
                 ofxImGui::EndTree(mainSettings);
             
             }
-            
-            if (ofxImGui::BeginTree(m_cameraGroup, mainSettings))
-            {
-                if(AppManager::getInstance().getRealSenseManager().isRealSenseActive()){
-                    static const std::vector<std::string> labels2 = { "Depth", "IR", "Color" };
-                    
-                    ofxImGui::AddRadio(m_cameraMode, labels2, 3);
-                    ofxImGui::AddParameter(m_cameraGroup.getInt("IR Exposure"));
-                    ofxImGui::AddParameter(m_cameraGroup.getFloat("Min Depth"));
-                    ofxImGui::AddParameter(m_cameraGroup.getFloat("Max Depth"));
-                    ofxImGui::AddParameter(m_cameraGroup.getBool("Auto exposure"));
-                    ofxImGui::AddParameter(m_cameraGroup.getBool("Emitter"));
-                    ofxImGui::EndTree(mainSettings);
-                }
-        
-            }
-            
-            if (ofxImGui::BeginTree(m_openCvGroup, mainSettings))
-            {
-                //auto & group =
-                
-                ofxImGui::AddParameter(m_openCvGroup.getFloat("Learning Time"));
-                ofxImGui::AddParameter(m_openCvGroup.getFloat("Threshold Value"));
-                ofxImGui::AddParameter(m_openCvGroup.getFloat("Min area"));
-                ofxImGui::AddParameter(m_openCvGroup.getFloat("Max area"));
-                ofxImGui::AddParameter(m_openCvGroup.getFloat("Threshold"));
-                ofxImGui::AddParameter(m_openCvGroup.getBool("Holes"));
-                ofxImGui::AddParameter(m_openCvGroup.getBool("Reset Background"));
-                ofxImGui::EndTree(mainSettings);
-            }
+
             
             if (ofxImGui::BeginTree(m_postProcessingGroup, mainSettings))
             {
@@ -302,12 +262,6 @@ void GuiManager::drawGui()
                 ofxImGui::EndTree(mainSettings);
             }
             
-            if (ofxImGui::BeginTree(m_leapGroup, mainSettings))
-            {
-                static const std::vector<std::string> labels3 = { "Camera", "Hands"};
-                ofxImGui::AddRadio(m_leapMode, labels3, 2);
-                ofxImGui::EndTree(mainSettings);
-            }
             
         }
     

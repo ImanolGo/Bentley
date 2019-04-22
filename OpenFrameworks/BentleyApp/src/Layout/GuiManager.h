@@ -60,6 +60,8 @@ public:
 
     float getLedsSize() const {return m_ledsSize;}
     
+    void setVideoPath(const string& path) {m_videoPath = ofToDataPath(path);}
+    
 private:
     
     void setupGuiParameters();
@@ -68,15 +70,11 @@ private:
     
     void drawGui();
     
-    void setupCameraGui();
+    void setupVideoGui();
     
     void setupModesGui();
     
-    void setupLeapGui();
-    
     void setupLedsGui();
-    
-    void setupOpenCVGui();
     
     void setupScenesGui();
     
@@ -92,16 +90,12 @@ private:
     ofParameterGroup      m_parameters;
     
     ofParameterGroup m_modeGroup;
-    ofParameterGroup m_cameraGroup;
-    ofParameterGroup m_leapGroup;
+    ofParameterGroup m_videoGroup;
     ofParameterGroup m_ledsGroup;
-    ofParameterGroup m_openCvGroup;
-    ofParameterGroup m_realSenseGroup;
     ofParameterGroup m_scenesGroup;
     ofParameterGroup m_postProcessingGroup;
     
-    ofParameter<int> m_cameraMode;
-    ofParameter<int> m_leapMode;
+    ofParameter<string>     m_videoPath;
     ofParameter<int> m_viewMode;
     ofParameter<int> m_sceneMode;
     ofParameter<float>      m_ledsSize;
@@ -116,6 +110,7 @@ private:
     ofParameter<float>      m_maxInput;
     ofParameter<float>      m_minOutput;
     ofParameter<float>      m_maxOutput;
+    ofParameter<float>      m_blur;
     
     float m_width, m_height;
     ofPoint   m_position;

@@ -27,22 +27,9 @@
 
 enum ScreenMode{
     DRAW_NORMAL = 0,
-    DRAW_CAMERA,
-    DRAW_SCENE,
-    DRAW_LEAP,
-    DRAW_LEDS
-    
-};
-
-enum CameraMode{
-    DEPTH = 0,
-    IR,
-    COLOR
-};
-
-enum LeapMode{
-    CAMERA = 0,
-    HANDS
+    DRAW_VIDEO,
+    DRAW_3D,
+    DRAW_2D
 };
 
 
@@ -83,11 +70,7 @@ public:
     void end(string& name);
     
     void setDrawMode(int mode) {m_drawMode = mode;}
-    
-    void setLeapMode(int mode) {m_leapMode = mode;}
-    
-    void setCameraMode(int mode) {m_cameraMode = mode;}
-    
+
     void toggleDrawMode();
     
     int getDrawMode() {return m_drawMode;}
@@ -123,13 +106,12 @@ private:
     
     void updateFbos();
     
-    void updateCameraFbo();
+    void updateVideoFbo();
     
-    void updateSceneFbo();
+    void updateThreeDFbo();
     
-    void updateLedsFbo();
-    
-    void updateLeapFbo();
+    void updateTwoDFbo();
+
     
     void drawFbos();
     
@@ -137,16 +119,14 @@ private:
     
     void drawText();
     
-    void drawScene();
+    void drawThreeD();
     
-    void drawLeap();
+    void drawTwoD();
     
-    void drawLeds();
+    void drawVideo();
     
     void drawNormal();
     
-    void drawCamera();
-
     
 private:
 
@@ -166,8 +146,6 @@ private:
     FboMap              m_fbos;
     
     int                 m_drawMode;
-    int                 m_cameraMode;
-    int                 m_leapMode;
 
 };
 

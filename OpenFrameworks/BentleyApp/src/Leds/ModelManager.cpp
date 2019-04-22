@@ -55,7 +55,7 @@ void ModelManager::update()
 
 void ModelManager::draw()
 {
-    string name = "Leds";
+    string name = "3D";
     auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
     
     ofRectangle rect2 = ofRectangle(rect->x, rect->y, 0, 0);

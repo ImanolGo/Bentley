@@ -62,9 +62,6 @@ public:
     //! Returns the cam manager
     CamManager&  getCamManager() { return m_camManager; }
     
-    //! Returns the leap motion manager
-    LeapMotionManager&  getLeapMotionManager() { return m_leapMotionManager; }
-    
     //! Returns the udp manager
     UdpManager&  getUdpManager() { return m_udpManager; }
     
@@ -77,11 +74,8 @@ public:
     //! Returns the scenes manager
     SceneManager&  getSceneManager() { return m_sceneManager; }
     
-    //! Returns the color manager
-    ColorManager&  getColorManager() { return m_colorManager; }
-    
-    //! Returns the RealSense manager
-    RealSenseManager&  getRealSenseManager() { return m_realSenseManager; }
+    //! Returns the VideoManager manager
+    VideoManager&  getVideoManager() { return m_videoManager; }
 
     
     //==========================================================================
@@ -126,13 +120,12 @@ private:
 
     CamManager               m_camManager;               ///< Manages the web cam and processing
     ModelManager             m_modelManager;             ///< Manages the model and processing
-    LeapMotionManager        m_leapMotionManager;        ///< Manages the leap motion and gestures
+
     SceneManager             m_sceneManager;             ///< Manages all the scenes
     UdpManager               m_udpManager;               ///< Manages the udp communications
     LedsManager              m_ledsManager;              ///< Manages the leds
-    RealSenseManager         m_realSenseManager;         ///< Manages the real sense camera
+    VideoManager             m_videoManager;             ///< Manages the video playback
     
-    ColorManager             m_colorManager;             ///< Manages the color palettes
     
     bool                     m_debugMode;
     bool                     m_initialized;

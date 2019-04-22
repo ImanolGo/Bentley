@@ -5,7 +5,7 @@
 
       <window title="Bentley App" x="0" y="0" width="1280" height="720" fullscreen="0" showCursor="1"/>
       <debug showCursor="1" setVerbose="0" logToFile = "0"/>
-      <network ip="127.0.0.1"  portUdpSend="7000" portUdpReceive="7001" dmxPort = "0"/>
+      <network ip="127.0.0.1"  portUdpSend="7000" portUdpReceive="7001" portOscSend = "7002" portOscReceive= "7003"/>
 
   </of_settings>
 

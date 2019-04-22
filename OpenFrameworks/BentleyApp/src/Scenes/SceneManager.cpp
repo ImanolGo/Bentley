@@ -50,23 +50,6 @@ void SceneManager::createScenes()
     
     ofPtr<ofxScene> scene;
     
-    //Create Cocoon Scene
-    scene = ofPtr<ofxScene> (new CocoonScene());
-    m_mySceneManager.addScene(scene);
-    
-    //Create Relive Scene
-    scene = ofPtr<ofxScene> (new ReliveScene());
-    m_mySceneManager.addScene(scene);
-    
-    //Create Capture Scene
-    scene = ofPtr<ofxScene> (new CaptureScene());
-    m_mySceneManager.addScene(scene);
-    
-    //Create Enhance Scene
-    scene = ofPtr<ofxScene> (new EnhanceScene());
-    m_mySceneManager.addScene(scene);
-    
-    
     //Create Blank Scene
     scene = ofPtr<ofxScene> (new BlankScene());
     m_mySceneManager.addScene(scene);

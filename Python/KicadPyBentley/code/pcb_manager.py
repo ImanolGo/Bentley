@@ -96,7 +96,11 @@ class PcbManager:
             name_ = "J" + str(len(self.joints)+1)
             self.joints.append(name)
         elif "fiducial" in lowname:
-            name_ = ""
+            name_ = "F" + str(len(self.fiducials)+1)
+            self.fiducials.append(name)
+        elif "BM04B" in lowname:
+            name_ = "J" + str(len(self.joints)+1)
+            self.joints.append(name)
         else:
             name_ = "U" + str(len(self.circuits)+1)
             self.circuits.append(name)
@@ -130,6 +134,7 @@ class PcbManager:
         self.capacitors = []
         self.joints = []
         self.circuits = []
+        self.fiducials = []
 
     def save(self, filename):
         self.pcb.title = filename

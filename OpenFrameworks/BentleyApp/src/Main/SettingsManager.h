@@ -45,11 +45,13 @@ public:
     
     float getAppHeight() const {return m_appHeight;}
     
-    int getDmxPort() const {return m_dmxPort;}
-    
     int getUdpPortSend() const {return m_portUdpSend;}
     
     int getUdpPortReceive() const {return m_portUdpReceive;}
+    
+    int getOscPortSend() const {return m_portOscSend;}
+    
+    int getOscPortReceive() const {return m_portOscReceive;}
     
     const string& getIpAddress() const {return m_ipAddress;}
     
@@ -91,9 +93,10 @@ private:
     float                   m_appWidth;             ///< stores the applications width
     float                   m_appHeight;            ///< stores the applications height
     ofColor                 m_blankColor;           ///<return blank color
-    int                     m_dmxPort;             ///< stores the settings dmx port
-    int                     m_portUdpSend;          ///< stores the UDP port used for the OSC Sending communications
-    int                     m_portUdpReceive;       ///< stores the UDP port used for
+    int                     m_portUdpSend;          ///< stores the UDP port
+    int                     m_portUdpReceive;       ///< stores the UDP port used
+    int                     m_portOscSend;          ///< stores the UDP port used for the OSC Sending communications
+    int                     m_portOscReceive;       ///< stores the OSC port used for
     string                  m_ipAddress;            ///< stores the Ip Address used for the Network communications
 
 };

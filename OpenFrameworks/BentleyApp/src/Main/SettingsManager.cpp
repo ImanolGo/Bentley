@@ -108,7 +108,8 @@ void SettingsManager::setNetworkProperties()
         m_ipAddress  = xml.getAttribute("ipAddress").getValue();
         m_portUdpSend = xml.getAttribute("portUdpSend").getIntValue();
         m_portUdpReceive = xml.getAttribute("portUdpReceive").getIntValue();
-        m_dmxPort = xml.getAttribute("portDmx").getIntValue();
+        m_portOscSend = xml.getAttribute("portOscSend").getIntValue();
+        m_portOscReceive = xml.getAttribute("portOscReceive").getIntValue();
         
         
         ofLogNotice() <<"SettingsManager::setNetworkProperties->  successfully loaded the network settings" ;
