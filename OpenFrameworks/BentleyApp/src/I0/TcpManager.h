@@ -14,8 +14,7 @@
 #include "ofMain.h"
 #include "ofxNetwork.h"
 #include "Manager.h"
-#include "ofxSimpleTimer.h"
-#include "ofxNetworkUtils.h"
+
 
 
 //========================== class TcpManager =======================================
@@ -28,16 +27,6 @@
 
 class TcpManager: public Manager
 {
-    static const int UDP_MESSAGE_LENGHT; ///Defines the Udp"s message length
-    
-    struct udp_header {
-        unsigned char f1;
-		unsigned char f2;
-		unsigned char f3;
-        short size;
-		unsigned char command;
-		unsigned char  channel;
-    };
     
 public:
     //! Constructor
@@ -52,55 +41,29 @@ public:
     //! updates the udp manager
     void update();
     
-    void timerCompleteHandler( int &args ) ;
-    
-    void setLedsPerChannel(int& value) {m_ledsPerChannel=value;}
-    
-    void sendColor(ofColor & color);
-    
     
 private:
     
-    void setupUdpConnection();
-    
-    void setupHeaders();
-    
-    void setupTimer();
-    
-    void setupIP();
+    void setupTcpConnection();
     
     void updateReveivePackage();
     
     bool isMessage(char * buffer, int size);
     
-    void parseMessage(char * buffer, int size);
+    void parseMessage(string& msg, int _id);
     
-    void receivedIp(char _id);
+    void sendStatus(int i);
     
-    void receivedHeartbeat(char _id, char val1, char val2);
-    
-    void createConnection(string& ip, int port);
-    
-    void sendAutodiscovery();
-    
-    void sendConnected();
-    
-    void sendDiscovered();
-    
-    void updatePixels();
-    
+    void sendError(int i);
     
     
 private:
     
-    ofxUDPManager m_udpConnection;
-    udp_header    m_dataHeader;
-    udp_header    m_connectHeader;
-    ofxSimpleTimer         m_timer;
-    string                 m_broadcast;
-    string                 m_ip;
+    ofxTCPServer           m_tcp;
+
     bool                   m_connected;
-    int                    m_ledsPerChannel;
+    bool                   m_status;
+    int                    m_index;
     
 };
 

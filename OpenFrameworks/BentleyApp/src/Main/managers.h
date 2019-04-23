@@ -23,3 +23,4 @@
 #include "LedsManager.h"
 #include "ModelManager.h"
 #include "VideoManager.h"
+#include "TcpManager.h"

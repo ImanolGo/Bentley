@@ -76,6 +76,9 @@ public:
     
     //! Returns the VideoManager manager
     VideoManager&  getVideoManager() { return m_videoManager; }
+    
+    //! Returns the TcpManager manager
+    TcpManager&  getTcpManager() { return m_tcpManager; }
 
     
     //==========================================================================
@@ -125,6 +128,7 @@ private:
     UdpManager               m_udpManager;               ///< Manages the udp communications
     LedsManager              m_ledsManager;              ///< Manages the leds
     VideoManager             m_videoManager;             ///< Manages the video playback
+    TcpManager               m_tcpManager;               ///< Manages the tcp communications
     
     
     bool                     m_debugMode;

@@ -52,12 +52,12 @@ void AppManager::setup()
 void AppManager::setupOF()
 {
     ofSetLogLevel(OF_LOG_NOTICE);
-    ofSetVerticalSync(false);
+    ofSetVerticalSync(true);
     ofSetEscapeQuitsApp(false);
     //ofSetDataPathRoot("./data/");
     //ofSetDataPathRoot(ofFilePath::getCurrentExeDir() + "./data");
     
-     ofSetBackgroundAuto(true);
+    ofSetBackgroundAuto(true);
     
     bool isOFDataFolderBundled = false;
     if( ofFile::doesFileExist("../Resources/data", false) ){
@@ -87,7 +87,7 @@ void AppManager::setupManagers()
     
     m_layoutManager.setup();
     m_videoManager.setup();
-   // m_udpManager.setup();
+    m_tcpManager.setup();
     m_ledsManager.setup();
     m_modelManager.setup();
     m_keyboardManager.setup();
@@ -105,7 +105,7 @@ void AppManager::update()
     m_visualEffectsManager.update();
     m_viewManager.update();
     m_videoManager.update();
-   // m_udpManager.update();
+    m_tcpManager.update();
    // m_sceneManager.update();
     m_ledsManager.update();
     m_modelManager.update();

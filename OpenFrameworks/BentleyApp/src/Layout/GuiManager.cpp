@@ -139,7 +139,7 @@ void GuiManager::setupProcessingGroup()
     m_parameters.add(m_gamma);
     m_postProcessingGroup.add(m_gamma);
     
-    m_blur.set("Gamma", 1.0, 0.0, 2.0);
+    m_blur.set("Blur", 0.0, 0.0, 2.0);
     m_blur.addListener(videoManager, &VideoManager::setBlurScale);
     m_parameters.add(m_blur);
     m_postProcessingGroup.add(m_blur);
@@ -259,6 +259,7 @@ void GuiManager::drawGui()
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Contrast"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Saturation"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Brightness"));
+                ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Blur"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Gamma"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MinInput"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MaxInput"));

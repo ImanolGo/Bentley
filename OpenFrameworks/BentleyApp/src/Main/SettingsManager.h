@@ -53,6 +53,8 @@ public:
     
     int getOscPortReceive() const {return m_portOscReceive;}
     
+    int getTcpPortReceive() const {return m_portTcpReceive;}
+    
     const string& getIpAddress() const {return m_ipAddress;}
     
    
@@ -93,10 +95,11 @@ private:
     float                   m_appWidth;             ///< stores the applications width
     float                   m_appHeight;            ///< stores the applications height
     ofColor                 m_blankColor;           ///<return blank color
-    int                     m_portUdpSend;          ///< stores the UDP port
-    int                     m_portUdpReceive;       ///< stores the UDP port used
-    int                     m_portOscSend;          ///< stores the UDP port used for the OSC Sending communications
-    int                     m_portOscReceive;       ///< stores the OSC port used for
+    int                     m_portUdpSend;          ///< stores the UDP sending
+    int                     m_portUdpReceive;       ///< stores the UDP receiving port
+    int                     m_portOscSend;          ///< stores the UDP port used for the OSC sending communications
+    int                     m_portOscReceive;       ///< stores the UDP port used for for the OSC receiving communications
+    int                     m_portTcpReceive;       ///< stores the TCP receiving port
     string                  m_ipAddress;            ///< stores the Ip Address used for the Network communications
 
 };

@@ -134,7 +134,7 @@ void VideoManager::load(string& name_)
     
     if(m_videoPlayer.load(name_))
     {
-        m_exportFbo.allocate(m_videoPlayer.getWidth(), m_videoPlayer.getHeight());
+        m_exportFbo.allocate(m_videoPlayer.getWidth(), m_videoPlayer.getHeight(), OF_PIXELS_RGB);
         m_exportFbo.begin();  ofClear(0); m_exportFbo.end();
         
         m_videoPlayer.setLoopState(OF_LOOP_NORMAL);
@@ -167,12 +167,13 @@ void VideoManager::updateVideo()
     {
 		this->updateFbos();
         int frame = m_videoPlayer.getCurrentFrame();
-  
+        
         if(m_frameNumber != frame)
         {
             m_frameNumber = frame;
             ofPixels pixels;
             m_reader.readToPixels(m_exportFbo, pixels);
+            //m_exportFbo.readToPixels(pixels);
             AppManager::getInstance().getLedsManager().setPixels(pixels);
         }
     }
@@ -189,8 +190,8 @@ void VideoManager::updateFbos()
     if (m_videoPlayer.isLoaded()) {
         m_exportFbo.begin();
             ofClear(0);
-            this->drawVideo();
-            //m_videoPlayer.draw(0, 0);
+            //this->drawVideo();
+            m_videoPlayer.draw(0, 0);
         m_exportFbo.end();
     }
 }
@@ -199,7 +200,7 @@ void VideoManager::drawVideo()
 {
     m_levels.begin();
     ofClear(0);
-    m_videoPlayer.draw(0, 0);
+    m_videoPlayer.draw(0, m_videoPlayer.getHeight(), m_videoPlayer.getWidth(), -m_videoPlayer.getHeight());
     m_levels.end();
     
     m_blur.begin();
@@ -247,6 +248,7 @@ void VideoManager::setVideoIndex(int i)
         return;
     }
     
+    ofLogNotice() <<"VideoManager::setVideoIndex ->  " << i;
     m_currentVideoIndex = i;
     this->load(m_videoNames[m_currentVideoIndex]);
     
@@ -258,6 +260,12 @@ void VideoManager::play()
 
 void VideoManager::next()
 {
+    if(m_videoNames.empty()){
+        return;
+    }
+    
+    ofLogNotice() <<"VideoManager::loadVideos -> Next ";
+    
     m_currentVideoIndex = (m_currentVideoIndex + 1) % m_videoNames.size();
     this->setVideoIndex(m_currentVideoIndex);
 }
