@@ -15,7 +15,7 @@
 
 
 
-VideoManager::VideoManager(): Manager(), m_frameNumber(-1), m_blurScale(0), m_currentVideoIndex(-1)
+VideoManager::VideoManager(): Manager(), m_frameNumber(-1), m_blurScale(0), m_currentVideoIndex(0), m_status(false)
 {
     //m_videoPlayer = new ofxAVFVideoPlayer();
 }
@@ -86,7 +86,7 @@ void VideoManager::setupFbo()
     m_fbo.allocate(width,height);
     m_fbo.begin(); ofClear(0); m_fbo.end();
     
-    m_exportFbo.allocate(width,height);
+    m_exportFbo.allocate(width,height, GL_RGB);
     m_exportFbo.begin(); ofClear(0); m_exportFbo.end();
     
 }
@@ -134,12 +134,16 @@ void VideoManager::load(string& name_)
     
     if(m_videoPlayer.load(name_))
     {
-        m_exportFbo.allocate(m_videoPlayer.getWidth(), m_videoPlayer.getHeight(), OF_PIXELS_RGB);
+        m_exportFbo.allocate(m_videoPlayer.getWidth(), m_videoPlayer.getHeight(), GL_RGB);
         m_exportFbo.begin();  ofClear(0); m_exportFbo.end();
         
         m_videoPlayer.setLoopState(OF_LOOP_NORMAL);
        // m_videoPlayer.setPixelFormat(OF_PIXELS_RGBA);
-        m_videoPlayer.play();
+        
+        if(m_status){
+             m_videoPlayer.play();
+        }
+       
         
         this->setupShaders(m_videoPlayer.getWidth(), m_videoPlayer.getHeight());
         
@@ -157,7 +161,7 @@ void VideoManager::load(string& name_)
 
 void VideoManager::updateVideo()
 {
-    if (!m_videoPlayer.isLoaded()) {
+    if (!m_videoPlayer.isLoaded() || !m_status) {
         return;
     }
     
@@ -172,7 +176,8 @@ void VideoManager::updateVideo()
         {
             m_frameNumber = frame;
             ofPixels pixels;
-            m_reader.readToPixels(m_exportFbo, pixels);
+            
+            m_reader.readToPixels(m_exportFbo, pixels, OF_IMAGE_COLOR_ALPHA);
             //m_exportFbo.readToPixels(pixels);
             AppManager::getInstance().getLedsManager().setPixels(pixels);
         }
@@ -190,8 +195,8 @@ void VideoManager::updateFbos()
     if (m_videoPlayer.isLoaded()) {
         m_exportFbo.begin();
             ofClear(0);
-            //this->drawVideo();
-            m_videoPlayer.draw(0, 0);
+            this->drawVideo();
+            //m_videoPlayer.draw(0, 0);
         m_exportFbo.end();
     }
 }
@@ -256,6 +261,7 @@ void VideoManager::setVideoIndex(int i)
 void VideoManager::play()
 {
    m_videoPlayer.play();
+   m_status = true;
 }
 
 void VideoManager::next()
@@ -273,7 +279,20 @@ void VideoManager::next()
 void VideoManager::pause()
 {
     m_videoPlayer.setPaused(true);
+    m_status = false;
 }
+
+void VideoManager::stop()
+{
+    m_videoPlayer.stop();
+    m_exportFbo.begin(); ofClear(0); m_exportFbo.end();
+    ofPixels pixels;
+    m_reader.readToPixels(m_exportFbo, pixels);
+    //m_exportFbo.readToPixels(pixels);
+    AppManager::getInstance().getLedsManager().setPixels(pixels);
+    m_status = false;
+}
+
 
 void  VideoManager::setSpeed(float& value)
 {

@@ -60,10 +60,7 @@ private:
 private:
     
     ofxTCPServer           m_tcp;
-
     bool                   m_connected;
-    bool                   m_status;
-    int                    m_index;
-    
+
 };
 

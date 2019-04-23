@@ -74,9 +74,15 @@ public:
     
     void play();
     
+    void stop();
+    
     void pause();
     
     void reload();
+    
+    int getCurrentIndex() const {return m_currentVideoIndex;}
+    
+    int getCurrentStatus() const {return m_status;}
 
 
 private:
@@ -117,6 +123,8 @@ private:
     int             m_frameNumber;
     int             m_currentVideoIndex;
     float           m_blurScale;
+    bool            m_status;
+    bool            m_playing;
     
 
 };

@@ -235,6 +235,16 @@ void GuiManager::drawGui()
                     }
                 }
                 
+                if (ImGui::Button("Play"))
+                {
+                    AppManager::getInstance().getVideoManager().play();
+                }
+                
+                if (ImGui::Button("Stop"))
+                {
+                    AppManager::getInstance().getVideoManager().stop();
+                }
+                
                 if (ImGui::Button("Next"))
                 {
                     AppManager::getInstance().getVideoManager().next();

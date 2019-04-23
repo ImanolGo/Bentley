@@ -13,7 +13,7 @@
 #include "AppManager.h"
 
 
-TcpManager::TcpManager(): Manager(), m_connected(false), m_status(false), m_index(0)
+TcpManager::TcpManager(): Manager(), m_connected(false)
 {
     //Intentionally left empty
 }
@@ -94,18 +94,18 @@ void TcpManager::parseMessage(string& msg, int id)
     }
     
     else if(command == "on"){
-        m_status = true;
+        AppManager::getInstance().getVideoManager().play();
         this->sendStatus(id);
     }
     
     else if(command == "off"){
-        m_status = false;
+        AppManager::getInstance().getVideoManager().stop();
         this->sendStatus(id);
     }
     
     else if(command == "mode"){
         if(result.size()>1){
-            m_index = ofToInt(result[1]);
+            AppManager::getInstance().getVideoManager().setVideoIndex(ofToInt(result[1]));
             this->sendStatus(id);
         }
         else{
@@ -122,8 +122,10 @@ void TcpManager::parseMessage(string& msg, int id)
 
 void TcpManager::sendStatus(int i)
 {
-    string status =  m_status ? "on " : "off ";
-    string message = "OK " + status + ofToString(m_index);
+    bool bStatud = AppManager::getInstance().getVideoManager().getCurrentStatus();
+    string status =  bStatud ? "on " : "off ";
+    int index = AppManager::getInstance().getVideoManager().getCurrentIndex();
+    string message = "OK " + status + ofToString(index);
     m_tcp.send(i, message);
     ofLogNotice() <<"TcpManager::sendStatus ->  " << message;
 }
