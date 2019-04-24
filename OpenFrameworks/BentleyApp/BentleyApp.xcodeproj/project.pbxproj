@@ -41,14 +41,12 @@
 		58BCEB4034B30CB4A3456FC7 /* SettingsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73D7AA4CF4895FC3DEEC2978 /* SettingsManager.cpp */; };
 		5BA83433165B9D092062C1AA /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F15C1CCF2D0F4C0041D33340 /* ofxOscSender.cpp */; };
 		5D33A9513B2A4C6DBD3188C7 /* GuiManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4907E8B0250B798D3E6F09A1 /* GuiManager.cpp */; };
-		5E2060A0FB5AA49034B6197B /* myEasyCam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42AE41179815462906180DEC /* myEasyCam.cpp */; };
 		60559E276513B524F97DFBED /* ofxTCPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EF9E076AAA82CA1FE5FCDEFB /* ofxTCPClient.cpp */; };
 		6F36C225B48477DFCCA6FB64 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5FA64D51DA6D1619944A259C /* ResourceManager.cpp */; };
 		76A63EE6C436F4596E9DDE8C /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = B5D3E3DBCF9C9E351AA85AD5 /* readme.md */; };
 		800A974BDDEEB77D4F33F621 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BD4FAA411D477319BDC9F49 /* imgui_draw.cpp */; };
 		86241D5BDF4952CAA7E9E9AF /* EngineOpenGLES.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6BFFBC6C323BE89050C19B9 /* EngineOpenGLES.cpp */; };
 		875651AF8693D3DE4CC23485 /* VisualEffects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DCB9CB9C1093718FA5F131FA /* VisualEffects.cpp */; };
-		8A28D6F85BD674B3A81C0468 /* CamManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4BDFC78B417C4E2FDD48BAC3 /* CamManager.cpp */; };
 		8B8821FB4158456E8185A22B /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1A14124BF720E4CA8987CC24 /* SceneManager.cpp */; };
 		8C9DFFBD826A20F752ED0CD6 /* CameraManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89DFBB918E3BCAFB0C93CAF3 /* CameraManager.cpp */; };
 		8CF0269A51B53AF174235BF6 /* ofxSimpleTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B12110942BA191806A2DDE7B /* ofxSimpleTimer.cpp */; };
@@ -157,7 +155,6 @@
 		3FF4A574B4B19F9EAB6050FF /* OscOutboundPacketStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = OscOutboundPacketStream.cpp; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxOsc/libs/oscpack/src/osc/OscOutboundPacketStream.cpp; sourceTree = SOURCE_ROOT; };
 		41CCDADA110A9A086C3191E1 /* TcpManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = TcpManager.cpp; path = src/I0/TcpManager.cpp; sourceTree = SOURCE_ROOT; };
 		4229475864D5EBC7913C8351 /* LayoutManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = LayoutManager.cpp; path = src/Layout/LayoutManager.cpp; sourceTree = SOURCE_ROOT; };
-		42AE41179815462906180DEC /* myEasyCam.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = myEasyCam.cpp; path = src/Visuals/myEasyCam.cpp; sourceTree = SOURCE_ROOT; };
 		440847B187D6560D99ACC1FD /* ofxFastFboReader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxFastFboReader.cpp; path = src/Addons/ofxFastFboReader/src/ofxFastFboReader.cpp; sourceTree = SOURCE_ROOT; };
 		444215CAAC56B3CC61CDD098 /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxGuiGroup.cpp; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxGui/src/ofxGuiGroup.cpp; sourceTree = SOURCE_ROOT; };
 		46FADFE3BED3D31A5385A87A /* ofxTCPServer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxTCPServer.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxNetwork/src/ofxTCPServer.h; sourceTree = SOURCE_ROOT; };
@@ -168,7 +165,6 @@
 		49483BB5B1099F80271B96E8 /* imgui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = imgui.cpp; path = src/Addons/ofxImGui/libs/imgui/src/imgui.cpp; sourceTree = SOURCE_ROOT; };
 		496FB8BB67BF37BF8B96AD33 /* SettingsManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SettingsManager.h; path = src/Main/SettingsManager.h; sourceTree = SOURCE_ROOT; };
 		4AF51E73A4CB5693AAE78221 /* BaseEngine.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = BaseEngine.h; path = src/Addons/ofxImGui/src/BaseEngine.h; sourceTree = SOURCE_ROOT; };
-		4BDFC78B417C4E2FDD48BAC3 /* CamManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = CamManager.cpp; path = src/Visuals/CamManager.cpp; sourceTree = SOURCE_ROOT; };
 		4C24B2C372E7EE6C3EDCE881 /* VideoVisual.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = VideoVisual.h; path = src/Engine/Visuals/VideoVisual.h; sourceTree = SOURCE_ROOT; };
 		4CC5B1C4F0112F2B563D5F2A /* ofxImGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxImGui.h; path = src/Addons/ofxImGui/src/ofxImGui.h; sourceTree = SOURCE_ROOT; };
 		4D62EA0C49693193D1322AEC /* Helpers.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Helpers.cpp; path = src/Addons/ofxImGui/src/Helpers.cpp; sourceTree = SOURCE_ROOT; };
@@ -197,7 +193,6 @@
 		73D7AA4CF4895FC3DEEC2978 /* SettingsManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SettingsManager.cpp; path = src/Main/SettingsManager.cpp; sourceTree = SOURCE_ROOT; };
 		74CA0108E316A6B162DFF22A /* ofxInputField.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxInputField.cpp; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxGui/src/ofxInputField.cpp; sourceTree = SOURCE_ROOT; };
 		76C4479895B14357D331E849 /* SceneManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SceneManager.h; path = src/Scenes/SceneManager.h; sourceTree = SOURCE_ROOT; };
-		778629BE32D842147D5E8F2C /* myEasyCam.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = myEasyCam.h; path = src/Visuals/myEasyCam.h; sourceTree = SOURCE_ROOT; };
 		78E61E440A21EE9FC6156AAD /* LayoutManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = LayoutManager.h; path = src/Layout/LayoutManager.h; sourceTree = SOURCE_ROOT; };
 		79BD947E4299AC2C326A0FA6 /* ofxNetworkUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxNetworkUtils.cpp; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxNetwork/src/ofxNetworkUtils.cpp; sourceTree = SOURCE_ROOT; };
 		7A56ACB5C0BD905E0E896431 /* LedsManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = LedsManager.h; path = src/Leds/LedsManager.h; sourceTree = SOURCE_ROOT; };
@@ -241,7 +236,6 @@
 		B99F53EBC043ACADFD12090F /* ofxOscParameterSync.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxOscParameterSync.cpp; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxOsc/src/ofxOscParameterSync.cpp; sourceTree = SOURCE_ROOT; };
 		B9AE6F01A3FF600E85AB1BA4 /* ofxUDPSettings.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxUDPSettings.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxNetwork/src/ofxUDPSettings.h; sourceTree = SOURCE_ROOT; };
 		BA77EAFB627C16E28A2A6AD8 /* ofxOscReceiver.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxOscReceiver.cpp; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxOsc/src/ofxOscReceiver.cpp; sourceTree = SOURCE_ROOT; };
-		BB1E7C76D20FAD4F603E2F8C /* CamManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = CamManager.h; path = src/Visuals/CamManager.h; sourceTree = SOURCE_ROOT; };
 		BB4754F1FAF9585C96ABC953 /* DefaultTheme.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DefaultTheme.h; path = src/Addons/ofxImGui/src/DefaultTheme.h; sourceTree = SOURCE_ROOT; };
 		BCCDDC884835D8E0D60C9A94 /* VisualEffectsManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = VisualEffectsManager.h; path = src/Engine/Visuals/VisualEffectsManager.h; sourceTree = SOURCE_ROOT; };
 		BDBBFA0737F9A133651F53BB /* ofxFastFboReader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxFastFboReader.h; path = src/Addons/ofxFastFboReader/src/ofxFastFboReader.h; sourceTree = SOURCE_ROOT; };
@@ -924,10 +918,6 @@
 		C02C33831C66F04FEBAE29DE /* Visuals */ = {
 			isa = PBXGroup;
 			children = (
-				4BDFC78B417C4E2FDD48BAC3 /* CamManager.cpp */,
-				BB1E7C76D20FAD4F603E2F8C /* CamManager.h */,
-				42AE41179815462906180DEC /* myEasyCam.cpp */,
-				778629BE32D842147D5E8F2C /* myEasyCam.h */,
 				2990685E1D17096D1F9B64CF /* VideoManager.cpp */,
 				67EDBB787A2D6F21FFDD4446 /* VideoManager.h */,
 			);
@@ -1493,8 +1483,6 @@
 				58BCEB4034B30CB4A3456FC7 /* SettingsManager.cpp in Sources */,
 				2BF29CBD5F6758C8B2152081 /* BlankScene.cpp in Sources */,
 				8B8821FB4158456E8185A22B /* SceneManager.cpp in Sources */,
-				8A28D6F85BD674B3A81C0468 /* CamManager.cpp in Sources */,
-				5E2060A0FB5AA49034B6197B /* myEasyCam.cpp in Sources */,
 				41495ECD0155116522DCA99A /* VideoManager.cpp in Sources */,
 				342EF89AB50592596434ABF4 /* ofxBaseGui.cpp in Sources */,
 				CFDD94D36571049F81BD1B50 /* ofxButton.cpp in Sources */,

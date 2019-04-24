@@ -105,14 +105,18 @@ void LayoutManager::resetWindowRects()
     float width = AppManager::getInstance().getSettingsManager().getAppWidth();
     float height  = AppManager::getInstance().getSettingsManager().getAppHeight();
     float ratio = width/ height;
-    float frame_width = ofGetWindowWidth() - (AppManager::getInstance().getGuiManager().getWidth() +  AppManager::getInstance().getGuiManager().getPosition().x) - 3*MARGIN;
+    float gui_offset = AppManager::getInstance().getGuiManager().getWidth() +  2*AppManager::getInstance().getGuiManager().getPosition().x;
+    float frame_width = ofGetWindowWidth() - gui_offset;
     float frame_height= ofGetWindowHeight();
     
     
     m_windowRects["3D"]->width = 2*frame_width/3 - 2*MARGIN;
     m_windowRects["3D"]->height = frame_height - 2*MARGIN;
-    m_windowRects["3D"]->x = AppManager::getInstance().getGuiManager().getWidth()  + 2*MARGIN;
+    m_windowRects["3D"]->x = gui_offset  + 2*MARGIN;
     m_windowRects["3D"]->y = MARGIN;
+    
+    ofRectangle rect(m_windowRects["3D"]->x, m_windowRects["3D"]->y, m_windowRects["3D"]->getWidth(), m_windowRects["3D"]->getHeight());
+    AppManager::getInstance().getModelManager().setControlArea(rect);
     
     m_windowRects["2D"]->width = frame_width/3 - 2*MARGIN;
     m_windowRects["2D"]->height = frame_height/2 - 2*MARGIN;
@@ -123,6 +127,10 @@ void LayoutManager::resetWindowRects()
     m_windowRects["Video"]->height = m_windowRects["2D"]->height;
     m_windowRects["Video"]->x = m_windowRects["2D"]->x;
     m_windowRects["Video"]->y = m_windowRects["2D"]->y + m_windowRects["2D"]->height + 2*MARGIN;
+    
+    
+   
+    
     
 }
 

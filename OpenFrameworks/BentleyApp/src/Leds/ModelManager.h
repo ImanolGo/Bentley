@@ -11,8 +11,6 @@
 #pragma once
 
 #include "Manager.h"
-#include "myEasyCam.h"
-
 
 //========================== class ModelManager ==============================
 //============================================================================
@@ -42,6 +40,8 @@ class ModelManager: public Manager
         void draw();
 
         void resetCamera();
+    
+        void setControlArea(ofRectangle& rect) {m_camera.setControlArea(rect);}
 
     private:
 
@@ -51,7 +51,7 @@ class ModelManager: public Manager
 
     private:
     
-        myEasyCam m_camera; // add mouse controls for camera movement
+        ofEasyCam m_camera; // add mouse controls for camera movement
     
         ofFbo     m_fbo;
 

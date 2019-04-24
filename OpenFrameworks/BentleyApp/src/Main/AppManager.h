@@ -59,9 +59,6 @@ public:
     //! Returns the GUI manager
     GuiManager&   getGuiManager() { return m_guiManager; }
     
-    //! Returns the cam manager
-    CamManager&  getCamManager() { return m_camManager; }
-    
     //! Returns the udp manager
     UdpManager&  getUdpManager() { return m_udpManager; }
     
@@ -121,7 +118,6 @@ private:
     KeyboardManager          m_keyboardManager;          ///< Manages the keyboard
     GuiManager               m_guiManager;               ///< Manages the graphical user interface
 
-    CamManager               m_camManager;               ///< Manages the web cam and processing
     ModelManager             m_modelManager;             ///< Manages the model and processing
 
     SceneManager             m_sceneManager;             ///< Manages all the scenes

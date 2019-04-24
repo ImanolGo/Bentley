@@ -17,7 +17,6 @@
 #include "LayoutManager.h"
 #include "KeyboardManager.h"
 #include "GuiManager.h"
-#include "CamManager.h"
 #include "UdpManager.h"
 #include "SceneManager.h"
 #include "LedsManager.h"
