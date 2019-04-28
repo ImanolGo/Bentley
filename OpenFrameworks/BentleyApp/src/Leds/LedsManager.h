@@ -134,9 +134,12 @@ class LedsManager: public Manager
     
     
         ofFbo   m_fbo;
+        ofFbo   m_fboMaskee;
+        ofFbo   m_fboMask;
         ofVbo   m_vbo3D;
         ofVbo   m_vbo2D;
-        ofShader m_shader;
+        ofShader m_vboShader;
+        ofShader m_maskShader;
         ofTexture m_texture;
     
         vector <ofVec3f> m_points3D;

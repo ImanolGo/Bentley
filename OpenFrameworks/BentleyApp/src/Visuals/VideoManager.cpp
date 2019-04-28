@@ -243,7 +243,11 @@ void VideoManager::drawFbo()
     m_exportFbo.draw(x,y, width, height);
     
     //m_fbo.draw(x,y, width, height);
-    
+}
+
+void VideoManager::draw(float width, float height)
+{
+    m_exportFbo.draw(0,0, width, height);
 }
 
 

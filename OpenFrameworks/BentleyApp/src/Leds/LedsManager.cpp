@@ -94,7 +94,9 @@ void LedsManager::arrangeLeds()
 
 void LedsManager::setupShader()
 {
-    m_shader.load("shaders/vboShader");
+    m_vboShader.load("shaders/vboShader");
+    m_maskShader.load("shaders/LuminanceMaskingShader");
+    
     ofDisableArbTex();
     ofLoadImage(m_texture, "images/general/dot.png");
     ofEnableArbTex();
@@ -116,9 +118,11 @@ void LedsManager::createLayout()
     
    
     ofPixels pix;
+    m_fboMask.allocate(width, height);
     m_fbo.allocate(width, height);
+    m_fboMaskee.allocate(width, height);
     
-    m_fbo.begin();
+    m_fboMask.begin();
     ofClear(0);
     ofSetColor(255);
     
@@ -130,9 +134,9 @@ void LedsManager::createLayout()
     }
     
     
-    m_fbo.end();
+    m_fboMask.end();
     
-    m_fbo.readToPixels(pix);
+    m_fboMask.readToPixels(pix);
     ofSaveImage(pix, "images/layout/leds_layout.png");
 }
 
@@ -470,7 +474,7 @@ void LedsManager::update()
          m_isNewFrame = false;
          //AppManager::getInstance().getImageManager().update();
     }
-   
+       
 }
 
 void LedsManager::setPixels(ofPixelsRef pixels)
@@ -496,48 +500,40 @@ void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
     pixelPos.x = ofMap(m_points2D[index].x, m_minPos.x, m_maxPos.x, 0, pixels.getWidth()-1);
     pixelPos.y = ofMap(m_points2D[index].y, m_minPos.y, m_maxPos.y,  pixels.getHeight()-1, 0);
     
-    
-//    if(m_is3D)
-//    {
-//        float treshold = m_minPos.y + (m_maxPos.y - m_minPos.y)*0.5;
-//
-//        if(m_points3D[index].y >= treshold ){
-//            pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, 0, (pixels.getWidth()-1)*0.5);
-//            pixelPos.y = ofMap(m_points3D[index].z/m_offset, m_maxPos.z, m_minPos.z, 0,  pixels.getHeight()-1);
-//        }
-//        else{
-//            pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, pixels.getWidth()-1, (pixels.getWidth()-1)*0.5);
-//            pixelPos.y = ofMap(m_points3D[index].z/m_offset, m_maxPos.z, m_minPos.z, 0,  pixels.getHeight()-1);
-//        }
-//    }
-//    else
-//    {
-//        pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, 0, pixels.getWidth()-1);
-//        pixelPos.y = ofMap(m_points3D[index].y/m_offset, m_maxPos.y, m_minPos.y, 0,  pixels.getHeight()-1);
-//    }
-    
-    //ofLogNotice() <<  m_position.x ; ofLogNotice() <<  m_position.y;
-    //ofLogNotice() <<  pixelPos.x ; ofLogNotice() <<  pixelPos.y;
-    //ofLogNotice() << pixelPos.x;
-    
     auto color = pixels.getColor((int)pixelPos.x, (int)pixelPos.y);
     m_colors[index] = ofFloatColor(color.r/255.0f, color.g/255.0f, color.b/255.0f);
 }
 
 void LedsManager::draw()
 {
-    m_shader.begin();
+    m_vboShader.begin();
     m_texture.bind();
         m_vbo3D.draw(GL_POINTS, 0, (int)m_points3D.size());
     m_texture.unbind();
-    m_shader.end();
+    m_vboShader.end();
 }
 
 void LedsManager::drawLayout()
 {
+    ofEnableAlphaBlending();
+    
+    m_fboMaskee.begin();
+        ofClear(0);
+        AppManager::getInstance().getVideoManager().draw(m_fboMask.getWidth(), m_fboMask.getHeight());
+    m_fboMaskee.end();
+    
+    
+    m_fbo.begin();
+        ofClear(0);
+        m_maskShader.begin();
+        m_maskShader.setUniformTexture("imageMask", m_fboMask.getTexture(), 1);
+        m_fboMaskee.draw(0,0);
+        m_maskShader.end();
+    m_fbo.end();
+    
     string name = "2D";
     auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
-    float ratio = m_fbo.getWidth()/ m_fbo.getHeight();
+    float ratio = m_fboMask.getWidth()/ m_fboMask.getHeight();
     float height = rect->getHeight();
     float width = height*ratio;
     
@@ -550,6 +546,7 @@ void LedsManager::drawLayout()
     float y = rect->getHeight()*0.5 - height*0.5;
     
     m_fbo.draw(x,y, width, height);
+    
 }
 
 

@@ -44,6 +44,9 @@ public:
     //! Draw the Video Manager
     void draw();
     
+    //! Draw the Video Manager
+    void draw(float width, float height);
+    
     void loadVideos(string& path);
     
     void load(string& name);
