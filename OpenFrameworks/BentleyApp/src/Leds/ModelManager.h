@@ -33,12 +33,12 @@ class ModelManager: public Manager
         //! Setup the Vase Manager
         void setup();
 
-        //! Update the Vase Manager
+        //! Update the Model Manager
         void update();
 
-        //! Draw the Vase Manager
+        //! Draw the Model Manager
         void draw();
-
+    
         void resetCamera();
     
         void setControlArea(ofRectangle& rect) {m_camera.setControlArea(rect);}

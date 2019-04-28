@@ -50,6 +50,7 @@ void LedsManager::setupLeds()
     this->readLeds();
      //this->createLedPositions();
     this->arrangeLeds();
+    this->createLayout();
 }
 
 bool LedsManager::readLeds()
@@ -75,9 +76,7 @@ bool LedsManager::readLeds()
         dirAux.listDir();
         dirAux.sort();
         this->loadSubfolder(dirAux);
-        
     }
-    
 }
 
 
@@ -99,9 +98,45 @@ void LedsManager::setupShader()
     ofDisableArbTex();
     ofLoadImage(m_texture, "images/general/dot.png");
     ofEnableArbTex();
-    
-    
 }
+
+void LedsManager::createLayout()
+{
+    float width = m_maxPos.x - m_minPos.x;
+    float height = m_maxPos.y - m_minPos.y;
+    float ratio = width/height;
+    if(ratio > 0.0){
+        width = 2000;
+        height = width/ratio;
+    }
+    else{
+        height = 2000;
+        width = height*ratio;
+    }
+    
+   
+    ofPixels pix;
+    m_fbo.allocate(width, height);
+    
+    m_fbo.begin();
+    ofClear(0);
+    ofSetColor(255);
+    
+    
+    for(auto led: m_points2D){
+        float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
+        float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
+        ofDrawCircle(x, y, 10);
+    }
+    
+    
+    m_fbo.end();
+    
+    m_fbo.readToPixels(pix);
+    ofSaveImage(pix, "images/layout/leds_layout.png");
+}
+
+
 
 void LedsManager::createLedPositions()
 {
@@ -491,10 +526,6 @@ void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
 
 void LedsManager::draw()
 {
-//    for(auto led: m_leds){
-//        led->draw();
-//    }
-    
     m_shader.begin();
     m_texture.bind();
         m_vbo3D.draw(GL_POINTS, 0, (int)m_points3D.size());
@@ -502,13 +533,28 @@ void LedsManager::draw()
     m_shader.end();
 }
 
+void LedsManager::drawLayout()
+{
+    string name = "2D";
+    auto rect = AppManager::getInstance().getLayoutManager().getWindowRect(name);
+    float ratio = m_fbo.getWidth()/ m_fbo.getHeight();
+    float height = rect->getHeight();
+    float width = height*ratio;
+    
+    if( width > rect->getWidth() ){
+        width = rect->getWidth();
+        height = width/ratio;
+    }
+    
+    float x = rect->getWidth()*0.5 - width*0.5;
+    float y = rect->getHeight()*0.5 - height*0.5;
+    
+    m_fbo.draw(x,y, width, height);
+}
+
+
 void LedsManager::setSize(float& value)
 {
-//    for(auto led: m_leds){
-//        led->setWidth(value);
-//    }
-    
-    //m_sizes.clear();
     for(auto& size: m_sizes){
         size = ofVec3f(10*value);
     }

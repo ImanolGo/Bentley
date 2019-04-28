@@ -175,7 +175,7 @@ void LayoutManager::updateTwoDFbo()
     string name = "2D";
     this->begin(name);
     ofClear(0);
-    AppManager::getInstance().getLedsManager().draw();
+    AppManager::getInstance().getLedsManager().drawLayout();
     this->end(name);
 }
 

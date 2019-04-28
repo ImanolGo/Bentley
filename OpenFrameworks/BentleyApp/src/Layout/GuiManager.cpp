@@ -174,6 +174,7 @@ void GuiManager::setupLedsGui()
     m_ledsSize.set("Size", 1.0, 0.0, 5.0);
     m_ledsSize.addListener(ledsManager, &LedsManager::setSize);
     m_ledsGroup.add(m_ledsSize);
+    m_parameters.add(m_ledsSize);
 }
 
 void GuiManager::update()

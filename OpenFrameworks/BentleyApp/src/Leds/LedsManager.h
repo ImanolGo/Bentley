@@ -48,6 +48,9 @@ class LedsManager: public Manager
         //! Draw the Led Manager
         void draw();
     
+        //! Draw the Led Layout
+        void drawLayout();
+    
         const LedVector& getLeds() const {return m_leds;}
     
         const vector <ofFloatColor>& getColors() const {return m_colors;}
@@ -70,6 +73,8 @@ class LedsManager: public Manager
     private:
     
         void setupLeds();
+    
+        void createLayout();
     
         bool readLeds();
     
@@ -128,8 +133,9 @@ class LedsManager: public Manager
         float              m_laserBrightness;
     
     
-        ofVbo m_vbo3D;
-        ofVbo m_vbo2D;
+        ofFbo   m_fbo;
+        ofVbo   m_vbo3D;
+        ofVbo   m_vbo2D;
         ofShader m_shader;
         ofTexture m_texture;
     
