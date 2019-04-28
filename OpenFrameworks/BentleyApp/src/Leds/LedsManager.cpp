@@ -85,6 +85,7 @@ void LedsManager::arrangeLeds()
 {
     this->normalizeLeds();
     this->centreLeds();
+    //this->normalizeLeds();
     
     int total = (int)m_points3D.size();
     m_vbo3D.setVertexData(&m_points3D[0], total, GL_DYNAMIC_DRAW);
@@ -201,7 +202,7 @@ void LedsManager::sortLeds()
 
 void LedsManager::normalizeLeds()
 {
-    this->normalize2DLeds();
+    //this->normalize2DLeds();
     this->normalize3DLeds();
     
 }
@@ -219,10 +220,6 @@ void LedsManager::normalize2DLeds()
         if(max < abs(position.y)){
             max = abs(position.y);
         }
-        
-        if(max < abs(position.z)){
-            max = abs(position.z);
-        }
     }
     
     ofLogNotice() <<"LedsManager::normalize2DLeds -> max value =  " << max;
@@ -232,7 +229,7 @@ void LedsManager::normalize2DLeds()
     {
         position/=max;
         
-        //ofLogNotice() <<"LedsManager::normalizeLeds -> id " << id << ", x = "  << position.x << ", y = "  << position.y << ", z = " << position.z ;
+        ofLogNotice() <<"LedsManager::normalizeLeds -> id " << id << ", x = "  << position.x << ", y = "  << position.y << ", z = " << position.z ;
         id++;
     }
     
@@ -273,10 +270,74 @@ void LedsManager::normalize3DLeds()
 
 void LedsManager::centreLeds()
 {
+    this->centre2DLeds();
+    this->centre3DLeds();
+}
+
+void LedsManager::centre3DLeds()
+{
     
+    ofPoint maxPos, minPos;
     bool firstIteration = true;
     
     for (auto position: m_points3D)
+    {
+        if(firstIteration){
+            firstIteration = false;
+            maxPos = position;
+            minPos = position;
+        }
+        
+        if(maxPos.x < position.x){
+            maxPos.x = position.x;
+        }
+        
+        if(maxPos.y < position.y){
+            maxPos.y = position.y;
+        }
+        
+        if(maxPos.z < position.z){
+            maxPos.z = position.z;
+        }
+        
+        if(minPos.x > position.x){
+            minPos.x = position.x;
+        }
+        
+        if(minPos.y > position.y){
+            minPos.y = position.y;
+        }
+        
+        if(minPos.z > position.z){
+            minPos.z = position.z;
+        }
+        
+    }
+    
+    ofLogNotice() <<"LedsManager::centreLeds -> min position: x = "  << minPos.x << ", y = "  << minPos.y << ", z = " << minPos.z ;
+    ofLogNotice() <<"LedsManager::centreLeds -> max position: x = "  << maxPos.x << ", y = "  << maxPos.y << ", z = " << maxPos.z ;
+    
+    ofPoint shift = (maxPos- minPos)*0.5  + minPos;
+    
+    ofLogNotice() <<"LedsManager::centreLeds -> shift position: x = "  << shift.x << ", y = "  << shift.y << ", z = " << shift.z ;
+    
+    for (auto& position: m_points3D)
+    {
+        position-=shift;
+        position*=m_offset;
+    }
+    
+//    m_maxPos -=shift;
+//    m_minPos -=shift;
+}
+
+
+void LedsManager::centre2DLeds()
+{
+    
+    bool firstIteration = true;
+    
+    for (auto position: m_points2D)
     {
         if(firstIteration){
             firstIteration = false;
@@ -292,10 +353,7 @@ void LedsManager::centreLeds()
             m_maxPos.y = position.y;
         }
         
-        if(m_maxPos.z < position.z){
-            m_maxPos.z = position.z;
-        }
-        
+    
         if(m_minPos.x > position.x){
             m_minPos.x = position.x;
         }
@@ -304,23 +362,18 @@ void LedsManager::centreLeds()
             m_minPos.y = position.y;
         }
         
-        if(m_minPos.z > position.z){
-            m_minPos.z = position.z;
-        }
-        
     }
     
-    ofLogNotice() <<"LedsManager::centreLeds -> min position: x = "  << m_minPos.x << ", y = "  << m_minPos.y << ", z = " << m_minPos.z ;
-    ofLogNotice() <<"LedsManager::centreLeds -> max position: x = "  << m_maxPos.x << ", y = "  << m_maxPos.y << ", z = " << m_maxPos.z ;
+    ofLogNotice() <<"LedsManager::centreLeds -> min position: x = "  << m_minPos.x << ", y = "  << m_minPos.y ;
+    ofLogNotice() <<"LedsManager::centreLeds -> max position: x = "  << m_maxPos.x << ", y = "  << m_maxPos.y;
     
-    ofPoint shift = (m_maxPos- m_minPos)*0.5  + m_minPos;
+    ofPoint shift = m_minPos;
     
     ofLogNotice() <<"LedsManager::centreLeds -> shift position: x = "  << shift.x << ", y = "  << shift.y << ", z = " << shift.z ;
     
-    for (auto& position: m_points3D)
+    for (auto& position: m_points2D)
     {
         position-=shift;
-        position*=m_offset;
     }
     
     m_maxPos -=shift;
@@ -387,43 +440,12 @@ void LedsManager::update()
 
 void LedsManager::setPixels(ofPixelsRef pixels)
 {
-    this->setLedColors(pixels);
-    
-    //AppManager::getInstance().getImageManager().update();
-}
-
-void LedsManager::setLedColors(ofPixelsRef pixels)
-{
-    
-//    for(int i=0; i<m_leds.size(); i++){
-//        m_leds[i]->setPixelColor(pixels, m_is3D);
-//        int n = i%9;
-//
-//        auto& color = m_leds[i]->getColor();
-//        if(n==8)
-//        {
-//            float brightness =  color.getBrightness()*m_laserBrightness;
-//            color = ofColor(brightness,0,0);
-//           // color.setBrightness(m_laserBrightness*brightness);
-//        }
-//        else{
-//             color.setBrightness(m_ledsBrightness*color.getBrightness());
-//            //m_leds[i]->getColor().setBrightness(m_ledsBrightness* m_leds[i]->getColor().getBrightness());
-//        }
-//    }
-
-
-//    for(auto led: m_leds){
-//        led->setPixelColor(pixels, m_is3D);
-//    }
-//
     for(int i=0; i<m_points3D.size(); i++){
         this->setPixelColor(pixels, i);
     }
     
     m_vbo3D.setColorData(&m_colors[0], m_points3D.size(), GL_DYNAMIC_DRAW);
     m_isNewFrame = true;
-    
 }
 
 
@@ -435,24 +457,29 @@ void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
     
     
     ofPoint pixelPos;
-    if(m_is3D)
-    {
-        float treshold = m_minPos.y + (m_maxPos.y - m_minPos.y)*0.5;
-        
-        if(m_points3D[index].y >= treshold ){
-            pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, 0, (pixels.getWidth()-1)*0.5);
-            pixelPos.y = ofMap(m_points3D[index].z/m_offset, m_maxPos.z, m_minPos.z, 0,  pixels.getHeight()-1);
-        }
-        else{
-            pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, pixels.getWidth()-1, (pixels.getWidth()-1)*0.5);
-            pixelPos.y = ofMap(m_points3D[index].z/m_offset, m_maxPos.z, m_minPos.z, 0,  pixels.getHeight()-1);
-        }
-    }
-    else
-    {
-        pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, 0, pixels.getWidth()-1);
-        pixelPos.y = ofMap(m_points3D[index].y/m_offset, m_maxPos.y, m_minPos.y, 0,  pixels.getHeight()-1);
-    }
+    
+    pixelPos.x = ofMap(m_points2D[index].x, m_minPos.x, m_maxPos.x, 0, pixels.getWidth()-1);
+    pixelPos.y = ofMap(m_points2D[index].y, m_minPos.y, m_maxPos.y,  pixels.getHeight()-1, 0);
+    
+    
+//    if(m_is3D)
+//    {
+//        float treshold = m_minPos.y + (m_maxPos.y - m_minPos.y)*0.5;
+//
+//        if(m_points3D[index].y >= treshold ){
+//            pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, 0, (pixels.getWidth()-1)*0.5);
+//            pixelPos.y = ofMap(m_points3D[index].z/m_offset, m_maxPos.z, m_minPos.z, 0,  pixels.getHeight()-1);
+//        }
+//        else{
+//            pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, pixels.getWidth()-1, (pixels.getWidth()-1)*0.5);
+//            pixelPos.y = ofMap(m_points3D[index].z/m_offset, m_maxPos.z, m_minPos.z, 0,  pixels.getHeight()-1);
+//        }
+//    }
+//    else
+//    {
+//        pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, 0, pixels.getWidth()-1);
+//        pixelPos.y = ofMap(m_points3D[index].y/m_offset, m_maxPos.y, m_minPos.y, 0,  pixels.getHeight()-1);
+//    }
     
     //ofLogNotice() <<  m_position.x ; ofLogNotice() <<  m_position.y;
     //ofLogNotice() <<  pixelPos.x ; ofLogNotice() <<  pixelPos.y;

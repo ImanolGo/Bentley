@@ -54,8 +54,6 @@ class LedsManager: public Manager
     
         void setPixels(ofPixelsRef pixels);
     
-        void setLedColors(ofPixelsRef pixels);
-    
         const ofPoint getMin() const {return m_minPos;}
     
         const ofPoint getMax() const {return m_maxPos;}
@@ -94,6 +92,10 @@ class LedsManager: public Manager
         void normalize2DLeds();
     
         void  centreLeds();
+    
+        void  centre3DLeds();
+    
+        void  centre2DLeds();
     
         bool loadSubfolder(ofDirectory& dir);
     
