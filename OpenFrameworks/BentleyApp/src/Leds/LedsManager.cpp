@@ -14,6 +14,8 @@
 #include "AppManager.h"
 
 
+const string LedsManager::LEDS_FOLDER_PATH = "leds/";
+
 
 LedsManager::LedsManager(): Manager(), m_isNewFrame(false), m_is3D(true), m_ledsBrightness(1.0), m_laserBrightness(0.25), m_offset(100)
 {
@@ -35,13 +37,60 @@ void LedsManager::setup()
 
 	Manager::setup();
     
-    this->createLedPositions();
+    this->setupLeds();
     this->setupShader();
     
     ofLogNotice() <<"LedsManager::initialized" ;
     
 }
 
+
+void LedsManager::setupLeds()
+{
+    this->readLeds();
+     //this->createLedPositions();
+    this->arrangeLeds();
+}
+
+bool LedsManager::readLeds()
+{
+    
+    ofDirectory dir(LEDS_FOLDER_PATH);
+    if( !dir.exists()){
+        ofLogNotice() <<"LedsManager::setupLeds -> Folder not found: " << LEDS_FOLDER_PATH;
+        return false;
+    }
+    
+    dir.listDir();
+    
+    ofLogNotice() <<"LedsManager::directory size: " << dir.size();
+    
+    
+    this->clearLeds();
+    
+    for(int i = 0; i < dir.size(); i++)
+    {
+        string pathAux =  dir.getPath(i);
+        ofDirectory dirAux(pathAux);
+        dirAux.listDir();
+        dirAux.sort();
+        this->loadSubfolder(dirAux);
+        
+    }
+    
+}
+
+
+void LedsManager::arrangeLeds()
+{
+    this->normalizeLeds();
+    this->centreLeds();
+    
+    int total = (int)m_points3D.size();
+    m_vbo3D.setVertexData(&m_points3D[0], total, GL_DYNAMIC_DRAW);
+    m_vbo3D.setNormalData(&m_sizes[0], total, GL_DYNAMIC_DRAW);
+    m_vbo3D.setColorData(&m_colors[0], m_points3D.size(), GL_DYNAMIC_DRAW);
+}
 
 void LedsManager::setupShader()
 {
@@ -53,102 +102,72 @@ void LedsManager::setupShader()
     
 }
 
-void LedsManager::setupLeds()
-{
-    ofLogNotice() <<"LedsManager::setupLeds" ;
-    
-    m_leds.clear();
-    m_vbo.clear();
-    m_points.clear();
-    m_sizes.clear();
-    
-    this->readLedsPosition();
-    m_is3D = this->getIs3D();
-    //this->sortLeds();
-    this->normalizeLeds();
-    this->centreLeds();
-    
-    int total = (int)m_points.size();
-    m_vbo.setVertexData(&m_points[0], total, GL_DYNAMIC_DRAW);
-    m_vbo.setNormalData(&m_sizes[0], total, GL_DYNAMIC_DRAW);
-    m_vbo.setColorData(&m_colors[0], m_points.size(), GL_DYNAMIC_DRAW);
-}
-
 void LedsManager::createLedPositions()
 {
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
+    
     int size = 100;
     
-    int id = 0;
     for(int i = 0; i<size; i++){
         for(int j = 0; j<size; j++)
         {
             ofPoint pos (j,i) ;
-            createLed(pos, id);
-            id++;
+            createLedPair(pos, pos);
         }
-            
-    }
-    
-    string path = "leds/LedPositionsTest.txt";
-    this->saveLeds(path);
-    m_is3D = this->getIs3D();
-    this->normalizeLeds();
-    this->centreLeds();
-    
-    int total = (int)m_points.size();
-    m_vbo.setVertexData(&m_points[0], total, GL_DYNAMIC_DRAW);
-    m_vbo.setNormalData(&m_sizes[0], total, GL_DYNAMIC_DRAW);
-    m_vbo.setColorData(&m_colors[0], m_points.size(), GL_DYNAMIC_DRAW);
-    
-}
-
-void LedsManager::readLedsPosition()
-{
-    int id = 0;
-    ofBuffer buffer = ofBufferFromFile(m_ledsFilePath);
-    ofPoint ledPosition;
-    
-    if(buffer.size())
-    {
         
-        for (ofBuffer::Line it = buffer.getLines().begin(), end = buffer.getLines().end(); it != end; ++it)
-        {
-            string line = *it;
-            if(!line.empty() && parseLedLine(line,ledPosition))
-            {
-                createLed(ledPosition, id);
-                id++;
-            }
-            
-        }
     }
 }
 
 
-bool LedsManager::getIs3D()
+bool LedsManager::addLedPair(string& pathTwoD, string& pathThreeD)
 {
-    bool is3D = false;
-    if(m_leds.size()<2){
+    ofBuffer buffer2D = ofBufferFromFile(pathTwoD);
+    ofBuffer buffer3D = ofBufferFromFile(pathThreeD);
+ 
+    ofLogNotice() <<"LedsManager::addLedPair -> buffer2D: " << pathTwoD ;
+    ofLogNotice() <<"LedsManager::addLedPair -> buffer3D: " << pathThreeD ;
+    
+    if(buffer2D.size()== 0 || buffer2D.size()== 0){
+        ofLogNotice() <<"LedsManager::addLedPair -> zero buffer size" ;
         return false;
     }
+
+    ofBuffer::Line it2d = buffer2D.getLines().begin();
+    ofBuffer::Line it3d = buffer3D.getLines().begin();
     
-    for(int i=0; i<m_leds.size()-1; i++)
-    {
-        auto position = m_leds[i]->getPosition();
-        auto positionNext= m_leds[i+1]->getPosition();
-        float delta = abs(m_leds[i]->getPosition().z - m_leds[i+1]->getPosition().z);
+    ofPoint ledPosition2D;
+    ofPoint ledPosition3D;
+    int id = 0;
+    
+    while(it2d != buffer2D.getLines().end() ||  it3d != buffer3D.getLines().end()){
         
-        if( delta > 0.001){
-            is3D = true;
+        string line2D = *it2d;
+        string line3D = *it3d;
+        
+        if(!line2D.empty() && parseLedLine(line2D,ledPosition2D) &&  !line3D.empty() && parseLedLine(line3D,ledPosition3D))
+        {
+            this->createLedPair(ledPosition2D, ledPosition3D);
         }
+        
+        ++it2d; ++it3d;
+        id++;
     }
-  
     
-    ofLogNotice() <<"LedsManager::getIs3D -> value = " << is3D ;
-    return is3D;
+    
 }
+
+
+void LedsManager::createLedPair(const ofPoint& position2D,const ofPoint& position3D)
+{
+    float size = AppManager::getInstance().getGuiManager().getLedsSize();
+    
+    m_points3D.push_back(position3D);
+    m_points2D.push_back(position2D);
+    m_sizes.push_back(ofVec3f(size));
+    m_colors.push_back(ofFloatColor(0,0,0));
+}
+
 
 void LedsManager::sortLeds()
 {
@@ -182,10 +201,17 @@ void LedsManager::sortLeds()
 
 void LedsManager::normalizeLeds()
 {
-    float max = 0;
-    for (auto position: m_points)
-    {
+    this->normalize2DLeds();
+    this->normalize3DLeds();
     
+}
+
+void LedsManager::normalize2DLeds()
+{
+    float max = 0;
+    for (auto position: m_points2D)
+    {
+        
         if(max < abs(position.x)){
             max = abs(position.x);
         }
@@ -199,14 +225,47 @@ void LedsManager::normalizeLeds()
         }
     }
     
-     ofLogNotice() <<"LedsManager::normalizeLeds -> max value =  " << max;
+    ofLogNotice() <<"LedsManager::normalize2DLeds -> max value =  " << max;
     
     int id = 0;
-    for (auto& position: m_points)
+    for (auto& position: m_points2D)
     {
         position/=max;
         
-        ofLogNotice() <<"LedsManager::normalizeLeds -> id " << id << ", x = "  << position.x << ", y = "  << position.y << ", z = " << position.z ;
+        //ofLogNotice() <<"LedsManager::normalizeLeds -> id " << id << ", x = "  << position.x << ", y = "  << position.y << ", z = " << position.z ;
+        id++;
+    }
+    
+}
+
+
+void LedsManager::normalize3DLeds()
+{
+    float max = 0;
+    for (auto position: m_points3D)
+    {
+        
+        if(max < abs(position.x)){
+            max = abs(position.x);
+        }
+        
+        if(max < abs(position.y)){
+            max = abs(position.y);
+        }
+        
+        if(max < abs(position.z)){
+            max = abs(position.z);
+        }
+    }
+    
+    ofLogNotice() <<"LedsManager::normalize3DLeds -> max value =  " << max;
+    
+    int id = 0;
+    for (auto& position: m_points3D)
+    {
+        position/=max;
+        
+        //ofLogNotice() <<"LedsManager::normalizeLeds -> id " << id << ", x = "  << position.x << ", y = "  << position.y << ", z = " << position.z ;
         id++;
     }
     
@@ -217,7 +276,7 @@ void LedsManager::centreLeds()
     
     bool firstIteration = true;
     
-    for (auto position: m_points)
+    for (auto position: m_points3D)
     {
         if(firstIteration){
             firstIteration = false;
@@ -258,7 +317,7 @@ void LedsManager::centreLeds()
     
     ofLogNotice() <<"LedsManager::centreLeds -> shift position: x = "  << shift.x << ", y = "  << shift.y << ", z = " << shift.z ;
     
-    for (auto& position: m_points)
+    for (auto& position: m_points3D)
     {
         position-=shift;
         position*=m_offset;
@@ -266,22 +325,20 @@ void LedsManager::centreLeds()
     
     m_maxPos -=shift;
     m_minPos -=shift;
-
-   
 }
 
 
 void LedsManager::createLed(const ofPoint& position, int& id)
 {
     //ofPtr<Led> led = ofPtr<Led> (new Led ( position, id ) );
-    //float size = AppManager::getInstance().getGuiManager().getLedsSize();
-    float size = 2;
+    float size = AppManager::getInstance().getGuiManager().getLedsSize();
+    //float size = 5;
 //    led->setWidth(size);
 //    m_leds.push_back(led);
     
 //    ofLogNotice() <<"LedsManager::createLed -> id " << led->getId() << ", x = "  << led->getPosition().x << ", y = "  << led->getPosition().y << ", z = " << led->getPosition().z ;
     
-    m_points.push_back(position);
+    m_points3D.push_back(position);
     m_sizes.push_back(ofVec3f(size));
     m_colors.push_back(ofFloatColor(0,0,0));
     
@@ -360,11 +417,11 @@ void LedsManager::setLedColors(ofPixelsRef pixels)
 //        led->setPixelColor(pixels, m_is3D);
 //    }
 //
-    for(int i=0; i<m_points.size(); i++){
+    for(int i=0; i<m_points3D.size(); i++){
         this->setPixelColor(pixels, i);
     }
     
-    m_vbo.setColorData(&m_colors[0], m_points.size(), GL_DYNAMIC_DRAW);
+    m_vbo3D.setColorData(&m_colors[0], m_points3D.size(), GL_DYNAMIC_DRAW);
     m_isNewFrame = true;
     
 }
@@ -372,7 +429,7 @@ void LedsManager::setLedColors(ofPixelsRef pixels)
 
 void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
 {
-    if(index<0 || index>=m_points.size()){
+    if(index<0 || index>=m_points3D.size()){
         return;
     }
     
@@ -382,19 +439,19 @@ void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
     {
         float treshold = m_minPos.y + (m_maxPos.y - m_minPos.y)*0.5;
         
-        if(m_points[index].y >= treshold ){
-            pixelPos.x = ofMap(m_points[index].x/m_offset, m_minPos.x, m_maxPos.x, 0, (pixels.getWidth()-1)*0.5);
-            pixelPos.y = ofMap(m_points[index].z/m_offset, m_maxPos.z, m_minPos.z, 0,  pixels.getHeight()-1);
+        if(m_points3D[index].y >= treshold ){
+            pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, 0, (pixels.getWidth()-1)*0.5);
+            pixelPos.y = ofMap(m_points3D[index].z/m_offset, m_maxPos.z, m_minPos.z, 0,  pixels.getHeight()-1);
         }
         else{
-            pixelPos.x = ofMap(m_points[index].x/m_offset, m_minPos.x, m_maxPos.x, pixels.getWidth()-1, (pixels.getWidth()-1)*0.5);
-            pixelPos.y = ofMap(m_points[index].z/m_offset, m_maxPos.z, m_minPos.z, 0,  pixels.getHeight()-1);
+            pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, pixels.getWidth()-1, (pixels.getWidth()-1)*0.5);
+            pixelPos.y = ofMap(m_points3D[index].z/m_offset, m_maxPos.z, m_minPos.z, 0,  pixels.getHeight()-1);
         }
     }
     else
     {
-        pixelPos.x = ofMap(m_points[index].x/m_offset, m_minPos.x, m_maxPos.x, 0, pixels.getWidth()-1);
-        pixelPos.y = ofMap(m_points[index].y/m_offset, m_maxPos.y, m_minPos.y, 0,  pixels.getHeight()-1);
+        pixelPos.x = ofMap(m_points3D[index].x/m_offset, m_minPos.x, m_maxPos.x, 0, pixels.getWidth()-1);
+        pixelPos.y = ofMap(m_points3D[index].y/m_offset, m_maxPos.y, m_minPos.y, 0,  pixels.getHeight()-1);
     }
     
     //ofLogNotice() <<  m_position.x ; ofLogNotice() <<  m_position.y;
@@ -413,7 +470,7 @@ void LedsManager::draw()
     
     m_shader.begin();
     m_texture.bind();
-        m_vbo.draw(GL_POINTS, 0, (int)m_points.size());
+        m_vbo3D.draw(GL_POINTS, 0, (int)m_points3D.size());
     m_texture.unbind();
     m_shader.end();
 }
@@ -429,30 +486,73 @@ void LedsManager::setSize(float& value)
         size = ofVec3f(10*value);
     }
     
-    m_vbo.setNormalData(&m_sizes[0], m_sizes.size(), GL_DYNAMIC_DRAW);
+    m_vbo3D.setNormalData(&m_sizes[0], m_sizes.size(), GL_DYNAMIC_DRAW);
 }
 
 
 
-bool LedsManager::loadLeds()
+
+
+
+bool LedsManager::loadSubfolder(ofDirectory& dir)
 {
-    //Open the Open File Dialog
-    ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a .txt");
+     ofLogNotice() <<"LedsManager::loading subfolders ..." ;
+    //only show txt files
+     dir.allowExt("txt");
     
-    //Check if the user opened a file
-    if (openFileResult.bSuccess){
-        
-        ofLogNotice() <<"LedsManager::loadLeds -> name: " <<   openFileResult.getName();
-        ofLogNotice() <<"LedsManager::loadLeds -> path: " <<   openFileResult.getPath();
-        
-        string path = openFileResult.getPath();
-        return this->load(path);
-        
-    }else {
-        
-        ofLogNotice() <<"LedsManager::loadVideo -> User hit cancel";
+    if( dir.listDir() == 0){
+        ofLogNotice() <<"LedsManager::setupLeds -> No led files found in: " << dir.getAbsolutePath();
         return false;
     }
+    
+    ofLogNotice()<< "LedsManager::loadSubfolder-> Path: " << dir.getAbsolutePath();
+    ofLogNotice()<< "LedsManager::loadSubfolder-> Size: " << dir.size();
+    
+    string twodfile = "";
+    string threedfile = "";
+    
+    //go through and print out all the paths
+    for(int i = 0; i < dir.size(); i++){
+        string path = dir.getPath(i);
+        if(ofIsStringInString(path, "POINTS_2D")){
+            twodfile = path;
+        }
+        
+        if(ofIsStringInString(path, "POINTS_3D")){
+            threedfile = path;
+        }
+    }
+    
+    
+    if(twodfile.empty() || threedfile.empty()){
+        ofLogNotice()<< "LedsManager::loadSubfolder-> No position's pair found ";
+        return false;
+    }
+    
+    return this->loadPair(twodfile, threedfile);
+    
+}
+
+
+bool LedsManager::loadPair(string& pathTwoD, string& pathThreeD)
+{
+    bool success = isValidFile(pathTwoD) && isValidFile(pathThreeD) ;
+    if(success){
+        AppManager::getInstance().getModelManager().resetCamera();
+        this->addLedPair(pathTwoD,pathThreeD);
+    }
+    
+    return success;
+}
+
+
+
+void LedsManager::clearLeds()
+{
+    m_leds.clear();
+    m_vbo3D.clear();
+    m_points3D.clear();
+    m_sizes.clear();
 }
 
 bool LedsManager::isValidFile(const string& path)
@@ -471,7 +571,7 @@ bool LedsManager::isValidFile(const string& path)
         
         string line = *it;
         
-        ofLogNotice() << line;
+        //ofLogNotice() << line;
         
         // copy the line to draw later
         // make sure its not a empty line
@@ -489,46 +589,6 @@ bool LedsManager::isValidFile(const string& path)
 }
 
 
-bool LedsManager::load(string& path)
-{
-    bool success = isValidFile(path);
-    if(success){
-        m_ledsFilePath =  path;
-        //AppManager::getInstance().getGuiManager().setModelPath(m_ledsFilePath);
-        AppManager::getInstance().getModelManager().resetCamera();
-        this->setupLeds();
-    }
-    
-    return success;
-}
-
-bool LedsManager::saveLeds(string& path)
-{
-    ofFile file;
-    if( file.open(path, ofFile::WriteOnly)){
-        
-        ofLogNotice() <<"LedsManager::saveLeds writing to: " << path;
-        for(auto led: m_leds){
-            file<< "{" << led->getPosition().x << ", " << led->getPosition().y << ", " << led->getPosition().z << "}\n";
-        }
-        
-       
-    }
-    else{
-        ofLogNotice() <<"LedsManager::saveLeds -> File does not exist: " << path;
-		return false;
-	}
-   
-     file.close();
-    
-	 return true;
-}
-
-void LedsManager::loadTest()
-{
-    string path = "leds/LedPositionsTest.txt";
-    this->load(path);
-}
 
 
 

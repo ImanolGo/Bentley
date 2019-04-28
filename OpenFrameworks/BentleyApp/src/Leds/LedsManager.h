@@ -23,6 +23,8 @@
 
 class LedsManager: public Manager
 {
+    static const string LEDS_FOLDER_PATH;
+    
     public:
     
         typedef vector<int> IntVector;
@@ -57,15 +59,7 @@ class LedsManager: public Manager
         const ofPoint getMin() const {return m_minPos;}
     
         const ofPoint getMax() const {return m_maxPos;}
-    
-        bool loadLeds();
-    
-        bool load(string& path);
-    
-        bool saveLeds(string& path);
-    
-        void loadTest();
-    
+
         bool isNewFrame() const {return m_isNewFrame;}
     
         void setSize(float& value);
@@ -77,11 +71,17 @@ class LedsManager: public Manager
     
     private:
     
-    
         void setupLeds();
-        void setupShader();
     
-        void readLedsPosition();
+        bool readLeds();
+    
+        void arrangeLeds();
+    
+        bool loadPair(string& pathTwoD, string& pathThreeD);
+    
+        bool addLedPair(string& pathTwoD, string& pathThreeD);
+    
+        void setupShader();
     
         void createLedPositions();
     
@@ -89,9 +89,13 @@ class LedsManager: public Manager
     
         void normalizeLeds();
     
-        bool getIs3D();
+        void normalize3DLeds();
+    
+        void normalize2DLeds();
     
         void  centreLeds();
+    
+        bool loadSubfolder(ofDirectory& dir);
     
         void readLedsPositionFromGroup(const string& groupName, int& id, int numberOfSections);
     
@@ -101,13 +105,15 @@ class LedsManager: public Manager
     
         void createLed(const ofPoint& position, int& id);
     
+        void createLedPair(const ofPoint& position2D,const ofPoint& position3D);
+    
         void removeCharsFromString( string &str, char* charsToRemove );
     
         bool isValidFile(const string& path);
     
         void setPixelColor(ofPixelsRef pixels, int index);
     
-    
+        void clearLeds();
 
     private:
     
@@ -115,17 +121,18 @@ class LedsManager: public Manager
         ofPoint            m_minPos;
         ofPoint            m_maxPos;
         bool               m_isNewFrame;
-        string             m_ledsFilePath;
         bool               m_is3D;
         float              m_ledsBrightness;
         float              m_laserBrightness;
     
     
-        ofVbo m_vbo;
+        ofVbo m_vbo3D;
+        ofVbo m_vbo2D;
         ofShader m_shader;
         ofTexture m_texture;
     
-        vector <ofVec3f> m_points;
+        vector <ofVec3f> m_points3D;
+        vector <ofVec3f> m_points2D;
         vector <ofVec3f> m_sizes;
         vector <ofFloatColor> m_colors;
         int         m_offset;
