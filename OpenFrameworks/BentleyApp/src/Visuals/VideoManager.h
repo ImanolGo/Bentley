@@ -128,7 +128,6 @@ private:
     float           m_blurScale;
     bool            m_status;
     bool            m_playing;
-    
 
 };
 

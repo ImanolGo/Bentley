@@ -15,7 +15,7 @@
 
 
 
-VideoManager::VideoManager(): Manager(), m_frameNumber(-1), m_blurScale(0), m_currentVideoIndex(0), m_status(false)
+VideoManager::VideoManager(): Manager(), m_frameNumber(-1), m_blurScale(0), m_currentVideoIndex(0), m_status(false), m_playing(false)
 {
     //m_videoPlayer = new ofxAVFVideoPlayer();
 }
@@ -137,11 +137,12 @@ void VideoManager::load(string& name_)
         m_exportFbo.allocate(m_videoPlayer.getWidth(), m_videoPlayer.getHeight(), GL_RGB);
         m_exportFbo.begin();  ofClear(0); m_exportFbo.end();
         
-        m_videoPlayer.setLoopState(OF_LOOP_NORMAL);
-       // m_videoPlayer.setPixelFormat(OF_PIXELS_RGBA);
         
         if(m_status){
              m_videoPlayer.play();
+             m_videoPlayer.update();
+             m_frameNumber =  m_videoPlayer.getCurrentFrame();
+             m_playing = false;
         }
        
         
@@ -167,16 +168,32 @@ void VideoManager::updateVideo()
     
     m_videoPlayer.update();
     
+    this->updateFbos();
+    
+    //m_frameNumber = frame;
+    
+    
     if(m_videoPlayer.isFrameNew())
     {
-		this->updateFbos();
+
         int frame = m_videoPlayer.getCurrentFrame();
-        
+
+        if(!m_playing){
+            if(frame < m_frameNumber || frame == 0){
+                m_playing = true;
+            }
+            else{
+                return;
+            }
+        }
+
+        this->updateFbos();
+
         if(m_frameNumber != frame)
         {
             m_frameNumber = frame;
             ofPixels pixels;
-            
+
             m_reader.readToPixels(m_exportFbo, pixels, OF_IMAGE_COLOR_ALPHA);
             //m_exportFbo.readToPixels(pixels);
             AppManager::getInstance().getLedsManager().setPixels(pixels);
@@ -289,6 +306,9 @@ void VideoManager::pause()
 void VideoManager::stop()
 {
     m_videoPlayer.stop();
+    m_videoPlayer.setFrame(0);
+    m_videoPlayer.closeMovie();
+    m_videoPlayer.unbind();
     m_exportFbo.begin(); ofClear(0); m_exportFbo.end();
     ofPixels pixels;
     m_reader.readToPixels(m_exportFbo, pixels);

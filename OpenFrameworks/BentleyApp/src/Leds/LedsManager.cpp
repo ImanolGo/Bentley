@@ -159,7 +159,6 @@ void LedsManager::createLedPositions()
     }
 }
 
-
 bool LedsManager::addLedPair(string& pathTwoD, string& pathThreeD)
 {
     ofBuffer buffer2D = ofBufferFromFile(pathTwoD);
@@ -197,7 +196,6 @@ bool LedsManager::addLedPair(string& pathTwoD, string& pathThreeD)
     
 }
 
-
 void LedsManager::createLedPair(const ofPoint& position2D,const ofPoint& position3D)
 {
     float size = AppManager::getInstance().getGuiManager().getLedsSize();
@@ -207,7 +205,6 @@ void LedsManager::createLedPair(const ofPoint& position2D,const ofPoint& positio
     m_sizes.push_back(ofVec3f(size));
     m_colors.push_back(ofFloatColor(0,0,0));
 }
-
 
 void LedsManager::sortLeds()
 {
