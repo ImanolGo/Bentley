@@ -178,19 +178,19 @@ void VideoManager::updateVideo()
 
         int frame = m_videoPlayer.getCurrentFrame();
 
-        if(!m_playing){
-            if(frame < m_frameNumber || frame == 0){
-                m_playing = true;
-            }
-            else{
-                return;
-            }
-        }
+//        if(!m_playing){
+//            if(frame < m_frameNumber || frame == 0){
+//                m_playing = true;
+//            }
+//            else{
+//                return;
+//            }
+//        }
 
-        this->updateFbos();
 
         if(m_frameNumber != frame)
         {
+            this->updateFbos();
             m_frameNumber = frame;
             ofPixels pixels;
 
