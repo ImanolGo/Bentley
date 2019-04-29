@@ -134,7 +134,7 @@ void VideoManager::load(string& name_)
     
     if(m_videoPlayer.load(name_))
     {
-        m_exportFbo.allocate(m_videoPlayer.getWidth(), m_videoPlayer.getHeight(), GL_RGB);
+        m_exportFbo.allocate(m_videoPlayer.getWidth()*0.5, m_videoPlayer.getHeight()*0.5, GL_RGB);
         m_exportFbo.begin();  ofClear(0); m_exportFbo.end();
         
         
@@ -146,7 +146,7 @@ void VideoManager::load(string& name_)
         }
        
         
-        this->setupShaders(m_videoPlayer.getWidth(), m_videoPlayer.getHeight());
+        this->setupShaders(m_exportFbo.getWidth(), m_exportFbo.getHeight());
         
         
         ofLogNotice() <<"VideoManager::load -> successfully loaded: " << name_;
@@ -222,7 +222,7 @@ void VideoManager::drawVideo()
 {
     m_levels.begin();
     ofClear(0);
-    m_videoPlayer.draw(0, m_videoPlayer.getHeight(), m_videoPlayer.getWidth(), -m_videoPlayer.getHeight());
+    m_videoPlayer.draw(0, m_exportFbo.getHeight(), m_exportFbo.getWidth(), -m_exportFbo.getHeight());
     m_levels.end();
     
     m_blur.begin();
