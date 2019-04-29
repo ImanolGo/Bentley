@@ -174,7 +174,7 @@ void LayoutManager::updateTwoDFbo()
 {
     string name = "2D";
     this->begin(name);
-    ofClear(0);
+    ofClear(0, 0, 0, 255);
     AppManager::getInstance().getLedsManager().drawLayout();
     this->end(name);
 }
@@ -194,7 +194,7 @@ void LayoutManager::updateVideoFbo()
 {
     string name = "Video";
     this->begin(name);
-    ofClear(0);
+    ofClear(0, 0, 0, 255);
     AppManager::getInstance().getVideoManager().draw();
     this->end(name);
 }

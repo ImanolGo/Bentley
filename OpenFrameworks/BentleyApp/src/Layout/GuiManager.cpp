@@ -200,8 +200,9 @@ void GuiManager::draw()
 void GuiManager::drawGui()
 {
     ofEnableAlphaBlending();
-   
+ 
     m_gui.begin();
+       
         auto mainSettings  = ofxImGui::Settings();
         //ofxImGui::Settings().windowPos  = ofVec2f(-LayoutManager::MARGIN,-LayoutManager::MARGIN);
        // ofxImGui::Settings().windowSize = ofVec2f(GUI_WIDTH,ofGetHeight());
