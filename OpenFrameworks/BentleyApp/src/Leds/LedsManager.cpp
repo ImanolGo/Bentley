@@ -77,6 +77,8 @@ bool LedsManager::readLeds()
         dirAux.sort();
         this->loadSubfolder(dirAux);
     }
+
+    return true;
 }
 
 
@@ -194,6 +196,7 @@ bool LedsManager::addLedPair(string& pathTwoD, string& pathThreeD)
         id++;
     }
     
+    return true;
     
 }
 
