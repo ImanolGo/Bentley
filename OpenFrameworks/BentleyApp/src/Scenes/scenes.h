@@ -9,5 +9,5 @@
 #pragma once
 
 #include "BlankScene.h"
-
+#include "VideoScene.h"
 

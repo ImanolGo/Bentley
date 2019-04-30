@@ -182,6 +182,38 @@ void SceneManager::draw(const ofRectangle& rect)
 }
 
 
+void SceneManager::removeVideos()
+{
+    this->changeScene("Blank");
+    
+    auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoResourcesPath();
+    auto& scenes = m_mySceneManager.scenes;
+    for(auto& path : videoPaths){
+        for(auto& scene : scenes){
+            if(scene->getName() == path.first){
+                m_mySceneManager.removeScene(scene);
+            }
+        }
+    }
+}
+
+void SceneManager::addVideos()
+{
+    
+    this->removeVideos();
+    
+    auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoResourcesPath();
+  
+    for(auto& path : videoPaths){
+        ofPtr<VideoScene> videoScene = ofPtr<VideoScene>(new VideoScene(path.first));
+        m_mySceneManager.addScene(videoScene);
+    }
+    
+    AppManager::getInstance().getGuiManager().setupScenesGui();
+}
+
+
+
 void SceneManager::changeScene(string sceneName)
 {
     m_mySceneManager.changeScene(sceneName);

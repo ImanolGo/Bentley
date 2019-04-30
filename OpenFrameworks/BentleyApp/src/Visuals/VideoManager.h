@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Manager.h"
+#include "SettingsManager.h"
 #include "ofxPSLevels.h"
 #include "ofxBlur.h"
 #include "ofxFastFboReader.h"
@@ -86,6 +87,8 @@ public:
     int getCurrentIndex() const {return m_currentVideoIndex;}
     
     int getCurrentStatus() const {return m_status;}
+    
+    const ResourcesPathMap& getVideoResourcesPath() const {return m_videoResourcesPath;}
 
 
 private:
@@ -107,12 +110,13 @@ private:
     void drawVideo();
     
     bool isVideo(string& name);
-
     
 private:
     
     
     vector<string>      m_videoNames;
+    
+    ResourcesPathMap    m_videoResourcesPath;   ///< stores the video paths
 
     ofVideoPlayer 	    m_videoPlayer;
     ofxPSLevels         m_levels;

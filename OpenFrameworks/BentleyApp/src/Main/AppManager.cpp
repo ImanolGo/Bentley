@@ -91,7 +91,7 @@ void AppManager::setupManagers()
     m_ledsManager.setup();
     m_modelManager.setup();
     m_keyboardManager.setup();
-   // m_sceneManager.setup();
+    m_sceneManager.setup();
     
     m_guiManager.setup();
 }
@@ -106,7 +106,7 @@ void AppManager::update()
     m_viewManager.update();
     m_videoManager.update();
     m_tcpManager.update();
-   // m_sceneManager.update();
+    m_sceneManager.update();
     m_ledsManager.update();
     m_modelManager.update();
     m_layoutManager.update();

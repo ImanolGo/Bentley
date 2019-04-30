@@ -62,6 +62,8 @@ public:
     
     void setVideoPath(const string& path) {m_videoPath = ofToDataPath(path);}
     
+    void setupScenesGui();
+    
 private:
     
     void setupGuiParameters();
@@ -75,9 +77,7 @@ private:
     void setupModesGui();
     
     void setupLedsGui();
-    
-    void setupScenesGui();
-    
+
     void setupProcessingGroup();
     
     void updateSize(const ofxImGui::Settings& settings);
@@ -96,8 +96,8 @@ private:
     ofParameterGroup m_postProcessingGroup;
     
     ofParameter<string>     m_videoPath;
-    ofParameter<int> m_viewMode;
-    ofParameter<int> m_sceneMode;
+    ofParameter<int>        m_viewMode;
+    ofParameter<int>        m_sceneMode;
     ofParameter<float>      m_ledsSize;
     
     std::vector<std::string>    m_sceneNames;

@@ -134,6 +134,25 @@ void ofxSceneManager::addScene(ofPtr<ofxScene> pScene) {
     scenes.push_back(pScene);
 }
 
+void ofxSceneManager::removeScene(ofPtr<ofxScene> pScene) {
+    ofRemoveListener(pScene->startFadingInEvent, this, &ofxSceneManager::_onStartFadingIn);
+    ofRemoveListener(pScene->startDrawingEvent, this, &ofxSceneManager::_onStartDrawing);
+    ofRemoveListener(pScene->finishedDrawingEvent, this, &ofxSceneManager::_onFinishedDrawing);
+    ofRemoveListener(pScene->startFadingOutEvent, this, &ofxSceneManager::_onStartFadingOut);
+    ofRemoveListener(pScene->finishSceneEvent, this, &ofxSceneManager::_onFinishScene);
+   
+    for(vector<ofPtr<ofxScene> >::iterator it = scenes.begin(); it != scenes.end();)
+    {
+        if(*it == pScene) {
+            it = scenes.erase(it);
+        }
+        else{
+            ++it;
+        }
+    }
+}
+
+
 void ofxSceneManager::setExitByTime(bool b) {
     for (int i=0; i<scenes.size(); i++) {
         scenes.at(i)->setExitByTime(b);

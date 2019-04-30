@@ -125,7 +125,7 @@ void LedsManager::createLayout()
     m_fboMaskee.allocate(width, height);
     
     m_fboMask.begin();
-    ofClear(0);
+    ofClear(0, 0, 0, 255);
     ofSetColor(255);
     
     

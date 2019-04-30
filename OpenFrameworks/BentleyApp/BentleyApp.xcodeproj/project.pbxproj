@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00F8DAC81953313F8180A13C /* ofxTextBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1486C841BC2A30DB7CBC449C /* ofxTextBlock.cpp */; };
 		051871DC20FC3FA3494C35B8 /* NetworkingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9815A3BF35D7D8A49C7C191 /* NetworkingUtils.cpp */; };
+		08648AAC2278809700F621D8 /* VideoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08648AAA2278809600F621D8 /* VideoScene.cpp */; };
 		089808A5781FD585C386F027 /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F59B5BCCA5921700F9B826F2 /* ofxSliderGroup.cpp */; };
 		08C2F6947E69C234CCCBB2EE /* EngineGLFW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CC728D821F21EB13047258 /* EngineGLFW.cpp */; };
 		0DF7C91B4D457B46CCBF90C5 /* Helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D62EA0C49693193D1322AEC /* Helpers.cpp */; };
@@ -109,6 +110,8 @@
 		0531B3702B259A47F8EF0746 /* ofxButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxButton.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxGui/src/ofxButton.h; sourceTree = SOURCE_ROOT; };
 		060123BB620E1BD7B931AE58 /* ofxTCPClient.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxTCPClient.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxNetwork/src/ofxTCPClient.h; sourceTree = SOURCE_ROOT; };
 		06A5B3AA5459CC5F29B84644 /* addon_config.mk */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = addon_config.mk; path = src/Addons/ofxImGui/addon_config.mk; sourceTree = SOURCE_ROOT; };
+		08648AAA2278809600F621D8 /* VideoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VideoScene.cpp; path = Scenes/VideoScene.cpp; sourceTree = "<group>"; };
+		08648AAB2278809700F621D8 /* VideoScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoScene.h; path = Scenes/VideoScene.h; sourceTree = "<group>"; };
 		0940234358464FB1AAA79D18 /* imstb_truetype.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = imstb_truetype.h; path = src/Addons/ofxImGui/libs/imgui/src/imstb_truetype.h; sourceTree = SOURCE_ROOT; };
 		09BB1D7613A1F9D8E8B11D7A /* KeyboardManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KeyboardManager.h; path = src/I0/KeyboardManager.h; sourceTree = SOURCE_ROOT; };
 		09F8F2DF1D53E65319F30B96 /* LightManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = LightManager.cpp; path = src/Engine/3D/LightManager.cpp; sourceTree = SOURCE_ROOT; };
@@ -929,6 +932,8 @@
 			children = (
 				3C4EA15C90BCFE1FFC1245B1 /* BlankScene.cpp */,
 				94B476E65081D2D5CE6D1228 /* BlankScene.h */,
+				08648AAA2278809600F621D8 /* VideoScene.cpp */,
+				08648AAB2278809700F621D8 /* VideoScene.h */,
 				1A14124BF720E4CA8987CC24 /* SceneManager.cpp */,
 				76C4479895B14357D331E849 /* SceneManager.h */,
 				8C488F38001D542DA27140DF /* scenes.h */,
@@ -1476,6 +1481,7 @@
 				93510377552D47B6620A7586 /* LayoutManager.cpp in Sources */,
 				EB2372CEF0C9D14317E0AC9F /* Led.cpp in Sources */,
 				3FE2F90B109919F6223E9439 /* LedsManager.cpp in Sources */,
+				08648AAC2278809700F621D8 /* VideoScene.cpp in Sources */,
 				1835B306208122634C04CA79 /* ModelManager.cpp in Sources */,
 				1AF15FCF93D2DDD6D4285C8E /* AppManager.cpp in Sources */,
 				4329994590465F5ADBC1E4C5 /* BentleyApp.cpp in Sources */,

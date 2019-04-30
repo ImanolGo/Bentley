@@ -106,7 +106,7 @@ private:
     
     void updateFbos();
     
-    void updateVideoFbo();
+    void updateSceneFbo();
     
     void updateThreeDFbo();
     
@@ -123,7 +123,7 @@ private:
     
     void drawTwoD();
     
-    void drawVideo();
+    void drawScene();
     
     void drawNormal();
     

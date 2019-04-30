@@ -35,6 +35,7 @@ public:
     void changeScene(std::string sceneName);
 
     void addScene(ofPtr<ofxScene> pScene);
+    void removeScene(ofPtr<ofxScene> pScene);
 
     void setExitByTime(bool b);
     void setSceneDuration(float fadeInSec, float fadeOutSec);

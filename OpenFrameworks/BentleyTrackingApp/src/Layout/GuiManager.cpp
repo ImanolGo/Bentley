@@ -189,8 +189,6 @@ void GuiManager::setupProcessingGroup()
     m_parameters.add(m_maxOutput);
     m_postProcessingGroup.add(m_maxOutput);
     
-  
-    
 }
 
 

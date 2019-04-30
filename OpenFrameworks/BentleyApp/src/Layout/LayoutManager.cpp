@@ -74,7 +74,7 @@ void LayoutManager::setupFbos()
     fbo = ofPtr<ofFbo>(new ofFbo());
     fbo->allocate(width, height, GL_RGBA);
     fbo->begin(); ofClear(0);  fbo->end();
-    m_fbos["Video"] = fbo;
+    m_fbos["Scene"] = fbo;
     
 }
 
@@ -123,10 +123,10 @@ void LayoutManager::resetWindowRects()
     m_windowRects["2D"]->x = m_windowRects["3D"]->x + m_windowRects["3D"]->width + MARGIN;
     m_windowRects["2D"]->y = MARGIN;
     
-    m_windowRects["Video"]->width = m_windowRects["2D"]->width;
-    m_windowRects["Video"]->height = m_windowRects["2D"]->height;
-    m_windowRects["Video"]->x = m_windowRects["2D"]->x;
-    m_windowRects["Video"]->y = m_windowRects["2D"]->y + m_windowRects["2D"]->height + 2*MARGIN;
+    m_windowRects["Scene"]->width = m_windowRects["2D"]->width;
+    m_windowRects["Scene"]->height = m_windowRects["2D"]->height;
+    m_windowRects["Scene"]->x = m_windowRects["2D"]->x;
+    m_windowRects["Scene"]->y = m_windowRects["2D"]->y + m_windowRects["2D"]->height + 2*MARGIN;
     
     
    
@@ -167,7 +167,7 @@ void LayoutManager::updateFbos()
 {
     this->updateTwoDFbo();
     this->updateThreeDFbo();
-    this->updateVideoFbo();
+    this->updateSceneFbo();
 }
 
 void LayoutManager::updateTwoDFbo()
@@ -190,12 +190,12 @@ void LayoutManager::updateThreeDFbo()
     this->end(name);
 }
 
-void LayoutManager::updateVideoFbo()
+void LayoutManager::updateSceneFbo()
 {
-    string name = "Video";
+    string name = "Scene";
     this->begin(name);
     ofClear(0, 0, 0, 255);
-    AppManager::getInstance().getVideoManager().draw();
+    AppManager::getInstance().getSceneManager().draw();
     this->end(name);
 }
 
@@ -281,16 +281,10 @@ void LayoutManager::draw()
         case DRAW_NORMAL:  this->drawNormal(); break;
         case DRAW_3D:  this->drawThreeD(); break;
         case DRAW_2D:  this->drawTwoD(); break;
-        case DRAW_VIDEO:  this->drawVideo(); break;
+        case DRAW_VIDEO:  this->drawScene(); break;
         default: this->drawNormal(); break;
     }
-    
-    void drawThreeD();
-    
-    void drawTwoD();
-    
-    void drawVideo();
-   
+
 }
 
 void LayoutManager::drawThreeD()
@@ -303,9 +297,9 @@ void LayoutManager::drawTwoD()
     m_fbos["2D"]->draw(0,0, ofGetWidth(), ofGetHeight());
 }
 
-void LayoutManager::drawVideo()
+void LayoutManager::drawScene()
 {
-    m_fbos["Video"]->draw(0,0, ofGetWidth(), ofGetHeight());
+    m_fbos["Scene"]->draw(0,0, ofGetWidth(), ofGetHeight());
 }
 
 

@@ -42,7 +42,8 @@ void GuiManager::setup()
     
     
     this->setupGuiParameters();
-    this->setupModesGui();
+    this->setupScenesGui();
+    //this->setupModesGui();
     this->setupLedsGui();
     this->setupVideoGui();
     this->setupProcessingGroup();
@@ -82,6 +83,7 @@ void GuiManager::setupScenesGui()
 {
      auto scenesManager = &AppManager::getInstance().getSceneManager();
     
+    m_sceneNames.clear();
     m_scenesGroup.setName("Scenes");
     m_sceneMode.set("Scene", 0);
     m_sceneMode.addListener(scenesManager, &SceneManager::changeSceneIndex);
@@ -115,52 +117,47 @@ void GuiManager::setupVideoGui()
 
 void GuiManager::setupProcessingGroup()
 {
-    auto videoManager = &AppManager::getInstance().getVideoManager();
+    auto scenesManager = &AppManager::getInstance().getSceneManager();
     
     m_postProcessingGroup.setName("Post Processing");
     
     m_contrast.set("Contrast", 1.0, 0.0, 2.0);
-    m_contrast.addListener(videoManager, &VideoManager::setContrast);
+    m_contrast.addListener(scenesManager, &SceneManager::setContrast);
     m_parameters.add(m_contrast);
     m_postProcessingGroup.add(m_contrast);
     
     m_saturation.set("Saturation", 1.0, 0.0, 2.0);
-    m_saturation.addListener(videoManager, &VideoManager::setSaturation);
+    m_saturation.addListener(scenesManager, &SceneManager::setSaturation);
     m_parameters.add(m_saturation);
     m_postProcessingGroup.add(m_saturation);
     
     m_brightness.set("Brightness", 1.0, 0.0, 2.0);
-    m_brightness.addListener(videoManager, &VideoManager::setBrightness);
+    m_brightness.addListener(scenesManager, &SceneManager::setBrightness);
     m_parameters.add(m_brightness);
     m_postProcessingGroup.add(m_brightness);
     
     m_gamma.set("Gamma", 1.0, 0.0, 2.0);
-    m_gamma.addListener(videoManager, &VideoManager::setGamma);
+    m_gamma.addListener(scenesManager, &SceneManager::setGamma);
     m_parameters.add(m_gamma);
     m_postProcessingGroup.add(m_gamma);
     
-    m_blur.set("Blur", 0.0, 0.0, 2.0);
-    m_blur.addListener(videoManager, &VideoManager::setBlurScale);
-    m_parameters.add(m_blur);
-    m_postProcessingGroup.add(m_blur);
-    
     m_minInput.set("MinInput", 0.0, 0.0, 1.0);
-    m_minInput.addListener(videoManager, &VideoManager::setMinInput);
+    m_minInput.addListener(scenesManager, &SceneManager::setMinInput);
     m_parameters.add(m_minInput);
     m_postProcessingGroup.add(m_minInput);
     
     m_maxInput.set("MaxInput", 1.0, 0.0, 1.0);
-    m_maxInput.addListener(videoManager, &VideoManager::setMaxInput);
+    m_maxInput.addListener(scenesManager, &SceneManager::setMaxInput);
     m_parameters.add(m_maxInput);
     m_postProcessingGroup.add(m_maxInput);
     
     m_minOutput.set("MinOutput", 0.0, 0.0, 1.0);
-    m_minOutput.addListener(videoManager, &VideoManager::setMinOutput);
+    m_minOutput.addListener(scenesManager, &SceneManager::setMinOutput);
     m_parameters.add(m_minOutput);
     m_postProcessingGroup.add(m_minOutput);
     
     m_maxOutput.set("MaxOutput", 1.0, 0.0, 1.0);
-    m_maxOutput.addListener(videoManager, &VideoManager::setMaxOutput);
+    m_maxOutput.addListener(scenesManager, &SceneManager::setMaxOutput);
     m_parameters.add(m_maxOutput);
     m_postProcessingGroup.add(m_maxOutput);
 }
@@ -218,11 +215,11 @@ void GuiManager::drawGui()
 //                ofxImGui::EndTree(mainSettings);
 //            }
             
-//            if (ofxImGui::BeginTree(m_scenesGroup, mainSettings))
-//            {
-//                ofxImGui::AddCombo(m_sceneMode, m_sceneNames);
-//                ofxImGui::EndTree(mainSettings);
-//            }
+            if (ofxImGui::BeginTree(m_scenesGroup, mainSettings))
+            {
+                ofxImGui::AddCombo(m_sceneMode, m_sceneNames);
+                ofxImGui::EndTree(mainSettings);
+            }
             
             if (ofxImGui::BeginTree(m_videoGroup, mainSettings))
             {
@@ -237,20 +234,20 @@ void GuiManager::drawGui()
                     }
                 }
                 
-                if (ImGui::Button("Play"))
-                {
-                    AppManager::getInstance().getVideoManager().play();
-                }
-                
-                if (ImGui::Button("Stop"))
-                {
-                    AppManager::getInstance().getVideoManager().stop();
-                }
-                
-                if (ImGui::Button("Next"))
-                {
-                    AppManager::getInstance().getVideoManager().next();
-                }
+//                if (ImGui::Button("Play"))
+//                {
+//                    AppManager::getInstance().getVideoManager().play();
+//                }
+//
+//                if (ImGui::Button("Stop"))
+//                {
+//                    AppManager::getInstance().getVideoManager().stop();
+//                }
+//
+//                if (ImGui::Button("Next"))
+//                {
+//                    AppManager::getInstance().getVideoManager().next();
+//                }
                 
                 ofxImGui::EndTree(mainSettings);
                 

@@ -90,6 +90,10 @@ public:
     
     void setMaxOutput(float& value) {m_levels.maxOutput = value;}
     
+    void removeVideos();
+    
+    void addVideos();
+    
 private:
     
     //! Create the scenes

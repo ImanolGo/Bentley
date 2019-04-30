@@ -67,14 +67,18 @@ void VideoManager::loadVideos(string& path)
     dir.sort();
    
     m_videoNames.clear();
+    m_videoResourcesPath.clear();
     
     //go through and print out all the paths
     for(int i = 0; i < dir.size(); i++){
-        string name = dir.getPath(i);
+        string path = dir.getPath(i);
+        string name = dir.getName(i);
+    
         m_videoNames.push_back(name);
+        m_videoResourcesPath[name] = path;
     }
     
-    this->setVideoIndex(0);
+    AppManager::getInstance().getSceneManager().addVideos();
 }
 
 
@@ -132,7 +136,14 @@ void VideoManager::load(string& name_)
     }
     
     
-    if(m_videoPlayer.load(name_))
+    if(m_videoResourcesPath.find(name_) == m_videoResourcesPath.end()){
+         ofLogNotice() <<"VideoManager::load ->name not found " << name_;
+         return;
+    }
+    
+    string path = m_videoResourcesPath.at(name_);
+    
+    if(m_videoPlayer.load(path))
     {
         m_exportFbo.allocate(m_videoPlayer.getWidth()*0.5, m_videoPlayer.getHeight()*0.5, GL_RGB);
         m_exportFbo.begin();  ofClear(0); m_exportFbo.end();
