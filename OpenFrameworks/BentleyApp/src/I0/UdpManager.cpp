@@ -161,7 +161,8 @@ void UdpManager::updatePixels()
 
     const auto & colors = AppManager::getInstance().getLedsManager().getColors();
     const int length = colors.size()*ledsPerPixel;
-    const char* pixels[length];
+	//char* pixels = new char[length];
+    //const char* pixels[length];
 
 
    // ofLogNotice() <<"UdpManager::updatePixels -> New Frame " << leds.size();

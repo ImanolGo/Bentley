@@ -136,9 +136,16 @@ void SettingsManager::setWindowProperties()
         int x = xml.getAttribute("x").getIntValue();
         int y = xml.getAttribute("y").getIntValue();
         bool fullscreen = xml.getAttribute("fullscreen").getBoolValue();
+		m_appWidth = ofGetScreenWidth();
+		m_appHeight = ofGetScreenHeight();
+
+		#ifdef TARGET_WIN32
+			m_appHeight -= 100;
+			y += 40;
+		#endif
         
         ofSetFullscreen(fullscreen);
-        ofSetWindowShape(ofGetScreenWidth(),ofGetScreenHeight());
+        ofSetWindowShape(m_appWidth, m_appHeight);
         if(!fullscreen){
             ofSetWindowPosition(x,y);
         }

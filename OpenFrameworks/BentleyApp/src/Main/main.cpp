@@ -2,14 +2,32 @@
 #include "BentleyApp.h"
 
 //========================================================================
-int main( ){
+#ifndef TARGET_WIN32
 
-	ofSetupOpenGL(1024,768, OF_WINDOW);			// <-------- setup the GL context
+int main() {
 
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
-	ofRunApp( new BentleyApp());
+	ofSetupOpenGL(1024, 768, OF_WINDOW);
+	ofRunApp(new BentleyApp());
 
 }
+
+#else
+
+#include "../../resource.h"
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+
+	ofSetupOpenGL(1280, 768, OF_WINDOW);
+
+	HWND hwnd = ofGetWin32Window();
+	HICON hMyIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hMyIcon);
+
+
+	ofRunApp(new BentleyApp());
+
+}
+
+#endif
+
 
