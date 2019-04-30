@@ -83,10 +83,10 @@ void AppManager::setupManagers()
     m_resourceManager.setup();
     m_viewManager.setup();
     m_visualEffectsManager.setup();
-   
     m_layoutManager.setup();
     m_videoManager.setup();
     m_tcpManager.setup();
+    m_oscManager.setup();
     m_ledsManager.setup();
     m_modelManager.setup();
     m_keyboardManager.setup();
@@ -105,6 +105,7 @@ void AppManager::update()
     m_viewManager.update();
     m_videoManager.update();
     m_tcpManager.update();
+    m_oscManager.update();
     m_sceneManager.update();
     m_ledsManager.update();
     m_modelManager.update();

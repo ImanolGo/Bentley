@@ -13,7 +13,7 @@
 #include "AppManager.h"
 
 
-const string OscManager::OSC_PARENT_ADDRESS = "/PrimaveraSoundProto";
+const string OscManager::OSC_PARENT_ADDRESS = "/BentleyApp";
 
 OscManager::OscManager(): Manager()
 {
@@ -91,8 +91,13 @@ void OscManager::update()
         
         if(m.getAddress() == OSC_PARENT_ADDRESS + "/Scene")
         {
-            string sceneName = m.getArgAsString(0);
-           // AppManager::getInstance().getGuiManager().onSceneChange(sceneName);
+            int value = m.getArgAsInt(0);
+            AppManager::getInstance().getGuiManager().onSceneChange(value);
+        }
+        else if(m.getAddress() == OSC_PARENT_ADDRESS + "/Video")
+        {
+            int value = m.getArgAsInt(0);
+            AppManager::getInstance().getGuiManager().onVideoChange(value);
         }
         
         int portReceive = AppManager::getInstance().getSettingsManager().getOscPortReceive();

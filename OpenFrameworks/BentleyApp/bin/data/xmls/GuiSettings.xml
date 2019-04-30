@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
 <group>
-	<Size>1.092</Size>
-	<VideoPath>C:\Users\imanolgo-pc\Desktop\TestVideos</VideoPath>
+	<Size>0.735</Size>
+	<VideoPath>/Users/imanolgo/Dropbox/BentleyLedCarApp/Videos</VideoPath>
 	<Contrast>1</Contrast>
 	<Saturation>1</Saturation>
 	<Brightness>1</Brightness>
 	<Gamma>1</Gamma>
-	<Blur>0</Blur>
 	<MinInput>0</MinInput>
 	<MaxInput>1</MaxInput>
 	<MinOutput>0</MinOutput>

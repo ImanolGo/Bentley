@@ -106,8 +106,9 @@ void GuiManager::onSceneChange(int sceneIndex)
 void GuiManager::onVideoChange(int videoIndex)
 {
     int size = AppManager::getInstance().getSceneManager().getNumberScenes();
-    videoIndex+= AppManager::getInstance().getSceneManager().getSceneOffset();
-    if(videoIndex >=0 && videoIndex < size){
+    int offset = AppManager::getInstance().getSceneManager().getSceneOffset();
+    videoIndex+= offset;
+    if(videoIndex >=offset && videoIndex < size){
         m_sceneMode = videoIndex;
     }
 }

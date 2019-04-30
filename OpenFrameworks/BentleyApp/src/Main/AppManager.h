@@ -76,6 +76,9 @@ public:
     
     //! Returns the TcpManager manager
     TcpManager&  getTcpManager() { return m_tcpManager; }
+    
+    //! Returns the OscManager manager
+    OscManager&  getOscManager() { return m_oscManager; }
 
     
     //==========================================================================
@@ -125,6 +128,7 @@ private:
     LedsManager              m_ledsManager;              ///< Manages the leds
     VideoManager             m_videoManager;             ///< Manages the video playback
     TcpManager               m_tcpManager;               ///< Manages the tcp communications
+    OscManager               m_oscManager;               ///< Manages the osc communications
     
     
     bool                     m_debugMode;
