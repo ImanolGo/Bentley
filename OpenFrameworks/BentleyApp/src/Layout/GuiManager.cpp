@@ -233,15 +233,6 @@ void GuiManager::drawGui()
             ImGui::Text(m_textTcp.c_str());
             ImGui::Text(m_textOsc.c_str());
            
-            
-//            if (ofxImGui::BeginTree(m_modeGroup, mainSettings))
-//            {
-//                static const std::vector<std::string> labels1 = { "Normal", "Camera", "Scene", "Leap", "Leds" };
-//
-//                ofxImGui::AddRadio(m_viewMode, labels1, 5);
-//                ofxImGui::EndTree(mainSettings);
-//            }
-            
             if (ofxImGui::BeginTree(m_scenesGroup, mainSettings))
             {
                 ofxImGui::AddCombo(m_sceneMode, m_sceneNames);
@@ -261,20 +252,6 @@ void GuiManager::drawGui()
                     }
                 }
                 
-//                if (ImGui::Button("Play"))
-//                {
-//                    AppManager::getInstance().getVideoManager().play();
-//                }
-//
-//                if (ImGui::Button("Stop"))
-//                {
-//                    AppManager::getInstance().getVideoManager().stop();
-//                }
-//
-//                if (ImGui::Button("Next"))
-//                {
-//                    AppManager::getInstance().getVideoManager().next();
-//                }
                 
                 ofxImGui::EndTree(mainSettings);
                 
@@ -295,7 +272,7 @@ void GuiManager::drawGui()
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Contrast"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Saturation"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Brightness"));
-                ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Blur"));
+                //ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Blur"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("Gamma"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MinInput"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MaxInput"));

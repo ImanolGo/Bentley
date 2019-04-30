@@ -37,7 +37,7 @@ void AppManager::setup()
 	if(m_initialized)
 		return;
     
-    ofLogNotice() << "AppManager::initialized";
+    
 
 	Manager::setup();
     
@@ -46,6 +46,7 @@ void AppManager::setup()
     //ofSetVerticalSync(false);
     
     m_initialized = true;
+    ofLogNotice() << "AppManager::initialized";
     
 }
 
@@ -100,16 +101,17 @@ void AppManager::update()
     if(!m_initialized)
         return;
     
-    m_guiManager.update();
+    
     m_visualEffectsManager.update();
     m_viewManager.update();
-    m_videoManager.update();
+   // m_videoManager.update();
     m_tcpManager.update();
     m_oscManager.update();
     m_sceneManager.update();
     m_ledsManager.update();
     m_modelManager.update();
     m_layoutManager.update();
+    m_guiManager.update();
 }
 
 

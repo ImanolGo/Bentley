@@ -38,21 +38,28 @@ void TestScene::setupVideo()
 {
     auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoResourcesPath();
     
-    string path = "data/videos/TestVideo.mov";
+
+    string path = "videos/TestVideo.mov";
+    if( ofFile::doesFileExist("../Resources/data", false) ){
+        ofDisableDataPath();
+        ofDirectory dir(path);
+        path = "data/videos/TestVideo.mov";
+        path = dir.getAbsolutePath();
+    }
     
-    ofDisableDataPath();
-    ofDirectory dir(path);
-    if(m_videoPlayer.load(dir.getAbsolutePath())){
+    
+    if(m_videoPlayer.load(path)){
          m_videoPlayer.setLoopState(OF_LOOP_NORMAL);
          m_videoPlayer.play();
          ofLogNotice() << "TestScene::setupVideo-> Loaded " << path;
     }
     else{
-        ofLogNotice() <<"TestScene::setupVideo-> Cannot find: " << dir.getAbsolutePath();
+        ofLogNotice() <<"TestScene::setupVideo-> Cannot find: " << path;
     }
     
-   
-    ofEnableDataPath();
+    if( ofFile::doesFileExist("../Resources/data", false) ){
+        ofEnableDataPath();
+    }
     
    
 }
