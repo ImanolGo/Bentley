@@ -13,7 +13,7 @@
 #include "scenes.h"
 #include "AppManager.h"
 
-SceneManager::SceneManager(): Manager(), m_alpha(-1), m_transitionTime(1.0)
+SceneManager::SceneManager(): Manager(), m_alpha(-1), m_transitionTime(1.0), m_sceneOffset(2), m_currentVideoIndex(0), m_status(false)
 {
 	//Intentionally left empty
 }
@@ -58,6 +58,8 @@ void SceneManager::createScenes()
     auto sceneTest = ofPtr<TestScene> (new TestScene());
     sceneTest->setup();
     m_mySceneManager.addScene(sceneTest);
+    
+    m_sceneOffset = 2;
     
     float width = AppManager::getInstance().getSettingsManager().getAppWidth();
     float height = AppManager::getInstance().getSettingsManager().getAppHeight();
@@ -221,21 +223,44 @@ void SceneManager::addVideos()
 
 void SceneManager::changeScene(string sceneName)
 {
-    m_mySceneManager.changeScene(sceneName);
-    m_sceneTimer.start(false,true);
-    m_currentSceneName = sceneName;
-    this->sendSceneChange();
-    
-    
+    for(auto scene: m_mySceneManager.scenes){
+        if(scene->getName() == sceneName){
+            m_mySceneManager.changeScene(sceneName);
+            m_sceneTimer.start(false,true);
+            m_currentSceneName = sceneName;
+            this->sendSceneChange();
+            
+            break;
+        }
+    }
+}
+
+void SceneManager::setVideoIndex(int value)
+{
+    int size = m_mySceneManager.scenes.size() - m_sceneOffset;
+    if(value >= 0  &&  value<size){
+        m_currentVideoIndex = value;
+    }
 }
 
 void SceneManager::changeSceneIndex(int& sceneIndex)
 {
+    if(sceneIndex < 0 || sceneIndex >= m_mySceneManager.scenes.size()){
+        return;
+    }
     
      m_mySceneManager.changeScene(sceneIndex);
      m_sceneTimer.start(false,true);
      m_currentSceneName = this->getSceneName(sceneIndex);
      this->sendSceneChange();
+    
+    if(sceneIndex < m_sceneOffset){
+        m_status = false;
+    }
+    else{
+         m_status = true;
+        m_currentVideoIndex = sceneIndex - m_sceneOffset;
+    }
 }
 
 

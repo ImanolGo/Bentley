@@ -64,6 +64,10 @@ public:
     
     void setupScenesGui();
     
+    void onSceneChange(int sceneIndex);
+    
+    void onVideoChange(int videoIndex);
+    
 private:
     
     void setupGuiParameters();

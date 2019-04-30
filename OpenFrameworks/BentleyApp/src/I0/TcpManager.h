@@ -61,6 +61,8 @@ private:
     
     ofxTCPServer           m_tcp;
     bool                   m_connected;
+    bool                   m_mode;
+    bool                   m_index;
 
 };
 

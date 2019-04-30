@@ -94,6 +94,14 @@ public:
     
     void addVideos();
     
+    void setVideoIndex(int value);
+    
+    int getSceneOffset() const {return m_sceneOffset;}
+    
+    int getCurrentVideoIndex() const {return m_currentVideoIndex;}
+    
+    bool getCurrentStatus() const {return m_status;}
+    
 private:
     
     //! Create the scenes
@@ -137,6 +145,9 @@ private:
     vector<string>           m_sceneList;
     string                   m_currentSceneName;
     float                    m_transitionTime;
+    int                      m_sceneOffset;
+    bool                     m_status;
+    int                      m_currentVideoIndex;
     
 };
 

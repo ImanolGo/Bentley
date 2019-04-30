@@ -94,18 +94,24 @@ void TcpManager::parseMessage(string& msg, int id)
     }
     
     else if(command == "on"){
-        AppManager::getInstance().getVideoManager().play();
+        int index = AppManager::getInstance().getSceneManager().getCurrentVideoIndex();
+        AppManager::getInstance().getGuiManager().onVideoChange(index);
         this->sendStatus(id);
     }
     
     else if(command == "off"){
-        AppManager::getInstance().getVideoManager().stop();
+        AppManager::getInstance().getGuiManager().onSceneChange(0);
         this->sendStatus(id);
     }
     
     else if(command == "mode"){
         if(result.size()>1){
-            AppManager::getInstance().getVideoManager().setVideoIndex(ofToInt(result[1]));
+            bool bStatud = AppManager::getInstance().getSceneManager().getCurrentStatus();
+            int index = ofToInt(result[1]);
+            AppManager::getInstance().getSceneManager().setVideoIndex(index);
+            if(bStatud){
+                 AppManager::getInstance().getGuiManager().onVideoChange(index);
+            }
             this->sendStatus(id);
         }
         else{
@@ -122,9 +128,9 @@ void TcpManager::parseMessage(string& msg, int id)
 
 void TcpManager::sendStatus(int i)
 {
-    bool bStatud = AppManager::getInstance().getVideoManager().getCurrentStatus();
+    bool bStatud = AppManager::getInstance().getSceneManager().getCurrentStatus();
     string status =  bStatud ? "on " : "off ";
-    int index = AppManager::getInstance().getVideoManager().getCurrentIndex();
+    int index = AppManager::getInstance().getSceneManager().getCurrentVideoIndex();
     string message = "OK " + status + ofToString(index);
     m_tcp.send(i, message);
     ofLogNotice() <<"TcpManager::sendStatus ->  " << message;

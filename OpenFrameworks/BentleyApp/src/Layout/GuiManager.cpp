@@ -94,6 +94,23 @@ void GuiManager::setupScenesGui()
     }
 }
 
+void GuiManager::onSceneChange(int sceneIndex)
+{
+    int size = AppManager::getInstance().getSceneManager().getNumberScenes();
+    if(sceneIndex >=0 && sceneIndex < size){
+        m_sceneMode = sceneIndex;
+    }
+}
+
+
+void GuiManager::onVideoChange(int videoIndex)
+{
+    int size = AppManager::getInstance().getSceneManager().getNumberScenes();
+    videoIndex+= AppManager::getInstance().getSceneManager().getSceneOffset();
+    if(videoIndex >=0 && videoIndex < size){
+        m_sceneMode = videoIndex;
+    }
+}
 
 void GuiManager::setupModesGui()
 {
