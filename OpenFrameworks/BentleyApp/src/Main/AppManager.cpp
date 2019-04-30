@@ -84,7 +84,6 @@ void AppManager::setupManagers()
     m_viewManager.setup();
     m_visualEffectsManager.setup();
    
-    
     m_layoutManager.setup();
     m_videoManager.setup();
     m_tcpManager.setup();

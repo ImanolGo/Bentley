@@ -45,6 +45,10 @@ public:
     
     float getAppHeight() const {return m_appHeight;}
     
+    void setAppWidth(float value)  {m_appWidth = value;}
+    
+    void setAppHeight(float value) {m_appHeight = value;}
+    
     int getUdpPortSend() const {return m_portUdpSend;}
     
     int getUdpPortReceive() const {return m_portUdpReceive;}

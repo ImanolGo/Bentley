@@ -142,7 +142,11 @@ void LedsManager::createLayout()
     m_fboMask.readToPixels(pix);
     ofSaveImage(pix, "images/layout/leds_layout.png");
     
-    ofLogNotice() <<"LedsManager::createLayout: saved layout -> w = " << width << ", h = " << height << ", ratio = " << ratio;
+    //ofLogNotice() <<"LedsManager::createLayout: saved layout -> w = " << width << ", h = " << height << ", ratio = " << ratio;
+    ofLogNotice() <<"LedsManager::createLayout: new app width -> w = " << width << ", new app height = " << height << ", ratio = " << ratio;
+    AppManager::getInstance().getSettingsManager().setAppWidth(width);
+    AppManager::getInstance().getSettingsManager().setAppHeight(height);
+    
 }
 
 
@@ -520,9 +524,10 @@ void LedsManager::drawLayout()
 {
     ofEnableAlphaBlending();
     
+    ofRectangle rect1(0,0,m_fboMask.getWidth(), m_fboMask.getHeight());
     m_fboMaskee.begin();
         ofClear(0);
-        AppManager::getInstance().getVideoManager().draw(m_fboMask.getWidth(), m_fboMask.getHeight());
+        AppManager::getInstance().getSceneManager().draw(rect1);
     m_fboMaskee.end();
     
     
