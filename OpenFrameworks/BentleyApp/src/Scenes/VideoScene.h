@@ -53,6 +53,7 @@ private:
     
     
     ofVideoPlayer 	m_videoPlayer;
+    bool            m_initialized;
 
 };
 

@@ -10,4 +10,4 @@
 
 #include "BlankScene.h"
 #include "VideoScene.h"
-
+#include "TestScene.h"

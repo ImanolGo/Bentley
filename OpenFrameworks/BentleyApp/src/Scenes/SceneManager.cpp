@@ -45,14 +45,19 @@ void SceneManager::setup()
 
 void SceneManager::createScenes()
 {
-    m_mySceneManager.setTransitionFade();
-	//m_mySceneManager.setTransitionDissolve();
+    //m_mySceneManager.setTransitionFade();
+	m_mySceneManager.setTransitionDissolve();
     
     ofPtr<ofxScene> scene;
     
     //Create Blank Scene
     scene = ofPtr<ofxScene> (new BlankScene());
     m_mySceneManager.addScene(scene);
+    
+    //Create Test Scene
+    auto sceneTest = ofPtr<TestScene> (new TestScene());
+    sceneTest->setup();
+    m_mySceneManager.addScene(sceneTest);
     
     float width = AppManager::getInstance().getSettingsManager().getAppWidth();
     float height = AppManager::getInstance().getSettingsManager().getAppHeight();
@@ -199,13 +204,13 @@ void SceneManager::removeVideos()
 
 void SceneManager::addVideos()
 {
-    
     this->removeVideos();
     
     auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoResourcesPath();
   
     for(auto& path : videoPaths){
-        ofPtr<VideoScene> videoScene = ofPtr<VideoScene>(new VideoScene(path.first));
+        auto videoScene = ofPtr<VideoScene>(new VideoScene(path.first));
+        videoScene->setup();
         m_mySceneManager.addScene(videoScene);
     }
     

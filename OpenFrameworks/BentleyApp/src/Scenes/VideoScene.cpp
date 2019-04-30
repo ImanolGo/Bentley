@@ -10,7 +10,7 @@
 #include "VideoScene.h"
 #include "AppManager.h"
 
-VideoScene::VideoScene(std::string name): ofxScene(name)
+VideoScene::VideoScene(std::string name): ofxScene(name), m_initialized(false)
 {
     //Intentionally left empty
 }
@@ -22,8 +22,16 @@ VideoScene::~VideoScene()
 
 
 void VideoScene::setup() {
+    
+    if(m_initialized){
+        return;
+    }
+    
+    
     ofLogNotice(getName() + "::setup");
     this->setupVideo();
+    
+    m_initialized = true;
 }
 
 void VideoScene::setupVideo()
@@ -50,7 +58,7 @@ void VideoScene::update()
 
 void VideoScene::updateVideo()
 {
-    if(m_videoPlayer.isInitialized() && m_videoPlayer.isLoaded())
+    if(m_videoPlayer.isLoaded())
     {
         m_videoPlayer.update();
     }
@@ -78,8 +86,10 @@ void VideoScene::drawVideo()
 void VideoScene::willFadeIn() {
      ofLogNotice("VideoScene::willFadeIn");
     
-    if(m_videoPlayer.isInitialized() && m_videoPlayer.isLoaded())
+    if( m_videoPlayer.isLoaded())
     {
+        ofLogNotice("VideoScene::willFadeIn-> PLAY");
+        m_videoPlayer.setFrame(0);
         m_videoPlayer.play();
     }
 }
@@ -93,8 +103,9 @@ void VideoScene::willFadeOut() {
 }
 
 void VideoScene::willExit() {
-    if(m_videoPlayer.isInitialized() && m_videoPlayer.isLoaded())
+    if(m_videoPlayer.isLoaded())
     {
+        ofLogNotice("VideoScene::willFadeIn-> STOP");
         m_videoPlayer.stop();
     }
 }

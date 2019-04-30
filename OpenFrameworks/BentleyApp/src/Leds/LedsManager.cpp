@@ -106,15 +106,16 @@ void LedsManager::setupShader()
 
 void LedsManager::createLayout()
 {
+    float resolution = 2000;
     float width = m_maxPos.x - m_minPos.x;
     float height = m_maxPos.y - m_minPos.y;
     float ratio = width/height;
-    if(ratio > 0.0){
-        width = 2000;
+    if(ratio > 1.0){
+        width = resolution;
         height = width/ratio;
     }
     else{
-        height = 2000;
+        height = resolution;
         width = height*ratio;
     }
     
@@ -132,7 +133,7 @@ void LedsManager::createLayout()
     for(auto led: m_points2D){
         float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
         float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
-        ofDrawCircle(x, y, 10);
+        ofDrawCircle(x, y, 2);
     }
     
     
@@ -140,6 +141,8 @@ void LedsManager::createLayout()
     
     m_fboMask.readToPixels(pix);
     ofSaveImage(pix, "images/layout/leds_layout.png");
+    
+    ofLogNotice() <<"LedsManager::createLayout: saved layout -> w = " << width << ", h = " << height << ", ratio = " << ratio;
 }
 
 

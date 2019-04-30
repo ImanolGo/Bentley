@@ -10,6 +10,7 @@
 		00F8DAC81953313F8180A13C /* ofxTextBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1486C841BC2A30DB7CBC449C /* ofxTextBlock.cpp */; };
 		051871DC20FC3FA3494C35B8 /* NetworkingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9815A3BF35D7D8A49C7C191 /* NetworkingUtils.cpp */; };
 		08648AAC2278809700F621D8 /* VideoScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08648AAA2278809600F621D8 /* VideoScene.cpp */; };
+		08648AAF22788F9600F621D8 /* TestScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 08648AAD22788F9600F621D8 /* TestScene.cpp */; };
 		089808A5781FD585C386F027 /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F59B5BCCA5921700F9B826F2 /* ofxSliderGroup.cpp */; };
 		08C2F6947E69C234CCCBB2EE /* EngineGLFW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CC728D821F21EB13047258 /* EngineGLFW.cpp */; };
 		0DF7C91B4D457B46CCBF90C5 /* Helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D62EA0C49693193D1322AEC /* Helpers.cpp */; };
@@ -112,6 +113,8 @@
 		06A5B3AA5459CC5F29B84644 /* addon_config.mk */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = addon_config.mk; path = src/Addons/ofxImGui/addon_config.mk; sourceTree = SOURCE_ROOT; };
 		08648AAA2278809600F621D8 /* VideoScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VideoScene.cpp; path = Scenes/VideoScene.cpp; sourceTree = "<group>"; };
 		08648AAB2278809700F621D8 /* VideoScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoScene.h; path = Scenes/VideoScene.h; sourceTree = "<group>"; };
+		08648AAD22788F9600F621D8 /* TestScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestScene.cpp; path = Scenes/TestScene.cpp; sourceTree = "<group>"; };
+		08648AAE22788F9600F621D8 /* TestScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestScene.h; path = Scenes/TestScene.h; sourceTree = "<group>"; };
 		0940234358464FB1AAA79D18 /* imstb_truetype.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = imstb_truetype.h; path = src/Addons/ofxImGui/libs/imgui/src/imstb_truetype.h; sourceTree = SOURCE_ROOT; };
 		09BB1D7613A1F9D8E8B11D7A /* KeyboardManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KeyboardManager.h; path = src/I0/KeyboardManager.h; sourceTree = SOURCE_ROOT; };
 		09F8F2DF1D53E65319F30B96 /* LightManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = LightManager.cpp; path = src/Engine/3D/LightManager.cpp; sourceTree = SOURCE_ROOT; };
@@ -934,6 +937,8 @@
 				94B476E65081D2D5CE6D1228 /* BlankScene.h */,
 				08648AAA2278809600F621D8 /* VideoScene.cpp */,
 				08648AAB2278809700F621D8 /* VideoScene.h */,
+				08648AAD22788F9600F621D8 /* TestScene.cpp */,
+				08648AAE22788F9600F621D8 /* TestScene.h */,
 				1A14124BF720E4CA8987CC24 /* SceneManager.cpp */,
 				76C4479895B14357D331E849 /* SceneManager.h */,
 				8C488F38001D542DA27140DF /* scenes.h */,
@@ -1458,6 +1463,7 @@
 				12451834526FB5CD4EA0D0DF /* ofxSceneManager.cpp in Sources */,
 				2103A064E150C83390C6389A /* README.md in Sources */,
 				8CF0269A51B53AF174235BF6 /* ofxSimpleTimer.cpp in Sources */,
+				08648AAF22788F9600F621D8 /* TestScene.cpp in Sources */,
 				00F8DAC81953313F8180A13C /* ofxTextBlock.cpp in Sources */,
 				48F94177806B5CB8D3C0F283 /* CameraAnimations.cpp in Sources */,
 				C6B3BFC2668F137F745DC3C6 /* CameraAnimationsManager.cpp in Sources */,
