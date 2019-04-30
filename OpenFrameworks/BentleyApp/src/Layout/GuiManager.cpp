@@ -74,7 +74,9 @@ void GuiManager::setupGuiParameters()
     
     m_width = 0;
     m_height = 0;
-
+    
+    m_textTcp = "TCP Port: " + ofToString(AppManager::getInstance().getSettingsManager().getTcpPortReceive());
+    m_textOsc = "OSC Port: " + ofToString(AppManager::getInstance().getSettingsManager().getOscPortReceive());
 }
 
 
@@ -125,6 +127,7 @@ void GuiManager::setupVideoGui()
 {
     auto videoManager = &AppManager::getInstance().getVideoManager();
     
+    m_videoGroup.setName("Videos");
     m_videoPath.set("VideoPath", " ");
     m_videoPath.addListener(videoManager, &VideoManager::loadVideos);
     m_parameters.add(m_videoPath);
@@ -224,6 +227,12 @@ void GuiManager::drawGui()
         if (ofxImGui::BeginWindow("GUI", mainSettings, false))
         {
             ImGui::Text("%.1f FPS (%.3f ms/frame)", ofGetFrameRate(), 1000.0f / ImGui::GetIO().Framerate);
+            
+            int oscPort = AppManager::getInstance().getSettingsManager().getOscPortReceive();
+            
+            ImGui::Text(m_textTcp.c_str());
+            ImGui::Text(m_textOsc.c_str());
+           
             
 //            if (ofxImGui::BeginTree(m_modeGroup, mainSettings))
 //            {
