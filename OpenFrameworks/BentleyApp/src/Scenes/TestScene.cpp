@@ -42,8 +42,8 @@ void TestScene::setupVideo()
     string path = "videos/TestVideo.mov";
     if( ofFile::doesFileExist("../Resources/data", false) ){
         ofDisableDataPath();
-        ofDirectory dir(path);
         path = "data/videos/TestVideo.mov";
+        ofDirectory dir(path);
         path = dir.getAbsolutePath();
     }
     
