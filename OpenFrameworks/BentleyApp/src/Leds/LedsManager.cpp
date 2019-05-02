@@ -106,7 +106,8 @@ void LedsManager::setupShader()
 
 void LedsManager::createLayout()
 {
-    float resolution = 2000;
+    float resolution = 6000;
+    float percentage = 0.2;
     float width = m_maxPos.x - m_minPos.x;
     float height = m_maxPos.y - m_minPos.y;
     float ratio = width/height;
@@ -121,26 +122,45 @@ void LedsManager::createLayout()
     
    
     ofPixels pix;
+    
+    ofFbo fbo;
+    fbo.allocate(width, height);
+    fbo.begin();
+    ofClear(0, 0, 0, 255);
+    ofSetColor(255);
+    
+    float size = 2;
+    for(auto led: m_points2D){
+        float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
+        float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
+        //ofDrawCircle(x, y, 4);
+        ofDrawRectangle(x - size*0.5, y - size*0.5, size, size);
+    }
+    
+    
+    fbo.end();
+    
+    fbo.readToPixels(pix);
+    ofSaveImage(pix, "images/layout/leds_layout.png");
+    
+    width*=percentage;
+    height*=percentage;
+    
     m_fboMask.allocate(width, height);
     m_fbo.allocate(width, height);
     m_fboMaskee.allocate(width, height);
     
     m_fboMask.begin();
-    ofClear(0, 0, 0, 255);
     ofSetColor(255);
-    
     
     for(auto led: m_points2D){
         float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
         float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
-        ofDrawCircle(x, y, 2);
+        //ofDrawCircle(x, y, 4);
+        ofDrawRectangle(x - size*0.5, y - size*0.5, size, size);
     }
     
-    
     m_fboMask.end();
-    
-    m_fboMask.readToPixels(pix);
-    ofSaveImage(pix, "images/layout/leds_layout.png");
     
     //ofLogNotice() <<"LedsManager::createLayout: saved layout -> w = " << width << ", h = " << height << ", ratio = " << ratio;
     ofLogNotice() <<"LedsManager::createLayout: new app width -> w = " << width << ", new app height = " << height << ", ratio = " << ratio;
@@ -410,6 +430,7 @@ void LedsManager::centre2DLeds()
         
     }
     
+    
     ofLogNotice() <<"LedsManager::centreLeds -> min position: x = "  << m_minPos.x << ", y = "  << m_minPos.y ;
     ofLogNotice() <<"LedsManager::centreLeds -> max position: x = "  << m_maxPos.x << ", y = "  << m_maxPos.y;
     
@@ -424,6 +445,20 @@ void LedsManager::centre2DLeds()
     
     m_maxPos -=shift;
     m_minPos -=shift;
+    
+    //Add margin
+    float max_x = abs(m_maxPos.x - m_minPos.x);
+    float max_y = abs(m_maxPos.y - m_minPos.y);
+    float max = max_y;
+    if(max_x<max_y){
+        max = max_x;
+    }
+    
+    float margin = max/20;
+    m_maxPos.x+=margin;
+    m_maxPos.y+=margin;
+    m_minPos.x-=margin;
+    m_minPos.y-=margin;
 }
 
 
@@ -576,7 +611,8 @@ bool LedsManager::loadSubfolder(ofDirectory& dir)
 {
      ofLogNotice() <<"LedsManager::loading subfolders ..." ;
     //only show txt files
-     dir.allowExt("txt");
+    // dir.allowExt("txt");
+     dir.allowExt("CSV");
     
     if( dir.listDir() == 0){
         ofLogNotice() <<"LedsManager::setupLeds -> No led files found in: " << dir.getAbsolutePath();
