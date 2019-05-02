@@ -99,8 +99,11 @@ void GuiManager::setupScenesGui()
 void GuiManager::onSceneChange(int sceneIndex)
 {
     int size = AppManager::getInstance().getSceneManager().getNumberScenes();
+    ofLogNotice() <<"GuiManager::onSceneChange << size -> " << size;
+
     if(sceneIndex >=0 && sceneIndex < size){
         m_sceneMode = sceneIndex;
+        ofLogNotice() <<"GuiManager::onSceneChange << m_sceneMode -> " << m_sceneMode;
     }
 }
 

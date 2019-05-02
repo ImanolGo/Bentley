@@ -72,10 +72,11 @@ void VideoManager::loadVideos(string& path)
     //go through and print out all the paths
     for(int i = 0; i < dir.size(); i++){
         string path = dir.getPath(i);
-        string name = ofToString(i) + "_" + dir.getName(i);
+        string name = dir.getName(i);
     
         m_videoNames.push_back(name);
         m_videoResourcesPath[name] = path;
+        ofLogNotice() <<"VideoManager::loadVideos -> Loaded: " << name;
     }
     
     AppManager::getInstance().getSceneManager().addVideos();

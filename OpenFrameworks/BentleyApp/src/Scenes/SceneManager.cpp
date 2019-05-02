@@ -36,7 +36,6 @@ void SceneManager::setup()
     this->setupFbo();
     this->setupLevels();
    // this->setupTimer();
-    this->initializeSceneList();
 
     ofLogNotice() <<"SceneManager::initialized";
 
@@ -105,13 +104,6 @@ void SceneManager::onChangeSceneDuration(float& value)
     m_sceneTimer.start( false ) ;
     ofLogNotice() <<"SceneManager::setupTimer << Time = : " << value << "s";
 }
-
-void SceneManager::initializeSceneList()
-{
-    m_sceneList.clear();
-    m_sceneList  = { "Weather", "Tides", "Traffic", "Wind", "Planes"};
-}
-
 
 void SceneManager::update()
 {
@@ -191,21 +183,22 @@ void SceneManager::draw(const ofRectangle& rect)
 
 void SceneManager::removeVideos()
 {
-    this->changeScene("Blank");
+    ofLogNotice() <<"SceneManager::removeVideos";
+
+    AppManager::getInstance().getGuiManager().onSceneChange(0);
     
     auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoResourcesPath();
-    auto& scenes = m_mySceneManager.scenes;
-    for(auto& path : videoPaths){
-        for(auto& scene : scenes){
-            if(scene->getName() == path.first){
-                m_mySceneManager.removeScene(scene);
-            }
-        }
+    auto scenes = m_mySceneManager.scenes;
+
+    for(int i=m_sceneOffset ; i < scenes.size(); i++){
+        ofLogNotice() <<"SceneManager::remove video -> " << scenes[i]->getName();
+        m_mySceneManager.removeScene(scenes[i]);
     }
 }
 
 void SceneManager::addVideos()
 {
+     
     this->removeVideos();
     
     auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoResourcesPath();
@@ -213,6 +206,7 @@ void SceneManager::addVideos()
     for(auto& path : videoPaths){
         auto videoScene = ofPtr<VideoScene>(new VideoScene(path.first));
         videoScene->setup();
+        ofLogNotice() <<"SceneManager::add video scene -> " << path.first;
         m_mySceneManager.addScene(videoScene);
     }
     
@@ -225,10 +219,11 @@ void SceneManager::changeScene(string sceneName)
 {
     for(auto scene: m_mySceneManager.scenes){
         if(scene->getName() == sceneName){
+            ofLogNotice() <<"SceneManager::changeScene -> " << sceneName;
             m_mySceneManager.changeScene(sceneName);
             m_sceneTimer.start(false,true);
             m_currentSceneName = sceneName;
-            this->sendSceneChange();
+            //this->sendSceneChange();
             
             break;
         }
@@ -249,10 +244,11 @@ void SceneManager::changeSceneIndex(int& sceneIndex)
         return;
     }
     
+    ofLogNotice() <<"SceneManager::changeSceneIndex << scene index" << sceneIndex;
+
      m_mySceneManager.changeScene(sceneIndex);
      m_sceneTimer.start(false,true);
      m_currentSceneName = this->getSceneName(sceneIndex);
-     this->sendSceneChange();
     
     if(sceneIndex < m_sceneOffset){
         m_status = false;
@@ -295,21 +291,9 @@ int SceneManager::getIndex(string& sceneName)
 void SceneManager::sceneTimerCompleteHandler( int &args )
 {
     m_sceneTimer.start(false);
-    
-    this->nextScene();
+
 }
 
-void SceneManager::nextScene()
-{
-    if(m_sceneList.empty()){
-        this->initializeSceneList();
-    }
-    
-    string sceneName = m_sceneList.back();  m_sceneList.pop_back();
-   // AppManager::getInstance().getGuiManager().onSceneChange(sceneName);
-    
-    ofLogNotice() <<"SceneManager::nextScene << Change Scene: " << sceneName;
-}
 
 void SceneManager::sendSceneChange()
 {
