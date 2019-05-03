@@ -636,7 +636,6 @@ void LedsManager::setSize(float& value)
 
 
 
-
 bool LedsManager::loadSubfolder(ofDirectory& dir)
 {
      ofLogNotice() <<"LedsManager::loading subfolders ..." ;
