@@ -70,8 +70,6 @@ public:
     
     void onChangeSceneDuration(float& value);
     
-    void nextScene();
-    
     const string& getCurrentSceneName() const {return m_currentSceneName;}
     
     void setContrast(float& value) {m_levels.contrast = value;}
@@ -114,9 +112,6 @@ private:
     
     //! Set up the scene timer
     void setupTimer();
-    
-     //! Initializes the scene list
-    void initializeSceneList();
     
     //! Update the scene timer
     void updateTimer();

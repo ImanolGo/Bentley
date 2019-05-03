@@ -146,9 +146,9 @@ void LedsManager::createLayout()
     width*=percentage;
     height*=percentage;
     
-    m_fboMask.allocate(width, height);
-    m_fbo.allocate(width, height);
-    m_fboMaskee.allocate(width, height);
+    m_fboMask.allocate(width, height, GL_RGB);
+    m_fbo.allocate(width, height, GL_RGB);
+    m_fboMaskee.allocate(width, height, GL_RGB);
     
     m_fboMask.begin();
     ofSetColor(255);
