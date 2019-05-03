@@ -61,7 +61,7 @@ void ModelManager::draw()
     
     ofBackgroundGradient( ofColor(100), ofColor(15), OF_GRADIENT_CIRCULAR );
 
-    
+	ofEnableAlphaBlending();
     ofDisableArbTex();
     glDepthMask(GL_FALSE);
     
