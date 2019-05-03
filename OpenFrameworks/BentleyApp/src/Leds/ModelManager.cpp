@@ -68,15 +68,19 @@ void ModelManager::draw()
     //ofSetColor(255, 100, 90);
     
     // this makes everything look glowy :)
-    ofEnableBlendMode(OF_BLENDMODE_ADD);
+    //ofEnableBlendMode(OF_BLENDMODE_ADD);
     ofEnablePointSprites();
-    
     
     //ofEnableDepthTest();
     //ofTranslate(-rect->x, 0, 0);
     m_camera.begin();
    // ofTranslate(-rect->x, 0, 0);
     //this->drawLeds();
+    
+    ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+    AppManager::getInstance().getLedsManager().drawModel();
+    
+    ofEnableBlendMode(OF_BLENDMODE_ADD);
     AppManager::getInstance().getLedsManager().draw();
     
    // ofTranslate(rect->x, 0 , 0);

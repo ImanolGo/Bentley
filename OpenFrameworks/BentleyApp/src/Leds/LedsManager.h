@@ -48,6 +48,9 @@ class LedsManager: public Manager
         //! Draw the Led Manager
         void draw();
     
+        //! Draw the Led Manager Model
+        void drawModel();
+    
         //! Draw the Led Layout
         void drawLayout();
     
@@ -136,16 +139,19 @@ class LedsManager: public Manager
         ofFbo   m_fbo;
         ofFbo   m_fboMaskee;
         ofFbo   m_fboMask;
-        ofVbo   m_vbo3D;
-        ofVbo   m_vbo2D;
+        ofVbo   m_vbo;
+        ofVbo   m_vboModel;
         ofShader m_vboShader;
         ofShader m_maskShader;
         ofTexture m_texture;
+        ofTexture m_textureModel;
     
         vector <ofVec3f> m_points3D;
         vector <ofVec3f> m_points2D;
         vector <ofVec3f> m_sizes;
+        vector <ofVec3f> m_sizesModel;
         vector <ofFloatColor> m_colors;
+        vector <ofFloatColor> m_colorsBlack;
         int         m_offset;
     
     
