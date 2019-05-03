@@ -84,29 +84,41 @@ bool LedsManager::readLeds()
 
 void LedsManager::arrangeLeds()
 {
+    
     this->normalizeLeds();
     this->centreLeds();
     //this->normalizeLeds();
     
     int total = (int)m_points3D.size();
-    m_vbo3D.setVertexData(&m_points3D[0], total, GL_DYNAMIC_DRAW);
-    m_vbo3D.setNormalData(&m_sizes[0], total, GL_DYNAMIC_DRAW);
-    m_vbo3D.setColorData(&m_colors[0], m_points3D.size(), GL_DYNAMIC_DRAW);
+    m_vbo.setVertexData(&m_points3D[0], total, GL_DYNAMIC_DRAW);
+    m_vbo.setNormalData(&m_sizes[0], total, GL_DYNAMIC_DRAW);
+    m_vbo.setColorData(&m_colors[0], m_points3D.size(), GL_DYNAMIC_DRAW);
+    
+    
+    m_vboModel.setVertexData(&m_points3D[0], total, GL_DYNAMIC_DRAW);
+    m_vboModel.setNormalData(&m_sizesModel[0], total, GL_DYNAMIC_DRAW);
+    m_vboModel.setColorData(&m_colorsBlack[0], m_points3D.size(), GL_DYNAMIC_DRAW);
+    
 }
 
 void LedsManager::setupShader()
 {
+    ofLogNotice() <<"LedsManager::setupShader ";
+    
     m_vboShader.load("shaders/vboShader");
     m_maskShader.load("shaders/LuminanceMaskingShader");
     
     ofDisableArbTex();
     ofLoadImage(m_texture, "images/general/dot.png");
+    ofLoadImage(m_textureModel, "images/general/black_dot.png");
+    //ofLoadImage(m_textureModel, "images/general/dot.png");
     ofEnableArbTex();
 }
 
 void LedsManager::createLayout()
 {
-    float resolution = 2000;
+    float resolution = 6000;
+    float percentage = 0.2;
     float width = m_maxPos.x - m_minPos.x;
     float height = m_maxPos.y - m_minPos.y;
     float ratio = width/height;
@@ -121,26 +133,45 @@ void LedsManager::createLayout()
     
    
     ofPixels pix;
-    m_fboMask.allocate(width, height);
-    m_fbo.allocate(width, height);
-    m_fboMaskee.allocate(width, height);
     
-    m_fboMask.begin();
+    ofFbo fbo;
+    fbo.allocate(width, height);
+    fbo.begin();
     ofClear(0, 0, 0, 255);
     ofSetColor(255);
     
+    float size = 2;
+    for(auto led: m_points2D){
+        float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
+        float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
+        //ofDrawCircle(x, y, 4);
+        ofDrawRectangle(x - size*0.5, y - size*0.5, size, size);
+    }
+    
+    
+    fbo.end();
+    
+    fbo.readToPixels(pix);
+    ofSaveImage(pix, "images/layout/leds_layout.png");
+    
+    width*=percentage;
+    height*=percentage;
+    
+    m_fboMask.allocate(width, height, GL_RGB);
+    m_fbo.allocate(width, height, GL_RGB);
+    m_fboMaskee.allocate(width, height, GL_RGB);
+    
+    m_fboMask.begin();
+    ofSetColor(255);
     
     for(auto led: m_points2D){
         float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
         float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
-        ofDrawCircle(x, y, 2);
+        //ofDrawCircle(x, y, 4);
+        ofDrawRectangle(x - size*0.5, y - size*0.5, size, size);
     }
     
-    
     m_fboMask.end();
-    
-    m_fboMask.readToPixels(pix);
-    ofSaveImage(pix, "images/layout/leds_layout.png");
     
     //ofLogNotice() <<"LedsManager::createLayout: saved layout -> w = " << width << ", h = " << height << ", ratio = " << ratio;
     ofLogNotice() <<"LedsManager::createLayout: new app width -> w = " << width << ", new app height = " << height << ", ratio = " << ratio;
@@ -213,7 +244,9 @@ void LedsManager::createLedPair(const ofPoint& position2D,const ofPoint& positio
     m_points3D.push_back(position3D);
     m_points2D.push_back(position2D);
     m_sizes.push_back(ofVec3f(size));
+    m_sizesModel.push_back(ofVec3f(size*0.5));
     m_colors.push_back(ofFloatColor(0,0,0));
+    m_colorsBlack.push_back(ofFloatColor(255,255,255));
 }
 
 void LedsManager::sortLeds()
@@ -410,6 +443,7 @@ void LedsManager::centre2DLeds()
         
     }
     
+    
     ofLogNotice() <<"LedsManager::centreLeds -> min position: x = "  << m_minPos.x << ", y = "  << m_minPos.y ;
     ofLogNotice() <<"LedsManager::centreLeds -> max position: x = "  << m_maxPos.x << ", y = "  << m_maxPos.y;
     
@@ -424,6 +458,20 @@ void LedsManager::centre2DLeds()
     
     m_maxPos -=shift;
     m_minPos -=shift;
+    
+    //Add margin
+    float max_x = abs(m_maxPos.x - m_minPos.x);
+    float max_y = abs(m_maxPos.y - m_minPos.y);
+    float max = max_y;
+    if(max_x<max_y){
+        max = max_x;
+    }
+    
+    float margin = max/20;
+    m_maxPos.x+=margin;
+    m_maxPos.y+=margin;
+    m_minPos.x-=margin;
+    m_minPos.y-=margin;
 }
 
 
@@ -439,7 +487,9 @@ void LedsManager::createLed(const ofPoint& position, int& id)
     
     m_points3D.push_back(position);
     m_sizes.push_back(ofVec3f(size));
+    m_sizesModel.push_back(ofVec3f(size*0.5));
     m_colors.push_back(ofFloatColor(0,0,0));
+    m_colorsBlack.push_back(ofFloatColor(255,255,255));
     
 }
 
@@ -490,7 +540,7 @@ void LedsManager::setPixels(ofPixelsRef pixels)
         this->setPixelColor(pixels, i);
     }
     
-    m_vbo3D.setColorData(&m_colors[0], m_points3D.size(), GL_DYNAMIC_DRAW);
+    m_vbo.setColorData(&m_colors[0], m_points3D.size(), GL_DYNAMIC_DRAW);
     m_isNewFrame = true;
 }
 
@@ -515,8 +565,17 @@ void LedsManager::draw()
 {
     m_vboShader.begin();
     m_texture.bind();
-        m_vbo3D.draw(GL_POINTS, 0, (int)m_points3D.size());
+        m_vbo.draw(GL_POINTS, 0, (int)m_points3D.size());
     m_texture.unbind();
+    m_vboShader.end();
+}
+
+void LedsManager::drawModel()
+{
+    m_vboShader.begin();
+    m_textureModel.bind();
+    m_vboModel.draw(GL_POINTS, 0, (int)m_points3D.size());
+    m_textureModel.unbind();
     m_vboShader.end();
 }
 
@@ -560,11 +619,17 @@ void LedsManager::drawLayout()
 
 void LedsManager::setSize(float& value)
 {
+    float value_ = value;
     for(auto& size: m_sizes){
-        size = ofVec3f(10*value);
+        size = ofVec3f(value_);
     }
     
-    m_vbo3D.setNormalData(&m_sizes[0], m_sizes.size(), GL_DYNAMIC_DRAW);
+    for(auto& size: m_sizesModel){
+        size = ofVec3f(value_);
+    }
+    
+    m_vbo.setNormalData(&m_sizes[0], m_sizes.size(), GL_DYNAMIC_DRAW);
+    m_vboModel.setNormalData(&m_sizesModel[0], m_sizesModel.size(), GL_DYNAMIC_DRAW);
 }
 
 
@@ -576,7 +641,8 @@ bool LedsManager::loadSubfolder(ofDirectory& dir)
 {
      ofLogNotice() <<"LedsManager::loading subfolders ..." ;
     //only show txt files
-     dir.allowExt("txt");
+    // dir.allowExt("txt");
+     dir.allowExt("CSV");
     
     if( dir.listDir() == 0){
         ofLogNotice() <<"LedsManager::setupLeds -> No led files found in: " << dir.getAbsolutePath();
@@ -628,9 +694,13 @@ bool LedsManager::loadPair(string& pathTwoD, string& pathThreeD)
 void LedsManager::clearLeds()
 {
     m_leds.clear();
-    m_vbo3D.clear();
+    m_colors.clear();
+    m_colorsBlack.clear();
+    m_vbo.clear();
+    m_vboModel.clear();
     m_points3D.clear();
     m_sizes.clear();
+    m_sizesModel.clear();
 }
 
 bool LedsManager::isValidFile(const string& path)

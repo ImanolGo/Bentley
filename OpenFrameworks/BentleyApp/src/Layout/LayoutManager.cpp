@@ -175,6 +175,9 @@ void LayoutManager::updateTwoDFbo()
     string name = "2D";
     this->begin(name);
     ofClear(0, 0, 0, 255);
+    ofSetColor(50, 50, 50);
+    ofDrawRectangle(0, 0,m_fbos[name]->getWidth(), m_fbos[name]->getHeight());
+    ofSetColor(255);
     AppManager::getInstance().getLedsManager().drawLayout();
     this->end(name);
 }
@@ -195,6 +198,9 @@ void LayoutManager::updateSceneFbo()
     string name = "Scene";
     this->begin(name);
     ofClear(0, 0, 0, 255);
+    ofSetColor(50, 50, 50);
+    ofDrawRectangle(0, 0,m_fbos[name]->getWidth(), m_fbos[name]->getHeight());
+    ofSetColor(255);
     AppManager::getInstance().getSceneManager().draw();
     this->end(name);
 }
