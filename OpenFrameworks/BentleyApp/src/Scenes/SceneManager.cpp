@@ -131,13 +131,13 @@ void SceneManager::updateFbo()
     m_levels.end();
     
     m_fbo.begin();
-        ofClear(0);
-        ofPushStyle();
+        ofClear(255,0,0);
+       ofPushStyle();
         ofSetColor(255);
         ofEnableAlphaBlending();
             m_levels.draw();
         ofDisableAlphaBlending();
-        ofPopStyle();
+		ofPopStyle();
     m_fbo.end();
 }
 

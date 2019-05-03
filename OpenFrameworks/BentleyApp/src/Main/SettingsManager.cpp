@@ -140,7 +140,7 @@ void SettingsManager::setWindowProperties()
 		float height = ofGetScreenHeight();
 
 		#ifdef TARGET_WIN32
-			width -= 100;
+			height -= 100;
 			y += 40;
 		#endif
         
