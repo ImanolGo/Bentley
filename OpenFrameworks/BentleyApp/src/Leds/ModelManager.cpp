@@ -85,8 +85,7 @@ void ModelManager::draw()
     
    // ofTranslate(rect->x, 0 , 0);
     m_camera.end();
-    //ofTranslate(rect->x, 0 , 0);
-    //ofDisableDepthTest();
+    ofDisablePointSprites();
     ofEnableArbTex();
     
 }
