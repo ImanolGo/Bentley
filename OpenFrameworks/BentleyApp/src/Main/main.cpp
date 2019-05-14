@@ -3,11 +3,20 @@
 
 //========================================================================
 
+
+
 #ifndef TARGET_WIN32
 
 int main() {
 
-	ofSetupOpenGL(1024, 768, OF_WINDOW);
+    ofGLFWWindowSettings settingsGL;
+    settingsGL.doubleBuffering = true;
+    settingsGL.windowMode = OF_WINDOW;
+    settingsGL.title = "Bentley App";
+   
+    ofCreateWindow(settingsGL);
+    
+	//ofSetupOpenGL(1024, 768, OF_WINDOW);
 	ofRunApp(new BentleyApp());
 
 }
@@ -18,7 +27,14 @@ int main() {
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
 
-	ofSetupOpenGL(1280, 768, OF_WINDOW);
+    ofGLFWWindowSettings settingsGL;
+    settingsGL.doubleBuffering = true;
+    settingsGL.windowMode = OF_WINDOW;
+    settingsGL.title = "Bentley App";
+    
+    ofCreateWindow(settingsGL);
+    
+	//ofSetupOpenGL(1280, 768, OF_WINDOW);
 
 	HWND hwnd = ofGetWin32Window();
 	HICON hMyIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));

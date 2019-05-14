@@ -70,9 +70,6 @@ class LedsManager: public Manager
     
         void setLedBrightness(float& value){m_ledsBrightness = value;}
     
-        void setLaserBrightness(float& value){m_laserBrightness = value;}
-    
-    
     private:
     
         void setupLeds();
@@ -133,8 +130,6 @@ class LedsManager: public Manager
         bool               m_isNewFrame;
         bool               m_is3D;
         float              m_ledsBrightness;
-        float              m_laserBrightness;
-    
     
         ofFbo   m_fbo;
         ofFbo   m_fboMaskee;

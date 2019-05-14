@@ -74,7 +74,15 @@ void AppManager::setupOF()
     //ofLogNotice() << " OF data path is " << ofFilePath::getAbsolutePath( ofToDataPath("") ) << endl;
     //ofSetDataPathRoot("../Resources/data/");
     //ofSetDataPathRoot(ofFilePath::getCurrentExeDir() + "/../Resources/data");
-   
+    
+    
+    
+#ifdef TARGET_LINUX
+    ofAppGLFWWindow* win;
+    win = dynamic_cast<ofAppGLFWWindow *> (ofGetWindowPtr());
+    win->setWindowIcon("images/icons/icon.png");
+#endif
+    
 }
 
 

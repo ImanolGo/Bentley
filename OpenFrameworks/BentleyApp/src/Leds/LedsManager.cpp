@@ -17,7 +17,7 @@
 const string LedsManager::LEDS_FOLDER_PATH = "leds/";
 
 
-LedsManager::LedsManager(): Manager(), m_isNewFrame(false), m_is3D(true), m_ledsBrightness(1.0), m_laserBrightness(0.25), m_offset(100)
+LedsManager::LedsManager(): Manager(), m_isNewFrame(false), m_is3D(true), m_ledsBrightness(1.0), m_offset(100)
 {
 	//Intentionally left empty
 }
@@ -555,7 +555,7 @@ void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
     ofPoint pixelPos;
     
     pixelPos.x = ofMap(m_points2D[index].x, m_minPos.x, m_maxPos.x, 0, pixels.getWidth()-1);
-    pixelPos.y = ofMap(m_points2D[index].y, m_minPos.y, m_maxPos.y,  pixels.getHeight()-1, 0);
+    pixelPos.y = ofMap(m_points2D[index].y, m_minPos.y, m_maxPos.y,  pixels.getHeight()-1,0);
     
     auto color = pixels.getColor((int)pixelPos.x, (int)pixelPos.y);
     m_colors[index] = ofFloatColor(color.r/255.0f, color.g/255.0f, color.b/255.0f);
