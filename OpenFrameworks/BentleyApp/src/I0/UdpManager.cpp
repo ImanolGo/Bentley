@@ -7,14 +7,9 @@
  */
 
 
-
-
 #include "UdpManager.h"
 #include "AppManager.h"
-
-#ifndef TARGET_WIN32
-#include "ofxMyIP.h"
-#endif
+#include "ofxNetworkUtils_.h"
 
 
 const int UdpManager::UDP_MESSAGE_LENGHT = 100;
@@ -40,10 +35,11 @@ void UdpManager::setup()
     Manager::setup();
     
     this->setupHeaders();
+    this->setupUdpConnection();
     this->setupIP();
     //this->setupTimer();
-    this->sendAutodiscovery();
-    this->setupUdpConnection();
+   // this->sendAutodiscovery();
+   
     
    
     
@@ -71,24 +67,28 @@ void UdpManager::setupHeaders()
 void UdpManager::setupUdpConnection()
 {
     int portReceive = AppManager::getInstance().getSettingsManager().getUdpPortReceive();
-    ofLogNotice() <<"UdpManager::setupUdpReceiver -> listening for udp messages on port  " << portReceive;
+    //ofLogNotice() <<"UdpManager::setupUdpReceiver -> listening for udp messages on port  " << portReceive;
     
     //m_udpConnection.SetEnableBroadcast(true);
     m_udpConnection.Create(); //create the socket
-    m_udpConnection.Bind(portReceive); //and bind to port
+    if( m_udpConnection.Bind(portReceive)) //and bind to port
+    {
+         ofLogNotice() <<"UdpManager::setupUdpReceiver -> listening to port  " << portReceive;
+    }
+  
     m_udpConnection.SetNonBlocking(true);
     
     
-    string ip = AppManager::getInstance().getSettingsManager().getIpAddress();
-    int portSend = AppManager::getInstance().getSettingsManager().getUdpPortSend();
-    
-    m_udpConnection.Connect(m_broadcast.c_str(),portSend);
-    //m_udpConnection.Connect(ip.c_str(),portSend);
-    m_udpConnection.SetEnableBroadcast(true);
-    
-    ofLogNotice() <<"UdpManager::setupUdpReceiver -> sending to IP " << m_broadcast <<" to port " << portSend;
-    
-    m_udpConnection.SetNonBlocking(true);
+//    string ip = AppManager::getInstance().getSettingsManager().getIpAddress();
+//    int portSend = AppManager::getInstance().getSettingsManager().getUdpPortSend();
+//
+//    m_udpConnection.Connect(m_broadcast.c_str(),portSend);
+//    //m_udpConnection.Connect(ip.c_str(),portSend);
+//    m_udpConnection.SetEnableBroadcast(true);
+//
+//    ofLogNotice() <<"UdpManager::setupUdpReceiver -> sending to IP " << m_broadcast <<" to port " << portSend;
+//
+//    m_udpConnection.SetNonBlocking(true);
     
 }
 
@@ -111,18 +111,12 @@ void UdpManager::setupTimer()
 
 void UdpManager::setupIP()
 {
-    #ifdef TARGET_WIN32
-        system("ipfirst.cmd");
-        ofFile file("my.ip");
-        file >> m_ip;
-        //ofLog() << "My IP: " << m_ip;
-
-    #else
-        ofxMyIP myip;
-        myip.setup();
-        m_ip = myip.getIpAddress();
-
-    #endif
+    Poco::Net::NetworkInterface::List siteLocalInterfaces = ofxNet::NetworkUtils::listNetworkInterfaces(ofxNet::NetworkUtils::SITE_LOCAL);
+    
+    if(!siteLocalInterfaces.empty()){
+        m_ip = siteLocalInterfaces[0].address().toString();
+    }
+    
 
     ofLogNotice() <<"UdpManager::setupIP -> IP address: " << m_ip;
 
@@ -145,8 +139,8 @@ void UdpManager::setupIP()
 }
 void UdpManager::update()
 {
-    this->updateReveivePackage();
-    this->updatePixels();
+    //this->updateReveivePackage();
+    //this->updatePixels();
    // m_timer.update();
     
 }

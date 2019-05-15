@@ -36,7 +36,7 @@ void OscManager::setup()
     Manager::setup();
     
     this->setupOscReceiver();
-    this->setupOscSender();
+    //this->setupOscSender();
     this->setupText();
     
     ofLogNotice() <<"OscManager::initialized" ;
@@ -45,8 +45,14 @@ void OscManager::setup()
 void OscManager::setupOscReceiver()
 {
     int portReceive = AppManager::getInstance().getSettingsManager().getOscPortReceive();
-    ofLogNotice() <<"OscManager::setupOscReceiver -> listening for osc messages on port  " << portReceive;
-    m_oscReceiver.setup(portReceive);
+   
+    if(m_oscReceiver.setup(portReceive))
+    {
+         ofLogNotice() <<"OscManager::setupOscReceiver -> listening to port " << portReceive;
+    }
+    else{
+        ofLogNotice() <<"OscManager::setupOscReceiver -> could not listen to port  " << portReceive;
+    }
     
 }
 

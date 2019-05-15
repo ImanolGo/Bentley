@@ -118,7 +118,7 @@ private:
     
     float m_width, m_height;
     ofPoint   m_position;
-    string m_textOsc, m_textTcp;
+    string m_textOsc, m_textTcp, m_textIP;
     
     
     bool        m_showGui;  //It defines the whether the gui should be shown or not

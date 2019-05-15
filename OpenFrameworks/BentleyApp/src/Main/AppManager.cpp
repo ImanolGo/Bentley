@@ -94,6 +94,7 @@ void AppManager::setupManagers()
     m_visualEffectsManager.setup();
     m_layoutManager.setup();
     m_videoManager.setup();
+    m_udpManager.setup();
     m_tcpManager.setup();
     m_oscManager.setup();
     m_ledsManager.setup();

@@ -14,7 +14,7 @@
 #include "ofxNetwork.h"
 #include "Manager.h"
 #include "ofxSimpleTimer.h"
-#include "ofxNetworkUtils.h"
+
 
 
 //========================== class UdpManager =======================================
@@ -56,6 +56,8 @@ public:
     void setLedsPerChannel(int& value) {m_ledsPerChannel=value;}
     
     void sendColor(ofColor & color);
+    
+    const string& getIpAddress() const {return m_ip;}
     
     
 private:

@@ -75,6 +75,7 @@ void GuiManager::setupGuiParameters()
     m_width = 0;
     m_height = 0;
     
+    m_textIP =  "IP Address: " + AppManager::getInstance().getUdpManager().getIpAddress();
     m_textTcp = "TCP Port: " + ofToString(AppManager::getInstance().getSettingsManager().getTcpPortReceive());
     m_textOsc = "OSC Port: " + ofToString(AppManager::getInstance().getSettingsManager().getOscPortReceive());
 }
@@ -233,6 +234,7 @@ void GuiManager::drawGui()
             
             int oscPort = AppManager::getInstance().getSettingsManager().getOscPortReceive();
             
+            ImGui::Text(m_textIP.c_str());
             ImGui::Text(m_textTcp.c_str());
             ImGui::Text(m_textOsc.c_str());
            
