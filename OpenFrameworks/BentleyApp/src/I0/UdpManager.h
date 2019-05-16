@@ -13,7 +13,7 @@
 #include "ofMain.h"
 #include "ofxNetwork.h"
 #include "Manager.h"
-#include "ofxSimpleTimer.h"
+
 
 
 
@@ -30,12 +30,16 @@ class UdpManager: public Manager
     static const int UDP_MESSAGE_LENGHT; ///Defines the Udp"s message length
     
     struct udp_header {
-        unsigned char f1;
-		unsigned char f2;
-		unsigned char f3;
-        short size;
-		unsigned char command;
-		unsigned char  channel;
+        unsigned int mnudp_ver;
+		unsigned int mncore_ver;
+		unsigned int origin;
+        unsigned int mbc_hash;
+        unsigned int packet_id;
+        unsigned int response_time;
+        unsigned int endpoint_id;
+        unsigned short port;
+        unsigned short payload_size;
+        
     };
     
 public:
@@ -50,25 +54,20 @@ public:
     
     //! updates the udp manager
     void update();
-    
-    void timerCompleteHandler( int &args ) ;
-    
+  
     void setLedsPerChannel(int& value) {m_ledsPerChannel=value;}
-    
-    void sendColor(ofColor & color);
-    
+
     const string& getIpAddress() const {return m_ip;}
     
+    void setupUdpConnection(unsigned char _id);
     
 private:
     
-    void setupUdpConnection();
-    
     void setupHeaders();
     
-    void setupTimer();
-    
     void setupIP();
+    
+    void setupReceiver();
     
     void updateReveivePackage();
     
@@ -77,27 +76,22 @@ private:
     void parseMessage(char * buffer, int size);
     
     void receivedIp(char _id);
-    
-    void receivedHeartbeat(char _id, char val1, char val2);
-    
-    void createConnection(string& ip, int port);
-    
-    void sendAutodiscovery();
-    
-    void sendConnected();
-    
-    void sendDiscovered();
-    
+        
     void updatePixels();
-    
-    
     
 private:
     
-    ofxUDPManager m_udpConnection;
-    udp_header    m_dataHeader;
-    udp_header    m_connectHeader;
-    ofxSimpleTimer         m_timer;
+    typedef std::map< unsigned char, ofxUDPManager > UdpConnectionMap;
+    
+    UdpConnectionMap m_udpConnections;
+    ofxUDPManager   m_udpReceiver;
+    udp_header    m_tileDataHeader;
+    udp_header    m_timeHeader;
+    udp_header    m_sensorHeader;
+    udp_header    m_tlcSettingsHeader;
+    unsigned int  m_packetID;
+    
+    string                 m_ipRoot;
     string                 m_broadcast;
     string                 m_ip;
     bool                   m_connected;

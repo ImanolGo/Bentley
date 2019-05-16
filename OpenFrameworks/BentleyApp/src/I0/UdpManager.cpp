@@ -35,13 +35,9 @@ void UdpManager::setup()
     Manager::setup();
     
     this->setupHeaders();
-    this->setupUdpConnection();
+    this->setupReceiver();
     this->setupIP();
-    //this->setupTimer();
-   // this->sendAutodiscovery();
-   
-    
-   
+    this->setupUdpConnection(102);
     
     ofLogNotice() <<"UdpManager::initialized" ;
 }
@@ -49,64 +45,91 @@ void UdpManager::setup()
 
 void UdpManager::setupHeaders()
 {
-    m_dataHeader.f1 = 0x10;
-    m_dataHeader.f2 = 0x41;
-    m_dataHeader.f3 = 0x37;
-    m_dataHeader.size = 0;
-    m_dataHeader.command = 'd';
-    m_dataHeader.channel = 0;
+   
+    m_timeHeader.mnudp_ver = 2;
+    m_timeHeader.mncore_ver = 1;
+    m_timeHeader.origin  = 0;
+    m_timeHeader.mbc_hash  = 0;
+    m_timeHeader.packet_id = 0;
+    m_timeHeader.response_time = 0;
+    m_timeHeader.endpoint_id = 0;
+    m_timeHeader.port = 8;
+    m_timeHeader.payload_size = 4;
     
-    m_connectHeader.f1 = 0x10;
-    m_connectHeader.f2 = 0x41;
-    m_connectHeader.f3 = 0x37;
-    m_connectHeader.size = 1;
-    m_connectHeader.command = 'c';
-    m_connectHeader.channel = 0;
+    m_tlcSettingsHeader.mnudp_ver = 2;
+    m_tlcSettingsHeader.mncore_ver = 1;
+    m_tlcSettingsHeader.origin  = 0;
+    m_tlcSettingsHeader.mbc_hash  = 0;
+    m_tlcSettingsHeader.packet_id = 0;
+    m_tlcSettingsHeader.response_time = 0;
+    m_tlcSettingsHeader.endpoint_id = 0;
+    m_tlcSettingsHeader.port = 9;
+    m_tlcSettingsHeader.payload_size = 0;
+    
+    m_tileDataHeader.mnudp_ver = 2;
+    m_tileDataHeader.mncore_ver = 1;
+    m_tileDataHeader.origin  = 0;
+    m_tileDataHeader.mbc_hash  = 0;
+    m_tileDataHeader.packet_id = 0;
+    m_tileDataHeader.response_time = 0;
+    m_tileDataHeader.endpoint_id = 0;
+    m_tileDataHeader.port = 10;
+    m_tileDataHeader.payload_size = 0;
+    
+    m_sensorHeader.mnudp_ver = 2;
+    m_sensorHeader.mncore_ver = 1;
+    m_sensorHeader.origin  = 0;
+    m_sensorHeader.mbc_hash  = 0;
+    m_sensorHeader.packet_id = 0;
+    m_sensorHeader.response_time = 0;
+    m_sensorHeader.endpoint_id = 0;
+    m_sensorHeader.port = 11;
+    m_sensorHeader.payload_size = 0;
+    
+    ofLogNotice() <<"UdpManager::setupHeaders-> int size : " << sizeof(unsigned int) ;
+    ofLogNotice() <<"UdpManager::setupHeaders-> short size : " << sizeof(unsigned short) ;
+    unsigned int x = 1;
+    ofLogNotice() <<"UdpManager::little endian -> " << (int) (((char *)&x)[0]);
+
 }
 
-void UdpManager::setupUdpConnection()
+void UdpManager::setupUdpConnection(unsigned char _id)
 {
+    
+    string ip = m_ipRoot + ofToString(int(_id));
+    
+    int portSend = AppManager::getInstance().getSettingsManager().getUdpPortSend();
+    ofxUDPManager connection;
+    
+    if(connection.Connect(ip.c_str(),portSend)){
+        connection.SetNonBlocking(true);
+        m_udpConnections[_id] = connection;
+        
+        ofLogNotice() <<"UdpManager::setupUdpConnection -> connection created : id = " << int(_id) << ", ip = " << ip <<",  port = " << portSend;
+    }
+    else{
+         ofLogNotice() <<"UdpManager::setupUdpConnection ->unable to create : id = " << int(_id)  << ", ip = " << ip <<",  port = " << portSend;
+    }
+
+}
+
+void UdpManager::setupReceiver()
+{
+    void setupUdpConnection(unsigned short _id);
+    
+    
     int portReceive = AppManager::getInstance().getSettingsManager().getUdpPortReceive();
     //ofLogNotice() <<"UdpManager::setupUdpReceiver -> listening for udp messages on port  " << portReceive;
     
     //m_udpConnection.SetEnableBroadcast(true);
-    m_udpConnection.Create(); //create the socket
-    if( m_udpConnection.Bind(portReceive)) //and bind to port
+    m_udpReceiver.Create(); //create the socket
+    if( m_udpReceiver.Bind(portReceive)) //and bind to port
     {
-         ofLogNotice() <<"UdpManager::setupUdpReceiver -> listening to port  " << portReceive;
+         ofLogNotice() <<"UdpManager::setupReceiver -> listening to port  " << portReceive;
     }
   
-    m_udpConnection.SetNonBlocking(true);
+    m_udpReceiver.SetNonBlocking(true);
     
-    
-//    string ip = AppManager::getInstance().getSettingsManager().getIpAddress();
-//    int portSend = AppManager::getInstance().getSettingsManager().getUdpPortSend();
-//
-//    m_udpConnection.Connect(m_broadcast.c_str(),portSend);
-//    //m_udpConnection.Connect(ip.c_str(),portSend);
-//    m_udpConnection.SetEnableBroadcast(true);
-//
-//    ofLogNotice() <<"UdpManager::setupUdpReceiver -> sending to IP " << m_broadcast <<" to port " << portSend;
-//
-//    m_udpConnection.SetNonBlocking(true);
-    
-}
-
-void UdpManager::createConnection(string& ip, int send)
-{
-    ofLogNotice() <<"UdpManager::createConnection -> sending to IP " << ip.c_str() <<" to port " << send;
-    
-    m_udpConnection.Connect(ip.c_str(),send);
-    m_udpConnection.SetNonBlocking(true);
-    m_connected = true;
-}
-
-void UdpManager::setupTimer()
-{
-    m_timer.setup( 60000 );
-    
-    m_timer.start( false ) ;
-    ofAddListener( m_timer.TIMER_COMPLETE , this, &UdpManager::timerCompleteHandler ) ;
 }
 
 void UdpManager::setupIP()
@@ -131,10 +154,12 @@ void UdpManager::setupIP()
         }
 
     }
-
+    
+    m_ipRoot = m_broadcast;
     m_broadcast+="255";
 
     ofLogNotice() <<"UdpManager::setupIP -> Broadcast IP address: " << m_broadcast;
+    ofLogNotice() <<"UdpManager::setupIP -> Root IP address: " << m_ipRoot;
 
 }
 void UdpManager::update()
@@ -162,75 +187,73 @@ void UdpManager::updatePixels()
    // ofLogNotice() <<"UdpManager::updatePixels -> New Frame " << leds.size();
 
     
-    int numChannels = colors.size()/m_ledsPerChannel + 1;
+//    int numChannels = colors.size()/m_ledsPerChannel + 1;
+//
+//    //ofLogNotice() <<"UdpManager::updatePixels -> numChannels " << numChannels;
+//
+//    for(int channel=0; channel<numChannels; channel++){
+//        int startIndex  = channel*m_ledsPerChannel;
+//        int endIndex  = (channel+1)*m_ledsPerChannel;
+//
+//        if(endIndex>colors.size()){
+//            endIndex = colors.size();
+//        }
+//
+//        string message="";
+//        message+= m_dataHeader.f1; message+= m_dataHeader.f2; message+= m_dataHeader.f3;
+//        int size = endIndex - startIndex;
+//        m_dataHeader.size = ledsPerPixel*size;
+//        unsigned char * s = (unsigned char*)& m_dataHeader.size;
+//        message+= s[1] ;  message+=  s[0];
+//        message+=m_dataHeader.command;
+//        message+=channel;
+//
+//        unsigned char r = 0;
+//        unsigned char g = 0;
+//        unsigned char b = 0;
+//
+//
+//        for(int i=startIndex; i<endIndex; i++){
+//            if(i>=colors.size()){
+//                break;
+//            }
+//
+//            r = colors[i].r * 255;
+//            g = colors[i].g * 255;
+//            b = colors[i].b * 255;
+//
+//            message+=r;
+//            message+=g;
+//            message+=b;
+//
+//        }
 
-    //ofLogNotice() <<"UdpManager::updatePixels -> numChannels " << numChannels;
-
-    for(int channel=0; channel<numChannels; channel++){
-        int startIndex  = channel*m_ledsPerChannel;
-        int endIndex  = (channel+1)*m_ledsPerChannel;
-
-        if(endIndex>colors.size()){
-            endIndex = colors.size();
-        }
-
-        string message="";
-        message+= m_dataHeader.f1; message+= m_dataHeader.f2; message+= m_dataHeader.f3;
-        int size = endIndex - startIndex;
-        m_dataHeader.size = ledsPerPixel*size;
-        unsigned char * s = (unsigned char*)& m_dataHeader.size;
-        message+= s[1] ;  message+=  s[0];
-        message+=m_dataHeader.command;
-        message+=channel;
-        
-        unsigned char r = 0;
-        unsigned char g = 0;
-        unsigned char b = 0;
-        
-
-        for(int i=startIndex; i<endIndex; i++){
-            if(i>=colors.size()){
-                break;
-            }
-            
-            r = colors[i].r * 255;
-            g = colors[i].g * 255;
-            b = colors[i].b * 255;
-            
-            message+=r;
-            message+=g;
-            message+=b;
-
-        }
-
-        m_udpConnection.Send(message.c_str(),message.length());
-    }
-
-
-    
+       // m_udpConnection.Send(message.c_str(),message.length());
+    //}
+ 
 }
 
 void UdpManager::updateReveivePackage()
 {
-    char udpMessage[UDP_MESSAGE_LENGHT];
-    m_udpConnection.Receive(udpMessage,UDP_MESSAGE_LENGHT);
-    string message=udpMessage;
-    
-    if(message!="")
-    {
-        ofLogNotice() <<"UdpManager::updateReveivePackage -> SIZE " << message.size();
-        ofLogNotice() <<"UdpManager::updateReveivePackage -> message " << message;
-        
-        this->parseMessage(udpMessage, UDP_MESSAGE_LENGHT);
-    }
+//    char udpMessage[UDP_MESSAGE_LENGHT];
+//    m_udpConnection.Receive(udpMessage,UDP_MESSAGE_LENGHT);
+//    string message=udpMessage;
+//
+//    if(message!="")
+//    {
+//        ofLogNotice() <<"UdpManager::updateReveivePackage -> SIZE " << message.size();
+//        ofLogNotice() <<"UdpManager::updateReveivePackage -> message " << message;
+//
+//        this->parseMessage(udpMessage, UDP_MESSAGE_LENGHT);
+//    }
 }
 
 bool UdpManager::isMessage(char * buffer, int size)
 {
-    if(buffer[0] != m_connectHeader.f1  && buffer[1] != m_connectHeader.f2  && buffer[2] != m_connectHeader.f3 ){
-        ofLogNotice() <<"UdpManager::isMessage -> FALSE ";
-        return false;
-    }
+//    if(buffer[0] != m_connectHeader.f1  && buffer[1] != m_connectHeader.f2  && buffer[2] != m_connectHeader.f3 ){
+//        ofLogNotice() <<"UdpManager::isMessage -> FALSE ";
+//        return false;
+//    }
     
     
     ofLogNotice() <<"UdpManager::isMessage -> TRUE ";
@@ -239,78 +262,22 @@ bool UdpManager::isMessage(char * buffer, int size)
 
 void UdpManager::parseMessage(char * buffer, int size)
 {
-    if(isMessage(buffer, size))
-    {
-        if(buffer[5] == m_connectHeader.command)
-        {
-            ofLogNotice() <<"UdpManager::isMessage -> Received Connect Command: " << m_connectHeader.command;
-            string ip; int port;
-            m_udpConnection.GetRemoteAddr(ip, port);
-            int portSend = AppManager::getInstance().getSettingsManager().getUdpPortSend();
-            this->createConnection(ip, portSend );
-            this->sendConnected();
-            m_timer.stop();
-        }
-        
-    }
-      
-}
-
-void UdpManager::sendColor(ofColor & color)
-{
-    if(!m_connected){
-        return;
-    }
-    
-    int ledsPerPixel = 3;
-    int size = 1;
-    int channel=0;
-    string message="";
-    message+= m_dataHeader.f1; message+= m_dataHeader.f2; message+= m_dataHeader.f3;
-    m_dataHeader.size = ledsPerPixel*size;
-    unsigned char * s = (unsigned char*)& m_dataHeader.size;
-    message+= s[1] ;  message+=  s[0];
-    message+=m_dataHeader.command;
-    message+=channel;
-
-    message+=color.r;
-    message+=color.g;
-    message+=color.b;
-
-    m_udpConnection.Send(message.c_str(),message.length());
+//    if(isMessage(buffer, size))
+//    {
+//        if(buffer[5] == m_connectHeader.command)
+//        {
+//            ofLogNotice() <<"UdpManager::isMessage -> Received Connect Command: " << m_connectHeader.command;
+//            string ip; int port;
+//            m_udpConnection.GetRemoteAddr(ip, port);
+//            int portSend = AppManager::getInstance().getSettingsManager().getUdpPortSend();
+//            this->createConnection(ip, portSend );
+//            this->sendConnected();
+//            m_timer.stop();
+//        }
+//
+//    }
     
 }
 
-void UdpManager::timerCompleteHandler( int &args )
-{
-    m_timer.start(false);
-    //  cout<<"TIMER COMPLETED"<<endl;
-    this->sendAutodiscovery();
-}
 
-void UdpManager::sendConnected()
-{
-    string message="";
-    message+= m_connectHeader.f1; message+= m_connectHeader.f2; message+= m_connectHeader.f3;
-    unsigned char * s = (unsigned char*)& m_connectHeader.size;
-    message+= s[1] ;  message+=  s[0];
-    message+=m_connectHeader.command;
-    message+=m_connectHeader.channel;
-    message+='c';
-    
-    m_udpConnection.Send(message.c_str(),message.length());
-    
-    ofLogNotice() <<"UdpManager::sendConnected -> Send Connected ";
-}
-void UdpManager::sendAutodiscovery()
-{
-//    string message="";
-//    
-//    message+= START_COMMAND;
-//    message+= AUTODISCOVERY_COMMAND;
-//    message+= END_COMMAND;
-//    
-//    m_udpConnection.Send(message.c_str(),message.length());
-//    
-//    ofLogNotice() <<"UdpManager::sendAutodiscovery << " << message;
-}
+
