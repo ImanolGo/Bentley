@@ -31,6 +31,7 @@ class UdpManager: public Manager
     static const int UDP_MESSAGE_LENGHT; ///Defines the Udp"s message length
     static const int UDP_MTU_ETHERNET; ///Defines the Ethernet's maximum transmission unit
     static const int DATA_HEADER_OVERHEAD; ///Defines the data's header overhead
+    static const double UDP_SEND_TIME; ///Defines the time to send a new Udp Package
     
     struct udp_header {
         unsigned int mnudp_ver;
@@ -64,6 +65,10 @@ public:
     
     void updatePixels();
     
+    void setStreaming(bool& value){m_streaming = value;}
+    
+    void nextFrame(){m_nextFrame = true;}
+    
 private:
     
     void setupHeaders();
@@ -72,7 +77,11 @@ private:
     
     void updateTime();
     
+    void updateElapsedTime();
+    
     void setupReceiver();
+    
+    void sendTest();
     
     void updateReveivePackage();
     
@@ -91,14 +100,18 @@ private:
     typedef std::map< unsigned short, ofxUDPManager > UdpConnectionMap;
     
     UdpConnectionMap m_udpConnections;
-    ofxUDPManager   m_udpReceiver;
+    ofxUDPManager   m_udpConnection;
     udp_header    m_tileDataHeader;
     udp_header    m_timeHeader;
     udp_header    m_sensorHeader;
     udp_header    m_tlcSettingsHeader;
     unsigned int  m_packetID;
     unsigned short  m_maxNumPixelsPerPacket;
-    unsigned int  m_frameNumber;
+    unsigned int    m_frameNumber;
+    bool            m_streaming;
+    bool            m_nextFrame;
+    double          m_elapsedTime;
+    
     
     string                 m_ipRoot;
     string                 m_broadcast;

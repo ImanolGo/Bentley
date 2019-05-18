@@ -44,6 +44,7 @@ void GuiManager::setup()
     this->setupGuiParameters();
     this->setupScenesGui();
     //this->setupModesGui();
+    this->setupCommunicationsGui();
     this->setupLedsGui();
     this->setupVideoGui();
     this->setupProcessingGroup();
@@ -197,6 +198,19 @@ void GuiManager::setupLedsGui()
     m_ledsSize.addListener(ledsManager, &LedsManager::setSize);
     m_ledsGroup.add(m_ledsSize);
     m_parameters.add(m_ledsSize);
+    
+}
+
+void GuiManager::setupCommunicationsGui()
+{
+    auto udpManager = &AppManager::getInstance().getUdpManager();
+    
+    m_communicationsGroup.setName("Communications");
+    m_streaming.set("Streaming", true);
+    m_streaming.addListener(udpManager, &UdpManager::setStreaming);
+    m_communicationsGroup.add(m_streaming);
+    m_parameters.add(m_streaming);
+    
 }
 
 void GuiManager::update()
@@ -262,11 +276,23 @@ void GuiManager::drawGui()
                 
             }
             
+            if (ofxImGui::BeginTree(m_communicationsGroup, mainSettings))
+            {
+                ofxImGui::AddParameter(m_streaming);
+                if (ImGui::Button("Next Frame..."))
+                {
+                    AppManager::getInstance().getUdpManager().nextFrame();
+                }
+                
+                ofxImGui::EndTree(mainSettings);
+                
+                
+            }
+            
             if (ofxImGui::BeginTree(m_ledsGroup, mainSettings))
             {
                 ofxImGui::AddParameter(m_ledsSize);
                 ofxImGui::EndTree(mainSettings);
-            
             }
 
             

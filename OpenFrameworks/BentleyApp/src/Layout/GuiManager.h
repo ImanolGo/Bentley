@@ -80,6 +80,8 @@ private:
     
     void setupModesGui();
     
+    void setupCommunicationsGui();
+    
     void setupLedsGui();
 
     void setupProcessingGroup();
@@ -96,13 +98,17 @@ private:
     ofParameterGroup m_modeGroup;
     ofParameterGroup m_videoGroup;
     ofParameterGroup m_ledsGroup;
+    ofParameterGroup m_communications;
     ofParameterGroup m_scenesGroup;
     ofParameterGroup m_postProcessingGroup;
+    ofParameterGroup m_communicationsGroup;
     
     ofParameter<string>     m_videoPath;
     ofParameter<int>        m_viewMode;
     ofParameter<int>        m_sceneMode;
     ofParameter<float>      m_ledsSize;
+    
+    ofParameter<bool>       m_streaming;
     
     std::vector<std::string>    m_sceneNames;
     

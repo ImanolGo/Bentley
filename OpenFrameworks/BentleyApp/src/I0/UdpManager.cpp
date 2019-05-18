@@ -15,8 +15,10 @@
 const int UdpManager::UDP_MESSAGE_LENGHT = 100;
 const int UdpManager::UDP_MTU_ETHERNET = 1500;
 const int UdpManager::DATA_HEADER_OVERHEAD = 60;
+const double UdpManager::UDP_SEND_TIME = 1.0;
 
-UdpManager::UdpManager(): Manager(), m_packetID(0), m_maxNumPixelsPerPacket(100), m_frameNumber(1)
+
+UdpManager::UdpManager(): Manager(), m_packetID(0), m_maxNumPixelsPerPacket(100), m_frameNumber(1), m_streaming(true), m_elapsedTime(0.0), m_nextFrame(false)
 {
     //Intentionally left empty
 }
@@ -36,10 +38,12 @@ void UdpManager::setup()
     
     Manager::setup();
     
+    this->setupIP();
     this->setupHeaders();
     this->setupReceiver();
-    this->setupIP();
-    this->setupUdpConnection(102);
+    
+    //this->setupUdpConnection(100);
+    this->sendTest();
     
     ofLogNotice() <<"UdpManager::initialized" ;
 }
@@ -120,16 +124,26 @@ void UdpManager::setupUdpConnection(unsigned short _id)
 void UdpManager::setupReceiver()
 {
     int portReceive = AppManager::getInstance().getSettingsManager().getUdpPortReceive();
+    int portSend = AppManager::getInstance().getSettingsManager().getUdpPortSend();
     //ofLogNotice() <<"UdpManager::setupUdpReceiver -> listening for udp messages on port  " << portReceive;
     
     //m_udpConnection.SetEnableBroadcast(true);
-    m_udpReceiver.Create(); //create the socket
-    if( m_udpReceiver.Bind(portReceive)) //and bind to port
+    m_udpConnection.Create(); //create the socket
+    if( m_udpConnection.Bind(portReceive)) //and bind to port
     {
          ofLogNotice() <<"UdpManager::setupReceiver -> listening to port  " << portReceive;
     }
-  
-    m_udpReceiver.SetNonBlocking(true);
+    
+    if(m_udpConnection.Connect(m_ip.c_str(),portSend))
+    {
+        ofLogNotice() <<"UdpManager::setupReceiver -> sending to " << m_ip << ", port = " << portSend;
+    }
+    else{
+         ofLogNotice() <<"UdpManager::setupReceiver -> could not connect to " << m_ip;
+    }
+
+    
+    m_udpConnection.SetNonBlocking(true);
     
 }
 
@@ -165,12 +179,46 @@ void UdpManager::setupIP()
 }
 void UdpManager::update()
 {
+   // this->updateElapsedTime();
     this->updateReveivePackage();
+}
+
+void UdpManager::updateElapsedTime()
+{
+    m_elapsedTime+=ofGetLastFrameTime();
+}
+
+
+
+void UdpManager::sendTest()
+{
+    ofLogNotice() <<"UdpManager::sendTest ";
+    
+    vector<ofColor> pixels;
+    pixels.push_back(ofColor(0)); pixels.push_back(ofColor(100)); pixels.push_back(ofColor(255));
+    string message = this->getDataHeader(pixels.size());
+    message+=this->getDataPayload(100, 0, pixels.size(), pixels);
+    m_udpConnection.Send(message.c_str(), message.length());
+    
+    this->updateTime();
     
 }
 
+
 void UdpManager::updatePixels()
 {
+//    if(m_streaming && m_elapsedTime<UDP_SEND_TIME){
+//        return;
+//    }
+//    
+//    m_elapsedTime = 0;
+    
+    if(!m_streaming && !m_nextFrame){
+        return;
+    }
+    
+    m_nextFrame = false;
+    
     const auto & branches = AppManager::getInstance().getLedsManager().getBranchers();
     
     for(auto& branch: branches){
@@ -223,7 +271,9 @@ string UdpManager::getDataHeader(unsigned int num_pixels)
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     s = (unsigned char*)& m_tileDataHeader.packet_id;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
-    s = (unsigned char*)& m_tileDataHeader.packet_id;
+    s = (unsigned char*)& m_tileDataHeader.response_time;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tileDataHeader.endpoint_id;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     s = (unsigned char*)& m_tileDataHeader.port;
     message+= s[0];  message+= s[1];
@@ -272,7 +322,9 @@ void UdpManager::updateTime()
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     s = (unsigned char*)& m_timeHeader.packet_id;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
-    s = (unsigned char*)& m_timeHeader.packet_id;
+    s = (unsigned char*)& m_timeHeader.response_time;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_timeHeader.endpoint_id;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     s = (unsigned char*)& m_timeHeader.port;
     message+= s[0];  message+= s[1];
@@ -284,6 +336,8 @@ void UdpManager::updateTime()
     for(auto& udpConnection: m_udpConnections){
         udpConnection.second.Send(message.c_str(),message.length());
     }
+    
+    m_udpConnection.Send(message.c_str(),message.length());
     
     m_frameNumber++;
 }
