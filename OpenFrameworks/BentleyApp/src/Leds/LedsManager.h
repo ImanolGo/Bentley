@@ -11,7 +11,7 @@
 #pragma once
 
 #include "Manager.h"
-#include "Led.h"
+#include "Brancher.h"
 
 //========================== class LedsManager ==============================
 //============================================================================
@@ -25,12 +25,7 @@ class LedsManager: public Manager
 {
     static const string LEDS_FOLDER_PATH;
     
-    public:
-    
-        typedef vector<int> IntVector;
-        typedef vector< ofPtr<Led> > LedVector;
 
-    
     public:
 
         //! Constructor
@@ -54,7 +49,7 @@ class LedsManager: public Manager
         //! Draw the Led Layout
         void drawLayout();
     
-        const LedVector& getLeds() const {return m_leds;}
+        const  vector<Brancher>& getBranchers() const {return m_branchers;}
     
         const vector <ofFloatColor>& getColors() const {return m_colors;}
     
@@ -85,6 +80,8 @@ class LedsManager: public Manager
         bool addLedPair(string& pathTwoD, string& pathThreeD);
     
         void setupShader();
+    
+        void updateBranches();
     
         void createLedPositions();
     
@@ -124,18 +121,20 @@ class LedsManager: public Manager
 
     private:
     
-        LedVector          m_leds;
         ofPoint            m_minPos;
         ofPoint            m_maxPos;
         bool               m_isNewFrame;
         bool               m_is3D;
         float              m_ledsBrightness;
     
+        vector<Brancher>    m_branchers;
+    
         ofFbo   m_fbo;
         ofFbo   m_fboMaskee;
         ofFbo   m_fboMask;
         ofVbo   m_vbo;
         ofVbo   m_vboModel;
+        ofMesh  m_meshModel;
         ofShader m_vboShader;
         ofShader m_maskShader;
         ofTexture m_texture;
@@ -147,6 +146,7 @@ class LedsManager: public Manager
         vector <ofVec3f> m_sizesModel;
         vector <ofFloatColor> m_colors;
         vector <ofFloatColor> m_colorsBlack;
+    
         int         m_offset;
     
     

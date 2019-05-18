@@ -90,16 +90,3 @@ void ModelManager::draw()
     
 }
 
-void ModelManager::drawLeds()
-{
-    float max = 100;
-    auto ledVector = AppManager::getInstance().getLedsManager().getLeds();
-    for (auto led: ledVector) {
-        auto pos = led->getPosition();
-
-        ofPushMatrix();
-            ofTranslate(pos*max);
-            led->draw();
-        ofPopMatrix();
-    }
-}

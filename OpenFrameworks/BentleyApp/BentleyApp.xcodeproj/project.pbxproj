@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00F8DAC81953313F8180A13C /* ofxTextBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1486C841BC2A30DB7CBC449C /* ofxTextBlock.cpp */; };
 		051871DC20FC3FA3494C35B8 /* NetworkingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9815A3BF35D7D8A49C7C191 /* NetworkingUtils.cpp */; };
+		083C29DE228DA6E100C730EE /* Brancher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083C29DD228DA6E100C730EE /* Brancher.cpp */; };
 		089808A5781FD585C386F027 /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F59B5BCCA5921700F9B826F2 /* ofxSliderGroup.cpp */; };
 		08C2F6947E69C234CCCBB2EE /* EngineGLFW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CC728D821F21EB13047258 /* EngineGLFW.cpp */; };
 		0DF7C91B4D457B46CCBF90C5 /* Helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D62EA0C49693193D1322AEC /* Helpers.cpp */; };
@@ -126,6 +127,8 @@
 		0607D43FBA32E9855CC5A982 /* md4.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = md4.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/md4.h; sourceTree = SOURCE_ROOT; };
 		06A5B3AA5459CC5F29B84644 /* addon_config.mk */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = addon_config.mk; path = src/Addons/ofxImGui/addon_config.mk; sourceTree = SOURCE_ROOT; };
 		06E4699DDD0C907002D10794 /* LICENSE.md */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = LICENSE.md; path = src/Addons/ofxNetworkUtils/LICENSE.md; sourceTree = SOURCE_ROOT; };
+		083C29DC228DA6E000C730EE /* Brancher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Brancher.h; path = Leds/Brancher.h; sourceTree = "<group>"; };
+		083C29DD228DA6E100C730EE /* Brancher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Brancher.cpp; path = Leds/Brancher.cpp; sourceTree = "<group>"; };
 		08ABF62AC22730155011D6C2 /* ebcdic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ebcdic.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/ebcdic.h; sourceTree = SOURCE_ROOT; };
 		0940234358464FB1AAA79D18 /* imstb_truetype.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = imstb_truetype.h; path = src/Addons/ofxImGui/libs/imgui/src/imstb_truetype.h; sourceTree = SOURCE_ROOT; };
 		09BB1D7613A1F9D8E8B11D7A /* KeyboardManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KeyboardManager.h; path = src/I0/KeyboardManager.h; sourceTree = SOURCE_ROOT; };
@@ -828,6 +831,8 @@
 			children = (
 				8817977EC402ECDACAF805F2 /* Led.cpp */,
 				ADC9CE1A1D2C99F170984832 /* Led.h */,
+				083C29DD228DA6E100C730EE /* Brancher.cpp */,
+				083C29DC228DA6E000C730EE /* Brancher.h */,
 				F6D304BD6F716E0F1666FDA6 /* LedsManager.cpp */,
 				7A56ACB5C0BD905E0E896431 /* LedsManager.h */,
 				EC2958AE46C53B67E9739A17 /* ModelManager.cpp */,
@@ -1798,6 +1803,7 @@
 				CC29C4F54AB4C7B1940C9EC2 /* ofxTCPManager.cpp in Sources */,
 				3973CDAE42951D6870403712 /* ofxTCPServer.cpp in Sources */,
 				CC1783B83457FEEC0F1845EA /* ofxUDPManager.cpp in Sources */,
+				083C29DE228DA6E100C730EE /* Brancher.cpp in Sources */,
 				1C1B9F830266AA4F921DC43B /* IpEndpointName.cpp in Sources */,
 				051871DC20FC3FA3494C35B8 /* NetworkingUtils.cpp in Sources */,
 				5659399376B34D6C3BB15694 /* UdpSocket.cpp in Sources */,

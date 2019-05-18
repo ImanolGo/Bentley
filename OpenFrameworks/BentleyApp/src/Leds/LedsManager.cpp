@@ -51,6 +51,8 @@ void LedsManager::setupLeds()
      //this->createLedPositions();
     this->arrangeLeds();
     this->createLayout();
+    
+    m_meshModel.save("leds/test.ply");
 }
 
 bool LedsManager::readLeds()
@@ -247,37 +249,9 @@ void LedsManager::createLedPair(const ofPoint& position2D,const ofPoint& positio
     m_sizesModel.push_back(ofVec3f(size*0.5));
     m_colors.push_back(ofFloatColor(0,0,0));
     m_colorsBlack.push_back(ofFloatColor(255,255,255));
+    m_meshModel.addVertex(position3D);
 }
 
-void LedsManager::sortLeds()
-{
-    
-    LedVector aux;
-    
-    while (!m_leds.empty())
-    {
-        int min = 10000;
-        int n = 0;
-        
-        for (int i = 0; i<m_leds.size(); i++) {
-            if(m_leds[i]->getId() < min)
-            {
-                n = i;
-                min = m_leds[i]->getId() ;
-            }
-        }
-        
-        aux.push_back(m_leds[n]);
-        m_leds.erase(m_leds.begin() + n);
-    }
-    
-    m_leds = aux;
-    //std::sort(m_leds.begin(), m_leds.end(), compare);
-    
-    //auto comp = []( const Led& w1, const Led& w2 ){ return w1.getId() < w2.getId(); }
-    
-    //std::sort(m_leds.begin(), m_leds.end(), [] (Led const& a, Led const& b) { return a.getId() < b.getId(); });
-}
 
 void LedsManager::normalizeLeds()
 {
@@ -529,14 +503,22 @@ void LedsManager::update()
 {
     if(m_isNewFrame){
          m_isNewFrame = false;
-         //AppManager::getInstance().getImageManager().update();
+        this->updateBranches();
+        AppManager::getInstance().getUdpManager().updatePixels();
     }
        
 }
 
+void LedsManager::updateBranches()
+{
+    for(auto& brancher: m_branchers){
+        brancher.setPixels(m_colors);
+    }
+}
+
 void LedsManager::setPixels(ofPixelsRef pixels)
 {
-    for(int i=0; i<m_points3D.size(); i++){
+    for(int i=0; i<m_points2D.size(); i++){
         this->setPixelColor(pixels, i);
     }
     
@@ -547,7 +529,7 @@ void LedsManager::setPixels(ofPixelsRef pixels)
 
 void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
 {
-    if(index<0 || index>=m_points3D.size()){
+    if(index<0 || index>=m_points2D.size()){
         return;
     }
     
@@ -692,7 +674,6 @@ bool LedsManager::loadPair(string& pathTwoD, string& pathThreeD)
 
 void LedsManager::clearLeds()
 {
-    m_leds.clear();
     m_colors.clear();
     m_colorsBlack.clear();
     m_vbo.clear();

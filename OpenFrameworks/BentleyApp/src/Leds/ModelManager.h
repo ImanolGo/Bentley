@@ -46,9 +46,7 @@ class ModelManager: public Manager
     private:
 
 
-        //! Draw all Leds
-        void drawLeds();
-
+    
     private:
     
         ofEasyCam m_camera; // add mouse controls for camera movement

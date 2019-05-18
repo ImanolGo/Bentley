@@ -13,8 +13,10 @@
 
 
 const int UdpManager::UDP_MESSAGE_LENGHT = 100;
+const int UdpManager::UDP_MTU_ETHERNET = 1500;
+const int UdpManager::DATA_HEADER_OVERHEAD = 60;
 
-UdpManager::UdpManager(): Manager(), m_connected(false), m_ledsPerChannel(300)
+UdpManager::UdpManager(): Manager(), m_packetID(0), m_maxNumPixelsPerPacket(100), m_frameNumber(1)
 {
     //Intentionally left empty
 }
@@ -86,6 +88,8 @@ void UdpManager::setupHeaders()
     m_sensorHeader.port = 11;
     m_sensorHeader.payload_size = 0;
     
+    m_maxNumPixelsPerPacket = (UDP_MTU_ETHERNET-DATA_HEADER_OVERHEAD)/3;
+    
     ofLogNotice() <<"UdpManager::setupHeaders-> int size : " << sizeof(unsigned int) ;
     ofLogNotice() <<"UdpManager::setupHeaders-> short size : " << sizeof(unsigned short) ;
     unsigned int x = 1;
@@ -93,7 +97,7 @@ void UdpManager::setupHeaders()
 
 }
 
-void UdpManager::setupUdpConnection(unsigned char _id)
+void UdpManager::setupUdpConnection(unsigned short _id)
 {
     
     string ip = m_ipRoot + ofToString(int(_id));
@@ -115,9 +119,6 @@ void UdpManager::setupUdpConnection(unsigned char _id)
 
 void UdpManager::setupReceiver()
 {
-    void setupUdpConnection(unsigned short _id);
-    
-    
     int portReceive = AppManager::getInstance().getSettingsManager().getUdpPortReceive();
     //ofLogNotice() <<"UdpManager::setupUdpReceiver -> listening for udp messages on port  " << portReceive;
     
@@ -164,73 +165,127 @@ void UdpManager::setupIP()
 }
 void UdpManager::update()
 {
-    //this->updateReveivePackage();
-    //this->updatePixels();
-   // m_timer.update();
+    this->updateReveivePackage();
     
 }
 
 void UdpManager::updatePixels()
 {
-    if(!m_connected){
-        return;
+    const auto & branches = AppManager::getInstance().getLedsManager().getBranchers();
+    
+    for(auto& branch: branches){
+        unsigned short id = branch.getId();
+        if(m_udpConnections.find(id)!=m_udpConnections.end()){
+            
+            int bytesPerLed = 3;
+            auto& pixels = branch.getPixels();
+            unsigned short division = pixels.size()/m_maxNumPixelsPerPacket;
+            unsigned int remainder = pixels.size()%m_maxNumPixelsPerPacket;
+            unsigned int offset = 0;
+            
+           
+            for(int i=0; i<division; i++){
+                
+                string message = this->getDataHeader(m_maxNumPixelsPerPacket);
+                message+=this->getDataPayload(id, offset,m_maxNumPixelsPerPacket,pixels);
+                m_udpConnections[id].Send(message.c_str(), message.length());
+                offset+=m_maxNumPixelsPerPacket;
+            }
+            
+            if(remainder!=0)
+            {
+                string message = this->getDataHeader(remainder);
+                message+=this->getDataPayload(id, offset,remainder,pixels);
+                m_udpConnections[id].Send(message.c_str(), message.length());
+            }
+        }
     }
     
-    int ledsPerPixel = 3;
-
-    const auto & colors = AppManager::getInstance().getLedsManager().getColors();
-    const int length = colors.size()*ledsPerPixel;
-	//char* pixels = new char[length];
-    //const char* pixels[length];
-
-
-   // ofLogNotice() <<"UdpManager::updatePixels -> New Frame " << leds.size();
-
     
-//    int numChannels = colors.size()/m_ledsPerChannel + 1;
-//
-//    //ofLogNotice() <<"UdpManager::updatePixels -> numChannels " << numChannels;
-//
-//    for(int channel=0; channel<numChannels; channel++){
-//        int startIndex  = channel*m_ledsPerChannel;
-//        int endIndex  = (channel+1)*m_ledsPerChannel;
-//
-//        if(endIndex>colors.size()){
-//            endIndex = colors.size();
-//        }
-//
-//        string message="";
-//        message+= m_dataHeader.f1; message+= m_dataHeader.f2; message+= m_dataHeader.f3;
-//        int size = endIndex - startIndex;
-//        m_dataHeader.size = ledsPerPixel*size;
-//        unsigned char * s = (unsigned char*)& m_dataHeader.size;
-//        message+= s[1] ;  message+=  s[0];
-//        message+=m_dataHeader.command;
-//        message+=channel;
-//
-//        unsigned char r = 0;
-//        unsigned char g = 0;
-//        unsigned char b = 0;
-//
-//
-//        for(int i=startIndex; i<endIndex; i++){
-//            if(i>=colors.size()){
-//                break;
-//            }
-//
-//            r = colors[i].r * 255;
-//            g = colors[i].g * 255;
-//            b = colors[i].b * 255;
-//
-//            message+=r;
-//            message+=g;
-//            message+=b;
-//
-//        }
+    this->updateTime();
+    
+}
 
-       // m_udpConnection.Send(message.c_str(),message.length());
-    //}
- 
+string UdpManager::getDataHeader(unsigned int num_pixels)
+{
+    string message="";
+    
+    m_tileDataHeader.packet_id = ++m_packetID;
+    m_tileDataHeader.payload_size = 10 + num_pixels*3;
+    
+    unsigned char * s = (unsigned char*)& m_tileDataHeader.mnudp_ver;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tileDataHeader.mncore_ver;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tileDataHeader.origin;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tileDataHeader.mbc_hash;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tileDataHeader.packet_id;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tileDataHeader.packet_id;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tileDataHeader.port;
+    message+= s[0];  message+= s[1];
+    s = (unsigned char*)& m_tileDataHeader.payload_size;
+    message+= s[0];  message+= s[1];
+    
+    return message;
+}
+
+string UdpManager::getDataPayload(unsigned short _id, unsigned int offset, int num_pixels, const vector<ofColor>& pixels)
+{
+    string message="";
+    
+    unsigned char * s = (unsigned char*)& m_frameNumber;
+    message+= s[0];  message+= s[1];
+    s = (unsigned char*)& _id;
+    message+= s[0];  message+= s[1];
+    s = (unsigned char*)& offset;
+    message+= s[0];  message+= s[1];message+= s[2];  message+= s[3];
+    s = (unsigned char*)& num_pixels;
+    message+= s[0];  message+= s[1];
+    
+    for(int j=0; j< num_pixels; j++)
+    {
+        message+=pixels[offset+j].r;
+        message+=pixels[offset+j].g;
+        message+=pixels[offset+j].b;
+    }
+    
+    return message;
+}
+
+void UdpManager::updateTime()
+{
+    
+    m_timeHeader.packet_id = ++m_packetID;
+   
+    string message="";
+    unsigned char * s = (unsigned char*)& m_timeHeader.mnudp_ver;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_timeHeader.mncore_ver;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_timeHeader.origin;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_timeHeader.mbc_hash;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_timeHeader.packet_id;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_timeHeader.packet_id;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_timeHeader.port;
+    message+= s[0];  message+= s[1];
+    s = (unsigned char*)& m_timeHeader.payload_size;
+    message+= s[0];  message+= s[1];
+    s = (unsigned char*)& m_frameNumber;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    
+    for(auto& udpConnection: m_udpConnections){
+        udpConnection.second.Send(message.c_str(),message.length());
+    }
+    
+    m_frameNumber++;
 }
 
 void UdpManager::updateReveivePackage()
