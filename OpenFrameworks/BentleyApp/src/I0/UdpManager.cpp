@@ -101,7 +101,7 @@ void UdpManager::setupHeaders()
 
 }
 
-void UdpManager::setupUdpConnection(unsigned short _id)
+void UdpManager::setupConnection(unsigned short _id)
 {
     
     string ip = m_ipRoot + ofToString(int(_id));
@@ -113,10 +113,10 @@ void UdpManager::setupUdpConnection(unsigned short _id)
         connection.SetNonBlocking(true);
         m_udpConnections[_id] = connection;
         
-        ofLogNotice() <<"UdpManager::setupUdpConnection -> connection created : id = " << int(_id) << ", ip = " << ip <<",  port = " << portSend;
+        ofLogNotice() <<"UdpManager::setupConnection -> connection created : id = " << int(_id) << ", ip = " << ip <<",  port = " << portSend;
     }
     else{
-         ofLogNotice() <<"UdpManager::setupUdpConnection ->unable to create : id = " << int(_id)  << ", ip = " << ip <<",  port = " << portSend;
+         ofLogNotice() <<"UdpManager::setupConnection ->unable to create : id = " << int(_id)  << ", ip = " << ip <<",  port = " << portSend;
     }
 
 }

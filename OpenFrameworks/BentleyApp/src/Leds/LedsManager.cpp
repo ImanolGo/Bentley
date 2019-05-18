@@ -47,8 +47,8 @@ void LedsManager::setup()
 
 void LedsManager::setupLeds()
 {
-    this->readLeds();
-     //this->createLedPositions();
+    //this->readLeds();
+    this->createLedPositions();
     this->arrangeLeds();
     this->createLayout();
     
@@ -142,7 +142,7 @@ void LedsManager::createLayout()
     ofClear(0, 0, 0, 255);
     ofSetColor(255);
     
-    float size = 2;
+    float size = 20;
     for(auto led: m_points2D){
         float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
         float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
@@ -188,17 +188,21 @@ void LedsManager::createLedPositions()
 {
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
-    
-    int size = 100;
-    
-    for(int i = 0; i<size; i++){
-        for(int j = 0; j<size; j++)
+    Brancher brancher(86);
+    int x = 0;
+    for(int i = 0; i<2; i++){
+        for(int j = 0; j<4; j++)
         {
             ofPoint pos (j,i) ;
             createLedPair(pos, pos);
+            brancher.addPixel(x);
+            x++;
         }
         
     }
+    
+    m_branchers.push_back(brancher);
+    AppManager::getInstance().getUdpManager().setupConnection(brancher.getId());
 }
 
 bool LedsManager::addLedPair(string& pathTwoD, string& pathThreeD)

@@ -61,7 +61,7 @@ public:
   
     const string& getIpAddress() const {return m_ip;}
     
-    void setupUdpConnection(unsigned short _id);
+    void setupConnection(unsigned short _id);
     
     void updatePixels();
     
