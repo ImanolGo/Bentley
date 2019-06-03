@@ -83,7 +83,7 @@ void GuiManager::setupGuiParameters()
 
 void GuiManager::setupScenesGui()
 {
-     auto scenesManager = &AppManager::getInstance().getSceneManager();
+    auto scenesManager = &AppManager::getInstance().getSceneManager();
     
     m_scenesGroup.setName("Scenes");
     m_sceneMode.set("Scene", 0);

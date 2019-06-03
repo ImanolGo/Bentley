@@ -188,7 +188,7 @@ void LedsManager::createLedPositions()
 {
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
-    Brancher brancher(86);
+    Brancher brancher(100);
     int x = 0;
     for(int i = 0; i<2; i++){
         for(int j = 0; j<4; j++)
@@ -202,6 +202,7 @@ void LedsManager::createLedPositions()
     }
     
     m_branchers.push_back(brancher);
+    ofLogNotice() <<"LedsManager::createLedPositions -> created brancher:" <<   brancher.getId();
     AppManager::getInstance().getUdpManager().setupConnection(brancher.getId());
 }
 

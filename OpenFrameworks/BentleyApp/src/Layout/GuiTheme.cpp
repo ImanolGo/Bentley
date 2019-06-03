@@ -1,5 +1,6 @@
 #include "GuiTheme.h"
 #include "ofMain.h"
+#include "GuiTheme.h"
 
 
 ofColor getRandomColor()

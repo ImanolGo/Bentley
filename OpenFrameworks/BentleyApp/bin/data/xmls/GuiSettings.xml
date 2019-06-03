@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <group>
-	<Size>3.13</Size>
+	<Streaming>0</Streaming>
+	<Size>20</Size>
 	<VideoPath>C:\Users\imanolgo-pc\Desktop\TestVideos</VideoPath>
 	<Contrast>1</Contrast>
 	<Saturation>1</Saturation>

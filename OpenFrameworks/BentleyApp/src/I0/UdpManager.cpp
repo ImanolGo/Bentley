@@ -43,7 +43,7 @@ void UdpManager::setup()
     this->setupReceiver();
     
     //this->setupUdpConnection(100);
-    this->sendTest();
+   // this->sendTest();
     
     ofLogNotice() <<"UdpManager::initialized" ;
 }
@@ -107,16 +107,22 @@ void UdpManager::setupConnection(unsigned short _id)
     string ip = m_ipRoot + ofToString(int(_id));
     
     int portSend = AppManager::getInstance().getSettingsManager().getUdpPortSend();
-    ofxUDPManager connection;
     
-    if(connection.Connect(ip.c_str(),portSend)){
-        connection.SetNonBlocking(true);
+    ofxUDPSettings settings;
+    settings.sendTo(ip.c_str(),portSend);
+    settings.blocking = true;
+    
+    //ofxUDPManager connection;
+    auto connection = std::make_shared<ofxUDPManager>();
+    
+//connection.Create(); //create the socket
+    if(connection->Setup(settings)){
         m_udpConnections[_id] = connection;
         
-        ofLogNotice() <<"UdpManager::setupConnection -> connection created : id = " << int(_id) << ", ip = " << ip <<",  port = " << portSend;
+        ofLogNotice() <<"UdpManager::setupConnection -> udp socket created : id = " << int(_id) << ", ip = " << ip <<",  port = " << portSend;
     }
     else{
-         ofLogNotice() <<"UdpManager::setupConnection ->unable to create : id = " << int(_id)  << ", ip = " << ip <<",  port = " << portSend;
+         ofLogNotice() <<"UdpManager::setupConnection ->unable to create udp socket : id = " << int(_id)  << ", ip = " << ip <<",  port = " << portSend;
     }
 
 }
@@ -134,13 +140,13 @@ void UdpManager::setupReceiver()
          ofLogNotice() <<"UdpManager::setupReceiver -> listening to port  " << portReceive;
     }
     
-    if(m_udpConnection.Connect(m_ip.c_str(),portSend))
-    {
-        ofLogNotice() <<"UdpManager::setupReceiver -> sending to " << m_ip << ", port = " << portSend;
-    }
-    else{
-         ofLogNotice() <<"UdpManager::setupReceiver -> could not connect to " << m_ip;
-    }
+//    if(m_udpConnection.Connect(m_ip.c_str(),portSend))
+//    {
+//        ofLogNotice() <<"UdpManager::setupReceiver -> sending to " << m_ip << ", port = " << portSend;
+//    }
+//    else{
+//         ofLogNotice() <<"UdpManager::setupReceiver -> could not connect to " << m_ip;
+//    }
 
     
     m_udpConnection.SetNonBlocking(true);
@@ -195,7 +201,7 @@ void UdpManager::sendTest()
     ofLogNotice() <<"UdpManager::sendTest ";
     
     vector<ofColor> pixels;
-    pixels.push_back(ofColor(0)); pixels.push_back(ofColor(100)); pixels.push_back(ofColor(255));
+    pixels.push_back(ofColor(0)); pixels.push_back(ofColor(127)); pixels.push_back(ofColor(255));
     string message = this->getDataHeader(pixels.size());
     message+=this->getDataPayload(100, 0, pixels.size(), pixels);
     m_udpConnection.Send(message.c_str(), message.length());
@@ -223,8 +229,9 @@ void UdpManager::updatePixels()
     
     for(auto& branch: branches){
         unsigned short id = branch.getId();
+         //ofLogNotice() <<"UdpManager::updatePixels -> brancher " << id;
         if(m_udpConnections.find(id)!=m_udpConnections.end()){
-            
+           // ofLogNotice() <<"UdpManager::updatePixels -> brancher FOUND " << id;
             int bytesPerLed = 3;
             auto& pixels = branch.getPixels();
             unsigned short division = pixels.size()/m_maxNumPixelsPerPacket;
@@ -236,7 +243,7 @@ void UdpManager::updatePixels()
                 
                 string message = this->getDataHeader(m_maxNumPixelsPerPacket);
                 message+=this->getDataPayload(id, offset,m_maxNumPixelsPerPacket,pixels);
-                m_udpConnections[id].Send(message.c_str(), message.length());
+                m_udpConnections[id]->Send(message.c_str(), message.length());
                 offset+=m_maxNumPixelsPerPacket;
             }
             
@@ -244,7 +251,7 @@ void UdpManager::updatePixels()
             {
                 string message = this->getDataHeader(remainder);
                 message+=this->getDataPayload(id, offset,remainder,pixels);
-                m_udpConnections[id].Send(message.c_str(), message.length());
+                m_udpConnections[id]->Send(message.c_str(), message.length());
             }
         }
     }
@@ -334,10 +341,10 @@ void UdpManager::updateTime()
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     
     for(auto& udpConnection: m_udpConnections){
-        udpConnection.second.Send(message.c_str(),message.length());
+        udpConnection.second->Send(message.c_str(),message.length());
     }
     
-    m_udpConnection.Send(message.c_str(),message.length());
+    //m_udpConnection.Send(message.c_str(),message.length());
     
     m_frameNumber++;
 }

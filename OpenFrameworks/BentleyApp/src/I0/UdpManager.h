@@ -97,7 +97,7 @@ private:
     
 private:
     
-    typedef std::map< unsigned short, ofxUDPManager > UdpConnectionMap;
+    typedef std::map< unsigned short, shared_ptr<ofxUDPManager> > UdpConnectionMap;
     
     UdpConnectionMap m_udpConnections;
     ofxUDPManager   m_udpConnection;
