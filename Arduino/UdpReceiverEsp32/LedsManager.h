@@ -11,19 +11,9 @@
 #include "Arduino.h"
 #include "FastLED.h"
 #include "WiFiManager.h"
+#include "Config.h"
 
-#define LED_TYPE    WS2812B
-#define COLOR_ORDER GRB
-#define NUM_CHANNELS 8
-#define NUM_LEDS 300
-#define MAX_BRIGHTNESS 100
-#define TEST_DELAY 500
-#define FPS_CHECK_TIME_MS 2000
-
-constexpr int data_pins[NUM_CHANNELS] = {0,2,4,5,13,14,15,16};
-
-
-const byte channelwidth = 3; //3 channels per pixel
+#define DATA_PIN  5
 
 
 class LedsManager{
@@ -35,18 +25,16 @@ class LedsManager{
     void setup();
     void update();
 
-    void parseRGBReceived(unsigned char* pbuff, int count);
+    void parseRGBReceived(unsigned char* pbuff, int packetSize);
     void setAllColor(CRGB color);
+    void show();
     
   private:
 
     void setupLeds();
     void initTest();
     void checkFps();
-
-    //int data_pins[NUM_CHANNELS];
-    //int clock_pins[NUM_CHANNELS];
-    CRGB leds[NUM_CHANNELS][NUM_LEDS];
+    CRGB leds[NUM_LEDS];
     
 };
 
@@ -66,16 +54,7 @@ void LedsManager::setup()
 void LedsManager::setupLeds()
 {
 
-    FastLED.addLeds<LED_TYPE,data_pins[0], COLOR_ORDER>(leds[0], NUM_LEDS);
-    FastLED.addLeds<LED_TYPE,data_pins[1], COLOR_ORDER>(leds[1], NUM_LEDS);
-    FastLED.addLeds<LED_TYPE,data_pins[2], COLOR_ORDER>(leds[2], NUM_LEDS);
-    FastLED.addLeds<LED_TYPE,data_pins[3], COLOR_ORDER>(leds[3], NUM_LEDS);
-    FastLED.addLeds<LED_TYPE,data_pins[4], COLOR_ORDER>(leds[4], NUM_LEDS);
-    FastLED.addLeds<LED_TYPE,data_pins[5], COLOR_ORDER>(leds[5], NUM_LEDS);
-    FastLED.addLeds<LED_TYPE,data_pins[6], COLOR_ORDER>(leds[6], NUM_LEDS);
-    FastLED.addLeds<LED_TYPE,data_pins[7], COLOR_ORDER>(leds[7], NUM_LEDS);
-
- 
+   FastLED.addLeds<LED_TYPE,DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
    FastLED.setMaxPowerInVoltsAndMilliamps (5, 2100);
    //FastLED.setDither( 0 );
    FastLED.clear();  
@@ -88,46 +67,48 @@ void LedsManager::update()
     this->checkFps();
 }
 
-void LedsManager::parseRGBReceived(unsigned char* pbuff, int count) 
+void LedsManager::parseRGBReceived(unsigned char* pbuff, int packetSize) 
 {
-  //DEBUG_PRINT_LN ("DMX Packet Received");
-  int output_channel = pbuff[6];
-  int numLeds = count/channelwidth;
 
-//  Serial.print("LedsManager::parseRGBReceived -> outputChannel: ");
-//  Serial.println(output_channel);
-//
-//  Serial.print("LedsManager::parseRGBReceived -> numLeds: ");
-//  Serial.println(numLeds);
+  if(packetSize<HEADER_SIZE+DATA_HEADER_SIZE)
+      return;
+  
+  unsigned short index = HEADER_SIZE;
+  unsigned short frame_num = ByteToShort(pbuff[index++], pbuff[index++]);
+  unsigned short tile_id = ByteToShort(pbuff[index++], pbuff[index++]);
+  unsigned long offset = ByteToLong(pbuff[index++], pbuff[index++],pbuff[index++], pbuff[index++]);
+  unsigned short size_ = ByteToShort(pbuff[index++], pbuff[index++]);
 
-   if(output_channel < 0 || output_channel>= NUM_CHANNELS){
-    return;
+  int data_bytes = CHANNEL_WIDTH*size_;
+  
+  if(packetSize == HEADER_SIZE+DATA_HEADER_SIZE + data_bytes)
+  {
+      int start_index = offset;
+      int end_index = start_index + size_;
+      if(end_index > NUM_LEDS){
+         end_index = NUM_LEDS;
+      }
+
+      int channel = HEADER_SIZE+DATA_HEADER_SIZE; 
+      for (int i = offset; i < end_index; i++) //loop to assign 3 channels to each pixel
+      {
+          leds[i] = CRGB(pbuff[channel++], pbuff[channel++], pbuff[channel++]);
+      }
+
+      
   }
-  
-  if(numLeds > NUM_LEDS){
-     numLeds = NUM_LEDS;
-  }
+      
+  //FastLED.show(); //send data to pixels
+}
 
- 
-    int channel = 0; //reset RGB channel assignment to 0 each time through loop.
-    for (int i = 0; i < numLeds; i++) //loop to assign 3 channels to each pixel
-    {
-        leds[output_channel][i] = CRGB(pbuff[HEADER_SIZE + channel], pbuff[HEADER_SIZE + (channel +1)], pbuff[HEADER_SIZE + (channel +2)]);
-        channel +=channelwidth; //increase last channel number by channel width
-    }
-  
-  //adjust_gamma();
-  
-  FastLED.show(); //send data to pixels
+void LedsManager::show()
+{
+    FastLED.show(); //send data to pixels
 }
 
 void LedsManager::setAllColor(CRGB color) 
 {
-  for(int i=0; i<NUM_CHANNELS; i++)
-  {
-     fill_solid(leds[i],NUM_LEDS, color);
-  }
- 
+  fill_solid(leds,NUM_LEDS, color);
   FastLED.show();
 }
 

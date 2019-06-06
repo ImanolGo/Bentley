@@ -13,27 +13,18 @@
 
 #pragma once
 #include "Arduino.h"
+#include "Config.h"
 #include <WiFi.h>
 #include <WiFiUdp.h>
-//#include <WiFiMulti.h>
 #include "LedsManager.h"
 
-
-#define BUFFER_MAX 1024
-#define PACKET_SIZE 4
-#define DISCOVERY_TIMER 3000
-#define WIFI_TIMEOUT 3000              // checks WiFi every ...ms. Reset after this time, if WiFi cannot reconnect.
-#define NO_DATA_TIMEOUT 10000         // sends autodiscovery if no data is coming after timeout
-#define LOCAL_PORT 7000 
-#define DISCOVERY_PORT 2390
-#define SEND_PORT 7001 
 
 
 //The udp library class
 WiFiUDP UdpReceive;
-WiFiUDP UdpDiscovery;
 
 bool wifiConnected = false;
+
 
 class WifiManager
 {
@@ -58,25 +49,17 @@ class WifiManager
     void connectToWiFi(const char * ssid, const char * pwd);
     void connectWifi();
     void checkWifiConnection();
-    void sendAutodiscovery();
-    void noReceive();
 
-    int checkProtocolHeaders(const unsigned char* messagein, int messagelength);
-    int BtoI(byte a, byte b);
+    bool parseHeader(const unsigned char* messagein, int messagelength, unsigned short& port_);
 
     String ssid;
     String pass;
     bool is_connected;
-    unsigned long autodiscovery_timer;
-    unsigned long no_data_timer;
 
     //WiFiUDP Udp;
     unsigned char packetBuffer[BUFFER_MAX];
     int receivedUdpLength;
 
-    char PACKET_START;
-    char AUTO_DISCOVERY_COMMAND;
-    char PACKET_END;
   
 };
 
@@ -85,21 +68,15 @@ WifiManager::WifiManager(LedsManager* ledsManager)
 {
     this->ledsManager=ledsManager;
     
-//    ssid = "TPH Operations";
-//    pass = "TheFUTURE!Sno3";
-
     ssid = "Don't worry, be happy!";
     pass = "whyistheskysohigh?";
 
 //    ssid     =  "TP-LINK_54E4";
 //    pass = "27155332";
 
-
     wifiConnected = false;
 
     receivedUdpLength = 0;
-    autodiscovery_timer =  millis();
-    no_data_timer =  millis();
     is_connected = false;
 }
 
@@ -115,13 +92,10 @@ void WifiManager::initializeWifi()
   
     UdpReceive.stop();
     UdpReceive.flush();
-    UdpDiscovery.stop();
-    UdpDiscovery.flush();
-  
 
+  
     Serial.println("WifiManager::connect wifi");
     connectToWiFi(ssid.c_str(), pass.c_str());
-    //connectWifi();
 }
 
 
@@ -177,113 +151,70 @@ void WifiManager::connectWifi() {
     //connected = true;
 }
 
-//
-//void WifiManager::connectWifi() {
-//     // attempt to connect to WiFi network:
-//   //Serial.print("Attempting to connect to SSID: ");
-//   //Serial.println(ssid);
-//   WiFi.begin(ssid.c_str(), pass.c_str());
-//
-//    unsigned long connect_start = millis();
-//    while(WiFi.status() != WL_CONNECTED) {
-//      delay(500);
-//      Serial.print(".");
-//  
-//      if(millis() - connect_start > WIFI_TIMEOUT) {
-//        Serial.println();
-//        Serial.print("Tried ");
-//        Serial.print(WIFI_TIMEOUT);
-//        Serial.print("ms. Resetting ESP now.");
-//        ESP.reset();
-//      }
-//    }
-// 
-//   Serial.print("\nConnected to SSID: ");
-//   Serial.println(ssid);
-//
-//   Serial.println("IP address: ");
-//   Serial.println(WiFi.localIP());
-//  
-//    Serial.print("\nStarting connection to UDP port ");
-//    Serial.println(localPort);
-//    // if you get a connection, report back via serial:
-//    Udp.begin(localPort);
-//    Udp.flush();
-//
-//    connected = true;
-//}
-
-
 
 void WifiManager::update()
 {
     parseUdp();
-    sendAutodiscovery();
-    noReceive();
 }
 
 
 void WifiManager::parseUdp()
 {
-  // if there's data available, read a packet
-  int packetSize = UdpReceive.parsePacket();
-  if (packetSize)
-  {   
-      //Serial.print("WifiManager::New Message: Size -> ");
-      //Serial.println(packetSize);
-      UdpReceive.read(packetBuffer,BUFFER_MAX); //read UDP packet
-      int count = checkProtocolHeaders(packetBuffer, packetSize);
-      //Serial.println(count);
-      if (count) 
-      {     
-             //Serial.println(packetBuffer[5]);
-            if(packetBuffer[5] == 'd'){
-              no_data_timer =  millis();
-              this->ledsManager->parseRGBReceived(packetBuffer, count); //process data function
+     // if there's data available, read a packet
+    int packetSize = UdpReceive.parsePacket();
+    if (packetSize)
+    {   
+        //Serial.print("WifiManager::New Message: Size -> ");
+        //Serial.println(packetSize);
+        UdpReceive.read(packetBuffer,BUFFER_MAX); //read UDP packet
+        unsigned short port;;
+        
+        if(parseHeader(packetBuffer, packetSize, port))
+        {
+            if(port == DATA_PORT)
+            {
+                this->ledsManager->parseRGBReceived(packetBuffer, packetSize); //process data function
             }
-            else if(packetBuffer[5] == 'c'){
-               is_connected = true;
-               Serial.println("WifiManager::parseUdp-> Device Connected!!!");
-               no_data_timer =  millis();
-               // if you get a connection, report back via serial:
-//               Udp.begin(LOCAL_PORT);
-//               Udp.flush();
+            else if(port == TIME_PORT)
+            {
+                this->ledsManager->show();
             }
-           
-           
-              
-      }
-  }
+        }
+  
+    }
 }
 
 
 
-int WifiManager::checkProtocolHeaders(const unsigned char* messagein, int messagelength) {
+bool WifiManager::parseHeader(const unsigned char* messagein, int messagelength, unsigned short& port_) {
 
+  if(messagelength < 32){
+      return false;
+  }
+
+  unsigned short index = 0;
+  unsigned long mnudp_ver = ByteToLong(messagein[index++], messagein[index++],messagein[index++],messagein[index++]);
+  unsigned long mncore_ver = ByteToLong(messagein[index++], messagein[index++],messagein[index++],messagein[index++]);
+  unsigned long origin = ByteToLong(messagein[index++], messagein[index++],messagein[index++],messagein[index++]);
+  unsigned long mbc_hash = ByteToLong(messagein[index++], messagein[index++],messagein[index++],messagein[index++]);
+  unsigned long packet_id = ByteToLong(messagein[index++], messagein[index++],messagein[index++],messagein[index++]);
+  unsigned long response_time = ByteToLong(messagein[index++], messagein[index++],messagein[index++],messagein[index++]);
+  unsigned long endpoint_id = ByteToLong(messagein[index++], messagein[index++],messagein[index++],messagein[index++]);
   
-  if ( messagein[0] == 0x10 && messagein[1] == 0x41 && messagein[2] == 0x37) { 
-      // 0x41 = 'A'
-      // 0x37 = '7'
-     //DEBUG_PRINT("Data Size: ");
-      int data_size = BtoI((byte)messagein[3],(byte)messagein[4]); // number of values plus start code
-
-//      Serial.println("WifiManager::checkProtocolHeaders: Data Bytes -> ");
-//      Serial.println(messagein[3]);
-//      Serial.println(messagein[4]);
-      
-     // messagein[3] * 256 + messagein[4]; // number of values plus start code
-     //DEBUG_PRINT_LN(data_size);
-      //DEBUG_PRINT_LN(messagelength-HEADER_SIZE);
-
-//      Serial.print("WifiManager::checkProtocolHeaders: Data Size -> ");
-//      Serial.println(data_size);
-      if ( (messagelength-HEADER_SIZE) == data_size ) 
+  unsigned short port =  ByteToShort(messagein[index++], messagein[index++]);
+  unsigned short payload_size =  ByteToShort(messagein[index++], messagein[index++]);
+  
+  if ( mnudp_ver == MNUDP_VER && mncore_ver == MNCORE_VER && origin == ORIGIN) 
+  { 
+      if( messagelength - HEADER_SIZE == payload_size)
       {
-        return data_size; //Return how many values are in the packet.
+        port_ = port;
+        return true;
       }
-        
-    }
-  return 0;
+      
+   }
+    
+  return false;
 }
 
 void WifiManager::connectToWiFi(const char * ssid, const char * pwd){
@@ -327,7 +258,6 @@ void WifiManager::WiFiEvent(WiFiEvent_t event){
           //initializes the UDP state
           //This initializes the transfer buffer
           UdpReceive.begin(LOCAL_PORT);
-          UdpDiscovery.begin(DISCOVERY_PORT);
           Serial.print("Listening to port: ");
           Serial.println(WiFi.localIP(), LOCAL_PORT); 
           wifiConnected = true;
@@ -340,58 +270,4 @@ void WifiManager::WiFiEvent(WiFiEvent_t event){
           //software_Reset();
           break;
     }
-}
-
-
-void WifiManager::sendAutodiscovery()
-{
-  //if(is_connected || !wifiConnected) return;
-
-  if (!wifiConnected) return;
-
-  if(is_connected) return;
-
-  if( millis() - autodiscovery_timer > DISCOVERY_TIMER)
-  {
-      IPAddress ip = WiFi.localIP();
-      ip[3] = 255;
-
-      int packetLength = 7;
-      char bffr[packetLength];
-      bffr[0] = 0x10;
-      bffr[1] = 0x41;
-      bffr[2] = 0x37;
-      bffr[3] = 0;
-      bffr[4] = 0;
-      bffr[5] = 'c';
-      bffr[6] = 0;
-      
-      // transmit broadcast package
-   
-      UdpDiscovery.beginPacket(ip, SEND_PORT);
-      UdpDiscovery.write((uint8_t *)bffr,packetLength);
-      UdpDiscovery.endPacket();
-
-      Serial.println("WifiManager::Autodiscovery sent!");
-      autodiscovery_timer = millis();
-  }
-}
-
-void WifiManager::noReceive()
-{
-    if((millis() - no_data_timer) > NO_DATA_TIMEOUT) //is the time since the counter changed greater than 5 seconds?
-    {
-       Serial.println("WifiManager::No received Data!!");
-       this->ledsManager->setAllColor(CRGB::Black);
-        no_data_timer =  millis();
-        //autodiscovery_timer = millis();
-        is_connected = false;
-    }
-    
-}
-
-
-int WifiManager::BtoI(byte a, byte b)
-{
-  return (a<<8)+b;
 }

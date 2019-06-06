@@ -188,7 +188,7 @@ void LedsManager::createLedPositions()
 {
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
-    Brancher brancher(100);
+    Brancher brancher(78);
     int x = 0;
     for(int i = 0; i<2; i++){
         for(int j = 0; j<4; j++)
