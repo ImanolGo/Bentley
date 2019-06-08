@@ -13,7 +13,7 @@
 #include "WiFiManager.h"
 #include "Config.h"
 
-#define DATA_PIN  5
+
 
 
 class LedsManager{
@@ -54,7 +54,7 @@ void LedsManager::setup()
 void LedsManager::setupLeds()
 {
 
-   FastLED.addLeds<LED_TYPE,DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+   FastLED.addLeds<LED_TYPE,DATA_PIN_, COLOR_ORDER>(leds, NUM_LEDS);
    FastLED.setMaxPowerInVoltsAndMilliamps (5, 2100);
    //FastLED.setDither( 0 );
    FastLED.clear();  

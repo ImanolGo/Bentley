@@ -23,12 +23,14 @@
 
 #define LED_TYPE  WS2812B
 #define COLOR_ORDER GRB
+#define DATA_PIN_  5
 #define NUM_CHANNELS 1
 #define NUM_LEDS 50
 #define MAX_BRIGHTNESS 255
 #define TEST_DELAY 500
 #define FPS_CHECK_TIME_MS 2000
 #define CHANNEL_WIDTH 3
+
 
 
 /*************************************************************************
