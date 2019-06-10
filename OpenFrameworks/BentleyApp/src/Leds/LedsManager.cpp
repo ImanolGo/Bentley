@@ -783,7 +783,10 @@ void LedsManager::setBCB(int& value)
 void LedsManager::timerCompleteHandler( int &args )
 {
     m_timer.start(false);
-    AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
+    bool isStreaming =  AppManager::getInstance().getUdpManager().getIsStreaming();
+    if(isStreaming){
+        AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
+    }
 }
 
 

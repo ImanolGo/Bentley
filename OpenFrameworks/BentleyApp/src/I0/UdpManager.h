@@ -71,6 +71,8 @@ public:
     
     void sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb);
     
+    bool getIsStreaming() const {return m_streaming;}
+    
 private:
     
     void setupHeaders();
