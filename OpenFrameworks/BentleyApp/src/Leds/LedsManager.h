@@ -110,7 +110,7 @@ class LedsManager: public Manager
     
         void  centre3DLeds();
     
-        void  centre2DLeds();
+        void  centre2DLeds(float margin_percentage);
     
         bool loadSubfolder(ofDirectory& dir);
     

@@ -199,17 +199,28 @@ void LedsManager::createLedPositions()
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
     Brancher brancher(20);
+//    int x = 0;
+//    for(int i = 0; i<2; i++){
+//        for(int j = 0; j<4; j++)
+//        {
+//            ofPoint pos (j,i) ;
+//            createLedPair(pos, pos);
+//            brancher.addPixel(x);
+//            x++;
+//        }
+//
+//    }
+    
     int x = 0;
-    for(int i = 0; i<2; i++){
-        for(int j = 0; j<4; j++)
-        {
-            ofPoint pos (j,i) ;
-            createLedPair(pos, pos);
-            brancher.addPixel(x);
-            x++;
-        }
-        
+    int num_pixels = 1000;
+    for(int i = 0; i<num_pixels; i++)
+    {
+        ofPoint pos (i,100);
+        createLedPair(pos, pos);
+        brancher.addPixel(x);
+        x++;
     }
+
     
     m_branchers.push_back(brancher);
     ofLogNotice() <<"LedsManager::createLedPositions -> created brancher:" <<   brancher.getId();
@@ -338,7 +349,7 @@ void LedsManager::normalize3DLeds()
 
 void LedsManager::centreLeds()
 {
-    this->centre2DLeds();
+    this->centre2DLeds(0);
     this->centre3DLeds();
 }
 
@@ -400,7 +411,7 @@ void LedsManager::centre3DLeds()
 }
 
 
-void LedsManager::centre2DLeds()
+void LedsManager::centre2DLeds(float margin_percentage)
 {
     
     bool firstIteration = true;
@@ -432,6 +443,16 @@ void LedsManager::centre2DLeds()
         
     }
     
+    if(m_maxPos.x == m_minPos.x){
+        m_maxPos.x +=1;
+        m_minPos.x -=1;
+    }
+    
+    if(m_maxPos.y == m_minPos.y){
+        m_maxPos.y +=1;
+        m_minPos.y -=1;
+    }
+    
     
     ofLogNotice() <<"LedsManager::centreLeds -> min position: x = "  << m_minPos.x << ", y = "  << m_minPos.y ;
     ofLogNotice() <<"LedsManager::centreLeds -> max position: x = "  << m_maxPos.x << ", y = "  << m_maxPos.y;
@@ -456,7 +477,8 @@ void LedsManager::centre2DLeds()
         max = max_x;
     }
     
-    float margin = max/20;
+    float margin = max*margin_percentage/100.0;
+    
     m_maxPos.x+=margin;
     m_maxPos.y+=margin;
     m_minPos.x-=margin;

@@ -17,7 +17,7 @@ TestScene::TestScene(): ofxScene("Test"), m_initialized(false)
 
 TestScene::~TestScene()
 {
-    m_videoPlayer.close();
+    //Intentionally left empty
 }
 
 
@@ -28,84 +28,39 @@ void TestScene::setup() {
     }
     
     ofLogNotice("TestScene::::setup");
-    this->setupVideo();
+    this->setupImage();
     
     m_initialized = true;
     
 }
 
-void TestScene::setupVideo()
+void TestScene::setupImage()
 {
-    auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoResourcesPath();
-    
-
-    string path = "videos/TestVideo.mov";
-    if( ofFile::doesFileExist("../Resources/data", false) ){
-        ofDisableDataPath();
-        path = "data/videos/TestVideo.mov";
-        ofDirectory dir(path);
-        path = dir.getAbsolutePath();
-    }
-    
-    
-    if(m_videoPlayer.load(path)){
-         m_videoPlayer.setLoopState(OF_LOOP_NORMAL);
-         m_videoPlayer.play();
-         ofLogNotice() << "TestScene::setupVideo-> Loaded " << path;
-    }
-    else{
-        ofLogNotice() <<"TestScene::setupVideo-> Cannot find: " << path;
-    }
-    
-    if( ofFile::doesFileExist("../Resources/data", false) ){
-        ofEnableDataPath();
-    }
-    
-   
+    m_image.load("images/general/color_spectrum.png");
 }
 
 
 void TestScene::update()
 {
-    this->updateVideo();
-}
-
-void TestScene::updateVideo()
-{
-    if(m_videoPlayer.isLoaded())
-    {
-        m_videoPlayer.update();
-    }
+    //Intentioanlly empty
 }
 
 void TestScene::draw()
 {
     ofBackground(0,0,0);
-    this->drawVideo();
+    this->drawImage();
 }
 
-void TestScene::drawVideo()
+void TestScene::drawImage()
 {
-    if(m_videoPlayer.isInitialized() && m_videoPlayer.isLoaded())
-    {
-        
-        float width = AppManager::getInstance().getSettingsManager().getAppWidth();
-        float height = AppManager::getInstance().getSettingsManager().getAppHeight();
-        
-        m_videoPlayer.draw(0,0,width,height);
-    }
-    
+    float width = AppManager::getInstance().getSettingsManager().getAppWidth();
+    float height = AppManager::getInstance().getSettingsManager().getAppHeight();
+    m_image.draw(0,0,width,height);
+
 }
 
 void TestScene::willFadeIn() {
      ofLogNotice("TestScene::willFadeIn");
-    
-    if(m_videoPlayer.isLoaded())
-    {
-        ofLogNotice("TestScene::willFadeIn -> PLAY");
-        m_videoPlayer.setFrame(0);
-        m_videoPlayer.play();
-    }
 }
 
 void TestScene::willDraw() {
@@ -117,9 +72,4 @@ void TestScene::willFadeOut() {
 }
 
 void TestScene::willExit() {
-    if(m_videoPlayer.isLoaded())
-    {
-        ofLogNotice("TestScene::willFadeIn -> STOP");
-        m_videoPlayer.stop();
-    }
 }

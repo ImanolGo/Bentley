@@ -43,16 +43,14 @@ public:
     
 private:
     
-    void setupVideo();
+    void setupImage();
     
-    void updateVideo();
-    
-    void drawVideo();
+    void drawImage();
     
 private:
     
     
-    ofVideoPlayer 	m_videoPlayer;
+    ofImage 	    m_image;
     bool            m_initialized;
 
 };
