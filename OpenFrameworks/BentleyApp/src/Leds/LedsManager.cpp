@@ -39,6 +39,7 @@ void LedsManager::setup()
     
     this->setupLeds();
     this->setupShader();
+    this->setupTimer();
     
     ofLogNotice() <<"LedsManager::initialized" ;
     
@@ -54,6 +55,15 @@ void LedsManager::setupLeds()
     
     m_meshModel.save("leds/test.ply");
 }
+
+void LedsManager::setupTimer()
+{
+    m_timer.setup( 1000 );
+    
+    m_timer.start( false ) ;
+    ofAddListener( m_timer.TIMER_COMPLETE , this, &LedsManager::timerCompleteHandler ) ;
+}
+
 
 bool LedsManager::readLeds()
 {
@@ -506,12 +516,20 @@ void LedsManager::removeCharsFromString( string &str, char* charsToRemove ) {
 
 void LedsManager::update()
 {
+    this->updateLeds();
+    m_timer.update();
+       
+}
+
+
+void LedsManager::updateLeds()
+{
     if(m_isNewFrame){
-         m_isNewFrame = false;
+        m_isNewFrame = false;
         this->updateBranches();
         AppManager::getInstance().getUdpManager().updatePixels();
     }
-       
+    
 }
 
 void LedsManager::updateBranches()
@@ -739,6 +757,12 @@ void LedsManager::setBCB(int& value)
     AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
 }
 
+
+void LedsManager::timerCompleteHandler( int &args )
+{
+    m_timer.start(false);
+    AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
+}
 
 
 

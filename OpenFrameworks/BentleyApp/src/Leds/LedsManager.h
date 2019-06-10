@@ -12,6 +12,7 @@
 
 #include "Manager.h"
 #include "Brancher.h"
+#include "ofxSimpleTimer.h"
 
 //========================== class LedsManager ==============================
 //============================================================================
@@ -71,9 +72,13 @@ class LedsManager: public Manager
     
         void setLedBrightness(float& value){m_ledsBrightness = value;}
     
+        void timerCompleteHandler( int &args ) ;
+    
     private:
     
         void setupLeds();
+    
+        void setupTimer();
     
         void createLayout();
     
@@ -88,6 +93,8 @@ class LedsManager: public Manager
         void setupShader();
     
         void updateBranches();
+    
+        void updateLeds();
     
         void createLedPositions();
     
@@ -145,6 +152,8 @@ class LedsManager: public Manager
         ofShader m_maskShader;
         ofTexture m_texture;
         ofTexture m_textureModel;
+        ofxSimpleTimer  m_timer;
+    
     
         vector <ofVec3f> m_points3D;
         vector <ofVec3f> m_points2D;

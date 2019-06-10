@@ -352,6 +352,10 @@ void UdpManager::updateTime()
 
 void UdpManager::sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb)
 {
+    if(!m_streaming){
+        return;
+    }
+    
     m_tlcSettingsHeader.packet_id = ++m_packetID;
     
     string message="";
