@@ -199,6 +199,20 @@ void GuiManager::setupLedsGui()
     m_ledsGroup.add(m_ledsSize);
     m_parameters.add(m_ledsSize);
     
+    m_ledsBCR.set("BCR", 10, 0, 127);
+    m_ledsBCR.addListener(ledsManager, &LedsManager::setBCR);
+    m_ledsGroup.add(m_ledsBCR);
+    m_parameters.add(m_ledsBCR);
+    
+    m_ledsBCG.set("BCG", 10, 0, 127);
+    m_ledsBCG.addListener(ledsManager, &LedsManager::setBCG);
+    m_ledsGroup.add(m_ledsBCG);
+    m_parameters.add(m_ledsBCG);
+    
+    m_ledsBCB.set("BCB", 10, 0, 127);
+    m_ledsBCB.addListener(ledsManager, &LedsManager::setBCB);
+    m_ledsGroup.add(m_ledsBCB);
+    m_parameters.add(m_ledsBCB);
 }
 
 void GuiManager::setupCommunicationsGui()
@@ -292,6 +306,9 @@ void GuiManager::drawGui()
             if (ofxImGui::BeginTree(m_ledsGroup, mainSettings))
             {
                 ofxImGui::AddParameter(m_ledsSize);
+                ofxImGui::AddParameter(m_ledsBCR);
+                ofxImGui::AddParameter(m_ledsBCG);
+                ofxImGui::AddParameter(m_ledsBCB);
                 ofxImGui::EndTree(mainSettings);
             }
 

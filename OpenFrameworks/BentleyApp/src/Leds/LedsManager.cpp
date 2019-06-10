@@ -17,7 +17,7 @@
 const string LedsManager::LEDS_FOLDER_PATH = "leds/";
 
 
-LedsManager::LedsManager(): Manager(), m_isNewFrame(false), m_is3D(true), m_ledsBrightness(1.0), m_offset(100)
+LedsManager::LedsManager(): Manager(), m_isNewFrame(false), m_is3D(true), m_ledsBrightness(1.0), m_offset(100), m_bcr(10), m_bcg(10), m_bcb(10)
 {
 	//Intentionally left empty
 }
@@ -188,7 +188,7 @@ void LedsManager::createLedPositions()
 {
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
-    Brancher brancher(78);
+    Brancher brancher(20);
     int x = 0;
     for(int i = 0; i<2; i++){
         for(int j = 0; j<4; j++)
@@ -719,6 +719,24 @@ bool LedsManager::isValidFile(const string& path)
     }
     
     return true;
+}
+
+void LedsManager::setBCR(int& value)
+{
+     m_bcr = ofClamp(value, 0, 127);
+     AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
+}
+
+void LedsManager::setBCG(int& value)
+{
+    m_bcr = ofClamp(value, 0, 127);
+    AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
+}
+
+void LedsManager::setBCB(int& value)
+{
+    m_bcr = ofClamp(value, 0, 127);
+    AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
 }
 
 

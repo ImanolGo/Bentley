@@ -70,7 +70,7 @@ void UdpManager::setupHeaders()
     m_tlcSettingsHeader.response_time = 0;
     m_tlcSettingsHeader.endpoint_id = 0;
     m_tlcSettingsHeader.port = 9;
-    m_tlcSettingsHeader.payload_size = 0;
+    m_tlcSettingsHeader.payload_size = 4;
     
     m_tileDataHeader.mnudp_ver = 2;
     m_tileDataHeader.mncore_ver = 1;
@@ -347,6 +347,43 @@ void UdpManager::updateTime()
     //m_udpConnection.Send(message.c_str(),message.length());
     
     m_frameNumber++;
+}
+
+
+void UdpManager::sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb)
+{
+    m_tlcSettingsHeader.packet_id = ++m_packetID;
+    
+    string message="";
+    unsigned char * s = (unsigned char*)& m_tlcSettingsHeader.mnudp_ver;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tlcSettingsHeader.mncore_ver;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tlcSettingsHeader.origin;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tlcSettingsHeader.mbc_hash;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tlcSettingsHeader.packet_id;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tlcSettingsHeader.response_time;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tlcSettingsHeader.endpoint_id;
+    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& m_tlcSettingsHeader.port;
+    message+= s[0];  message+= s[1];
+    s = (unsigned char*)& m_tlcSettingsHeader.payload_size;
+    message+= s[0];  message+= s[1];
+    
+    unsigned char global_settings = 2;
+    message+=global_settings;
+    message+=bcr;
+    message+=bcg;
+    message+=bcb;
+    
+    for(auto& udpConnection: m_udpConnections){
+        udpConnection.second->Send(message.c_str(),message.length());
+    }
+
 }
 
 void UdpManager::updateReveivePackage()

@@ -107,6 +107,9 @@ private:
     ofParameter<int>        m_viewMode;
     ofParameter<int>        m_sceneMode;
     ofParameter<float>      m_ledsSize;
+    ofParameter<int>        m_ledsBCR;
+    ofParameter<int>        m_ledsBCG;
+    ofParameter<int>        m_ledsBCB;
     
     ofParameter<bool>       m_streaming;
     

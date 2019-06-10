@@ -63,6 +63,12 @@ class LedsManager: public Manager
     
         void setSize(float& value);
     
+        void setBCR(int& value); 
+    
+        void setBCG(int& value);
+    
+        void setBCB(int& value);
+    
         void setLedBrightness(float& value){m_ledsBrightness = value;}
     
     private:
@@ -148,6 +154,7 @@ class LedsManager: public Manager
         vector <ofFloatColor> m_colorsBlack;
     
         int         m_offset;
+        int         m_bcr, m_bcg, m_bcb; //BC current setting
     
     
 };

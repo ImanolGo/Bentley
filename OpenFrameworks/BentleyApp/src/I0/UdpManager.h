@@ -69,6 +69,8 @@ public:
     
     void nextFrame(){m_nextFrame = true;}
     
+    void sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb);
+    
 private:
     
     void setupHeaders();
