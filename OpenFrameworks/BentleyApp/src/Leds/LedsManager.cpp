@@ -198,7 +198,7 @@ void LedsManager::createLedPositions()
 {
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
-    Brancher brancher(20);
+    Brancher brancher(100);
 //    int x = 0;
 //    for(int i = 0; i<2; i++){
 //        for(int j = 0; j<4; j++)
@@ -769,13 +769,13 @@ void LedsManager::setBCR(int& value)
 
 void LedsManager::setBCG(int& value)
 {
-    m_bcr = ofClamp(value, 0, 127);
+    m_bcg = ofClamp(value, 0, 127);
     AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
 }
 
 void LedsManager::setBCB(int& value)
 {
-    m_bcr = ofClamp(value, 0, 127);
+    m_bcb = ofClamp(value, 0, 127);
     AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
 }
 
