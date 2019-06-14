@@ -15,6 +15,8 @@
 
 
 const string LedsManager::LEDS_FOLDER_PATH = "leds/";
+const string LedsManager::BRANCHERS_FOLDER_PATH = "branchers/";
+
 
 
 LedsManager::LedsManager(): Manager(), m_isNewFrame(false), m_is3D(true), m_ledsBrightness(1.0), m_offset(100), m_bcr(10), m_bcg(10), m_bcb(10)
@@ -49,7 +51,8 @@ void LedsManager::setup()
 void LedsManager::setupLeds()
 {
     //this->readLeds();
-    this->createLedPositions();
+    this->readBranchers();
+    //this->createLedPositions();
     this->arrangeLeds();
     this->createLayout();
     
@@ -65,21 +68,21 @@ void LedsManager::setupTimer()
 }
 
 
-bool LedsManager::readLeds()
+bool LedsManager::readBranchers()
 {
-    
-    ofDirectory dir(LEDS_FOLDER_PATH);
+    ofDirectory dir(BRANCHERS_FOLDER_PATH);
     if( !dir.exists()){
-        ofLogNotice() <<"LedsManager::setupLeds -> Folder not found: " << LEDS_FOLDER_PATH;
+        ofLogNotice() <<"LedsManager::readBranchers -> Folder not found: " << BRANCHERS_FOLDER_PATH;
         return false;
     }
     
     dir.listDir();
+    dir.sort();
     
-    ofLogNotice() <<"LedsManager::directory size: " << dir.size();
+    ofLogNotice() <<"LedsManager::readBranchers-> directory size: " << dir.size();
     
     
-    this->clearLeds();
+    this->clearAll();
     
     for(int i = 0; i < dir.size(); i++)
     {
@@ -87,7 +90,35 @@ bool LedsManager::readLeds()
         ofDirectory dirAux(pathAux);
         dirAux.listDir();
         dirAux.sort();
-        this->loadSubfolder(dirAux);
+        this->loadBrancherSubfolder(dirAux);
+    }
+    
+    return true;
+}
+
+bool LedsManager::readLeds()
+{
+    
+    ofDirectory dir(LEDS_FOLDER_PATH);
+    if( !dir.exists()){
+        ofLogNotice() <<"LedsManager::readLeds -> Folder not found: " << LEDS_FOLDER_PATH;
+        return false;
+    }
+    
+    dir.listDir();
+    
+    ofLogNotice() <<"LedsManager::readLeds-< directory size: " << dir.size();
+    
+    
+    this->clearAll();
+    
+    for(int i = 0; i < dir.size(); i++)
+    {
+        string pathAux =  dir.getPath(i);
+        ofDirectory dirAux(pathAux);
+        dirAux.listDir();
+        dirAux.sort();
+        this->loadLedSubfolder(dirAux);
     }
 
     return true;
@@ -198,7 +229,9 @@ void LedsManager::createLedPositions()
 {
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
-    Brancher brancher(100);
+    
+    auto brancher = this->createBrancher(100);
+    
 //    int x = 0;
 //    for(int i = 0; i<2; i++){
 //        for(int j = 0; j<4; j++)
@@ -216,17 +249,71 @@ void LedsManager::createLedPositions()
     for(int i = 0; i<num_pixels; i++)
     {
         ofPoint pos (i,100);
-        createLedPair(pos, pos);
-        brancher.addPixel(x);
+        int size  = this->createLedPair(pos, pos);
+        //brancher->addPixel(x);
+        brancher->addPixel(size-1);
         x++;
     }
 
     
-    m_branchers.push_back(brancher);
-    ofLogNotice() <<"LedsManager::createLedPositions -> created brancher:" <<   brancher.getId();
-    AppManager::getInstance().getUdpManager().setupConnection(brancher.getId());
+    ofLogNotice() <<"LedsManager::createLedPositions -> created brancher:" <<   brancher->getId();
 }
 
+shared_ptr<Brancher> LedsManager::createBrancher( unsigned short _id)
+{
+    if(m_branchers.find(_id) != m_branchers.end()){
+        return m_branchers[_id];
+    }
+    
+    auto brancher = make_shared<Brancher>(_id);
+    AppManager::getInstance().getUdpManager().setupConnection(brancher->getId());
+    m_branchers[_id] = brancher;
+    
+    ofLogNotice() <<"LedsManager::createBrancher -> created brancher:" <<   brancher->getId();
+    
+    return brancher;
+   
+}
+
+bool LedsManager::addBrancherPair(string& pathTwoD, string& pathThreeD, shared_ptr<Brancher> brancher)
+{
+    ofBuffer buffer2D = ofBufferFromFile(pathTwoD);
+    ofBuffer buffer3D = ofBufferFromFile(pathThreeD);
+    
+    ofLogNotice() <<"LedsManager::addBrancherPair -> buffer2D: " << pathTwoD ;
+    ofLogNotice() <<"LedsManager::addBrancherPair -> buffer3D: " << pathThreeD ;
+    
+    if(buffer2D.size()== 0 || buffer2D.size()== 0){
+        ofLogNotice() <<"LedsManager::addLedPair -> zero buffer size" ;
+        return false;
+    }
+    
+    ofBuffer::Line it2d = buffer2D.getLines().begin();
+    ofBuffer::Line it3d = buffer3D.getLines().begin();
+    
+    ofPoint ledPosition2D;
+    ofPoint ledPosition3D;
+    int id = 0;
+    
+    while(it2d != buffer2D.getLines().end() ||  it3d != buffer3D.getLines().end()){
+        
+        string line2D = *it2d;
+        string line3D = *it3d;
+        
+        if(!line2D.empty() && parseBrancherLine(line2D,ledPosition2D) &&  !line3D.empty() && parseBrancherLine(line3D,ledPosition3D))
+        {
+            int size = this->createLedPair(ledPosition2D, ledPosition3D);
+            brancher->addPixel(size-1);
+        }
+        
+        ++it2d; ++it3d;
+        id++;
+    }
+    
+    ofLogNotice() <<"LedsManager::addBrancherPair -> brancher size : " << brancher->getPixels().size();
+    
+    return true;
+}
 bool LedsManager::addLedPair(string& pathTwoD, string& pathThreeD)
 {
     ofBuffer buffer2D = ofBufferFromFile(pathTwoD);
@@ -265,7 +352,7 @@ bool LedsManager::addLedPair(string& pathTwoD, string& pathThreeD)
     
 }
 
-void LedsManager::createLedPair(const ofPoint& position2D,const ofPoint& position3D)
+int LedsManager::createLedPair(const ofPoint& position2D,const ofPoint& position3D)
 {
     float size = AppManager::getInstance().getGuiManager().getLedsSize();
     
@@ -276,6 +363,8 @@ void LedsManager::createLedPair(const ofPoint& position2D,const ofPoint& positio
     m_colors.push_back(ofFloatColor(0,0,0));
     m_colorsBlack.push_back(ofFloatColor(255,255,255));
     m_meshModel.addVertex(position3D);
+    
+    return m_colors.size();
 }
 
 
@@ -349,7 +438,7 @@ void LedsManager::normalize3DLeds()
 
 void LedsManager::centreLeds()
 {
-    this->centre2DLeds(0);
+    this->centre2DLeds(5);
     this->centre3DLeds();
 }
 
@@ -457,18 +546,6 @@ void LedsManager::centre2DLeds(float margin_percentage)
     ofLogNotice() <<"LedsManager::centreLeds -> min position: x = "  << m_minPos.x << ", y = "  << m_minPos.y ;
     ofLogNotice() <<"LedsManager::centreLeds -> max position: x = "  << m_maxPos.x << ", y = "  << m_maxPos.y;
     
-    ofPoint shift = m_minPos;
-    
-    ofLogNotice() <<"LedsManager::centreLeds -> shift position: x = "  << shift.x << ", y = "  << shift.y << ", z = " << shift.z ;
-    
-    for (auto& position: m_points2D)
-    {
-        position-=shift;
-    }
-    
-    m_maxPos -=shift;
-    m_minPos -=shift;
-    
     //Add margin
     float max_x = abs(m_maxPos.x - m_minPos.x);
     float max_y = abs(m_maxPos.y - m_minPos.y);
@@ -483,6 +560,23 @@ void LedsManager::centre2DLeds(float margin_percentage)
     m_maxPos.y+=margin;
     m_minPos.x-=margin;
     m_minPos.y-=margin;
+    
+    ofPoint shift = m_minPos;
+
+    ofLogNotice() <<"LedsManager::centreLeds -> shift position: x = "  << shift.x << ", y = "  << shift.y << ", z = " << shift.z ;
+
+    for (auto& position: m_points2D)
+    {
+        position-=shift;
+    }
+
+    m_maxPos -=shift;
+    m_minPos -=shift;
+
+    
+
+    ofLogNotice() <<"LedsManager::centreLeds -> min position: x = "  << m_minPos.x << ", y = "  << m_minPos.y ;
+    ofLogNotice() <<"LedsManager::centreLeds -> max position: x = "  << m_maxPos.x << ", y = "  << m_maxPos.y;
 }
 
 
@@ -502,6 +596,34 @@ void LedsManager::createLed(const ofPoint& position, int& id)
     m_colors.push_back(ofFloatColor(0,0,0));
     m_colorsBlack.push_back(ofFloatColor(255,255,255));
     
+}
+
+bool LedsManager::parseBrancherLine(string& line, ofPoint& position)
+{
+    if(line.size() == 0){
+        return false;
+    }
+    
+    
+    line = ofSplitString(line, "_").back();
+    char chars[] = "{}";
+    removeCharsFromString(line, chars);
+    
+    //vector <string> strings = ofSplitString(line, ". " );
+    
+    //id = ofToInt(strings[0]);
+    
+    vector <string> positionsStrings = ofSplitString(line, ", " );
+    
+    if(positionsStrings.size()!=3){
+        return false;
+    }
+    
+    position.x = ofToFloat(positionsStrings[0]);
+    position.y = ofToFloat(positionsStrings[1]);
+    position.z = ofToFloat(positionsStrings[2]);
+    
+    return true;
 }
 
 bool LedsManager::parseLedLine(string& line, ofPoint& position)
@@ -557,7 +679,7 @@ void LedsManager::updateLeds()
 void LedsManager::updateBranches()
 {
     for(auto& brancher: m_branchers){
-        brancher.setPixels(m_colors);
+        brancher.second->setPixels(m_colors);
     }
 }
 
@@ -583,8 +705,17 @@ void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
     
     pixelPos.x = ofMap(m_points2D[index].x, m_minPos.x, m_maxPos.x, 0, pixels.getWidth()-1);
     pixelPos.y = ofMap(m_points2D[index].y, m_minPos.y, m_maxPos.y,  pixels.getHeight()-1,0);
+    int x = (int)pixelPos.x;
+    int y = (int)pixelPos.y;
+   
+    auto color = pixels.getColor(x, y);
     
-    auto color = pixels.getColor((int)pixelPos.x, (int)pixelPos.y);
+//    if(index == 20){
+//        ofLogNotice() << "pixelPos.x = " << x;
+//        ofLogNotice() << "pixelPos.y = " << y;
+//        ofLogNotice() << color;
+//    }
+    
     m_colors[index] = ofFloatColor(color.r/255.0f, color.g/255.0f, color.b/255.0f);
 }
 
@@ -661,11 +792,63 @@ void LedsManager::setSize(float& value)
 
 
 
-
-
-bool LedsManager::loadSubfolder(ofDirectory& dir)
+bool LedsManager::loadBrancherSubfolder(ofDirectory& dir)
 {
-     ofLogNotice() <<"LedsManager::loading subfolders ..." ;
+    ofLogNotice() <<"LedsManager::loading brancher subfolders ..." ;
+    //only show txt files
+    // dir.allowExt("txt");
+    //ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Path: " << dir.getAbsolutePath();
+    string path = dir.getAbsolutePath();
+    
+    auto strs = ofSplitString(path, "/");
+    string folder_name = strs.back();
+    
+    //string folder_name = this->getNameFromFolderPath(path);
+    
+    dir.allowExt("CSV");
+    
+    if( dir.listDir() == 0){
+        ofLogNotice() <<"LedsManager::setupLeds -> No led files found in: " << path;
+        return false;
+    }
+    
+    
+    unsigned short id = 100 + ( unsigned short) ofToInt(ofSplitString(folder_name, "_").back());
+    
+    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Path: " << path;
+    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Name: " << folder_name;
+    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Id: " << id;
+    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Size: " << dir.size();
+    
+    string twodfile = "";
+    string threedfile = "";
+    
+    //go through and print out all the paths
+    for(int i = 0; i < dir.size(); i++){
+        string path = dir.getPath(i);
+        if(ofIsStringInString(path, "_2D_")){
+            twodfile = path;
+        }
+        
+        if(ofIsStringInString(path, "_3D_")){
+            threedfile = path;
+        }
+    }
+    
+    
+    if(twodfile.empty() || threedfile.empty()){
+        ofLogNotice()<< "LedsManager::loadLedSubfolder-> No position's pair found ";
+        return false;
+    }
+    
+    
+    return this->loadBrancherPair(twodfile, threedfile, id);
+    
+}
+
+bool LedsManager::loadLedSubfolder(ofDirectory& dir)
+{
+     ofLogNotice() <<"LedsManager::loading led subfolders ..." ;
     //only show txt files
     // dir.allowExt("txt");
      dir.allowExt("CSV");
@@ -675,8 +858,8 @@ bool LedsManager::loadSubfolder(ofDirectory& dir)
         return false;
     }
     
-    ofLogNotice()<< "LedsManager::loadSubfolder-> Path: " << dir.getAbsolutePath();
-    ofLogNotice()<< "LedsManager::loadSubfolder-> Size: " << dir.size();
+    ofLogNotice()<< "LedsManager::loadLedSubfolder-> Path: " << dir.getAbsolutePath();
+    ofLogNotice()<< "LedsManager::loadLedSubfolder-> Size: " << dir.size();
     
     string twodfile = "";
     string threedfile = "";
@@ -695,18 +878,18 @@ bool LedsManager::loadSubfolder(ofDirectory& dir)
     
     
     if(twodfile.empty() || threedfile.empty()){
-        ofLogNotice()<< "LedsManager::loadSubfolder-> No position's pair found ";
+        ofLogNotice()<< "LedsManager::loadLedSubfolder-> No position's pair found ";
         return false;
     }
     
-    return this->loadPair(twodfile, threedfile);
+    return this->loadLedPair(twodfile, threedfile);
     
 }
 
 
-bool LedsManager::loadPair(string& pathTwoD, string& pathThreeD)
+bool LedsManager::loadLedPair(string& pathTwoD, string& pathThreeD)
 {
-    bool success = isValidFile(pathTwoD) && isValidFile(pathThreeD) ;
+    bool success = isValidLedFile(pathTwoD) && isValidLedFile(pathThreeD) ;
     if(success){
         AppManager::getInstance().getModelManager().resetCamera();
         this->addLedPair(pathTwoD,pathThreeD);
@@ -715,9 +898,24 @@ bool LedsManager::loadPair(string& pathTwoD, string& pathThreeD)
     return success;
 }
 
+bool LedsManager::loadBrancherPair(string& pathTwoD, string& pathThreeD, unsigned short _id)
+{
+    
+    bool success = isValidBrancherFile(pathTwoD) && isValidBrancherFile(pathThreeD);
+    
+    if(success){
+        AppManager::getInstance().getModelManager().resetCamera();
+        auto brancher = this->createBrancher(_id);
+        this->addBrancherPair(pathTwoD,pathThreeD, brancher);
+        //ofLogNotice() <<"LedsManager::addBrancherPair -> brancher size : " << brancher->getPixels().size();
+    }
+    
+    return success;
+}
 
 
-void LedsManager::clearLeds()
+
+void LedsManager::clearAll()
 {
     m_colors.clear();
     m_colorsBlack.clear();
@@ -726,14 +924,48 @@ void LedsManager::clearLeds()
     m_points3D.clear();
     m_sizes.clear();
     m_sizesModel.clear();
+    m_branchers.clear();
 }
 
-bool LedsManager::isValidFile(const string& path)
+bool LedsManager::isValidBrancherFile(const string& path)
 {
     ofBuffer buffer = ofBufferFromFile(path);
     
     if(buffer.size()==0){
-         ofLogNotice() <<"LedsManager::isValidFile -> empty file";
+        ofLogNotice() <<"LedsManager::isValidBrancherFile -> empty file";
+        return false;
+    }
+    
+    ofPoint ledPosition;
+    
+    for (ofBuffer::Line it = buffer.getLines().begin(), end = buffer.getLines().end(); it != end; ++it)
+    {
+        
+        string line = *it;
+        
+        //ofLogNotice() << line;
+        
+        // copy the line to draw later
+        // make sure its not a empty line
+        if(!line.empty() && !parseBrancherLine(line,ledPosition)) {
+            ofLogNotice() <<"LedsManager::isValidBrancherFile -> File not valid";
+            return false;
+        }
+        
+        // print out the line
+        //cout << line << endl;
+        
+    }
+    
+    return true;
+}
+
+bool LedsManager::isValidLedFile(const string& path)
+{
+    ofBuffer buffer = ofBufferFromFile(path);
+    
+    if(buffer.size()==0){
+         ofLogNotice() <<"LedsManager::isValidLedFile -> empty file";
         return false;
     }
     
@@ -749,7 +981,7 @@ bool LedsManager::isValidFile(const string& path)
         // copy the line to draw later
         // make sure its not a empty line
         if(!line.empty() && !parseLedLine(line,ledPosition)) {
-            ofLogNotice() <<"LedsManager::isValidFile -> File not valid";
+            ofLogNotice() <<"LedsManager::isValidLedFile -> File not valid";
             return false;
         }
         

@@ -228,12 +228,12 @@ void UdpManager::updatePixels()
     const auto & branches = AppManager::getInstance().getLedsManager().getBranchers();
     
     for(auto& branch: branches){
-        unsigned short id = branch.getId();
+        unsigned short id = branch.second->getId();
          //ofLogNotice() <<"UdpManager::updatePixels -> brancher " << id;
         if(m_udpConnections.find(id)!=m_udpConnections.end()){
            // ofLogNotice() <<"UdpManager::updatePixels -> brancher FOUND " << id;
             int bytesPerLed = 3;
-            auto& pixels = branch.getPixels();
+            auto& pixels = branch.second->getPixels();
             unsigned short division = pixels.size()/m_maxNumPixelsPerPacket;
             unsigned int remainder = pixels.size()%m_maxNumPixelsPerPacket;
             unsigned int offset = 0;

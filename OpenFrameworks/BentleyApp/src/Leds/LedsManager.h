@@ -25,8 +25,8 @@
 class LedsManager: public Manager
 {
     static const string LEDS_FOLDER_PATH;
+    static const string BRANCHERS_FOLDER_PATH;
     
-
     public:
 
         //! Constructor
@@ -50,7 +50,7 @@ class LedsManager: public Manager
         //! Draw the Led Layout
         void drawLayout();
     
-        const  vector<Brancher>& getBranchers() const {return m_branchers;}
+        const  map<unsigned short, shared_ptr<Brancher>>& getBranchers() const {return m_branchers;}
     
         const vector <ofFloatColor>& getColors() const {return m_colors;}
     
@@ -84,11 +84,19 @@ class LedsManager: public Manager
     
         bool readLeds();
     
+        bool readBranchers();
+    
         void arrangeLeds();
     
-        bool loadPair(string& pathTwoD, string& pathThreeD);
+        bool loadLedPair(string& pathTwoD, string& pathThreeD);
+    
+        bool loadBrancherPair(string& pathTwoD, string& pathThreeD,  unsigned short _id);
     
         bool addLedPair(string& pathTwoD, string& pathThreeD);
+    
+        bool addBrancherPair(string& pathTwoD, string& pathThreeD, shared_ptr<Brancher> brancher);
+    
+        shared_ptr<Brancher> createBrancher( unsigned short _id);
     
         void setupShader();
     
@@ -112,7 +120,9 @@ class LedsManager: public Manager
     
         void  centre2DLeds(float margin_percentage);
     
-        bool loadSubfolder(ofDirectory& dir);
+        bool loadLedSubfolder(ofDirectory& dir);
+    
+        bool loadBrancherSubfolder(ofDirectory& dir);
     
         void readLedsPositionFromGroup(const string& groupName, int& id, int numberOfSections);
     
@@ -120,18 +130,22 @@ class LedsManager: public Manager
     
         bool parseLedLine(string& line, ofPoint& position);
     
+        bool parseBrancherLine(string& line, ofPoint& position);
+    
         void createLed(const ofPoint& position, int& id);
     
-        void createLedPair(const ofPoint& position2D,const ofPoint& position3D);
+        int createLedPair(const ofPoint& position2D,const ofPoint& position3D);
     
         void removeCharsFromString( string &str, char* charsToRemove );
     
-        bool isValidFile(const string& path);
+        bool isValidLedFile(const string& path);
+    
+        bool isValidBrancherFile(const string& path);
     
         void setPixelColor(ofPixelsRef pixels, int index);
     
-        void clearLeds();
-
+        void clearAll();
+    
     private:
     
         ofPoint            m_minPos;
@@ -140,7 +154,7 @@ class LedsManager: public Manager
         bool               m_is3D;
         float              m_ledsBrightness;
     
-        vector<Brancher>    m_branchers;
+        map<unsigned short, shared_ptr<Brancher>>    m_branchers;
     
         ofFbo   m_fbo;
         ofFbo   m_fboMaskee;
