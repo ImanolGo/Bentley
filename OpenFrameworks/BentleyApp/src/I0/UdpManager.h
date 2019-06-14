@@ -99,6 +99,8 @@ private:
     
     string getDataPayload(unsigned short _id, unsigned int offset, int num_pixels, const vector<ofColor>& pixels);
     
+    void printHex(const string& message);
+    
 private:
     
     typedef std::map< unsigned short, shared_ptr<ofxUDPManager> > UdpConnectionMap;

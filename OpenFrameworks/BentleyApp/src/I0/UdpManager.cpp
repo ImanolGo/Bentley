@@ -13,7 +13,7 @@
 
 
 const int UdpManager::UDP_MESSAGE_LENGHT = 100;
-const int UdpManager::UDP_MTU_ETHERNET = 1500;
+const int UdpManager::UDP_MTU_ETHERNET = 1450;
 const int UdpManager::DATA_HEADER_OVERHEAD = 60;
 const double UdpManager::UDP_SEND_TIME = 1.0;
 
@@ -163,6 +163,7 @@ void UdpManager::setupIP()
     
 
     ofLogNotice() <<"UdpManager::setupIP -> IP address: " << m_ip;
+   // m_ip = "100.100.100.190";
 
     m_broadcast = "";
     auto stringSplit = ofSplitString(m_ip, ".");
@@ -244,6 +245,7 @@ void UdpManager::updatePixels()
                 message+=this->getDataPayload(id, offset,m_maxNumPixelsPerPacket,pixels);
                 m_udpConnections[id]->Send(message.c_str(), message.length());
                 offset+=m_maxNumPixelsPerPacket;
+                //this->printHex(message);
             }
             
             if(remainder!=0)
@@ -251,6 +253,7 @@ void UdpManager::updatePixels()
                 string message = this->getDataHeader(remainder);
                 message+=this->getDataPayload(id, offset,remainder,pixels);
                 m_udpConnections[id]->Send(message.c_str(), message.length());
+                //this->printHex(message);
             }
         }
     }
@@ -431,6 +434,19 @@ void UdpManager::parseMessage(char * buffer, int size)
 //    }
     
 }
+
+
+void UdpManager::printHex(const string& message)
+{
+    std::stringstream ss;
+    for(int i=0; i<message.length(); ++i){
+        ss << std::hex << (int)message[i] << " ";
+    }
+    std::string mystr = ss.str();
+    
+    ofLogNotice() <<"UdpManager::printHex ->  hex: " << mystr;
+}
+
 
 
 
