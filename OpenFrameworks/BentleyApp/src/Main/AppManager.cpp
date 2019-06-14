@@ -53,7 +53,8 @@ void AppManager::setup()
 void AppManager::setupOF()
 {
     ofSetLogLevel(OF_LOG_NOTICE);
-    ofSetVerticalSync(true);
+    //ofSetVerticalSync(true);
+    ofSetFrameRate(30);
     ofSetEscapeQuitsApp(false);
     //ofSetDataPathRoot("./data/");
     //ofSetDataPathRoot(ofFilePath::getCurrentExeDir() + "./data");
