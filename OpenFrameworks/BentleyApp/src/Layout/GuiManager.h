@@ -68,6 +68,8 @@ public:
     
     void onVideoChange(int videoIndex);
     
+    ofFloatColor getSolidColor() {return m_solidColor.get();}
+    
 private:
     
     void setupGuiParameters();
@@ -112,6 +114,8 @@ private:
     ofParameter<int>        m_ledsBCB;
     
     ofParameter<bool>       m_streaming;
+    
+    ofParameter<ofFloatColor>  m_solidColor;
     
     std::vector<std::string>    m_sceneNames;
     

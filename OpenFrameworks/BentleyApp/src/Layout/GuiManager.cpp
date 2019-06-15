@@ -96,6 +96,8 @@ void GuiManager::setupScenesGui()
     for(int i=0; i< scenesManager->getNumberScenes(); i++){
         m_sceneNames.push_back(scenesManager->getSceneName(i));
     }
+    
+    m_solidColor.set( "Color", ofFloatColor::black );
 }
 
 void GuiManager::onSceneChange(int sceneIndex)
@@ -268,6 +270,7 @@ void GuiManager::drawGui()
            
             if (ofxImGui::BeginTree(m_scenesGroup, mainSettings))
             {
+                ofxImGui::AddParameter(m_solidColor);
                 ofxImGui::AddCombo(m_sceneMode, m_sceneNames);
                 ofxImGui::EndTree(mainSettings);
             }

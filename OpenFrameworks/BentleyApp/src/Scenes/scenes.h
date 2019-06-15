@@ -13,3 +13,4 @@
 #include "TestScene.h"
 #include "ImageScene.h"
 #include "SinglePixelScene.h"
+#include "ColorScene.h"

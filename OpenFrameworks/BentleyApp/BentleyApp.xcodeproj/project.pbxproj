@@ -12,6 +12,7 @@
 		083C29DE228DA6E100C730EE /* Brancher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083C29DD228DA6E100C730EE /* Brancher.cpp */; };
 		0885DFF022B53D8C00583D35 /* SinglePixelScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0885DFEF22B53D8B00583D35 /* SinglePixelScene.cpp */; };
 		0885DFF322B559C800583D35 /* ImageScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0885DFF222B559C800583D35 /* ImageScene.cpp */; };
+		0885DFF622B561E500583D35 /* ColorScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0885DFF422B561E500583D35 /* ColorScene.cpp */; };
 		089808A5781FD585C386F027 /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F59B5BCCA5921700F9B826F2 /* ofxSliderGroup.cpp */; };
 		08C2F6947E69C234CCCBB2EE /* EngineGLFW.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 31CC728D821F21EB13047258 /* EngineGLFW.cpp */; };
 		0DF7C91B4D457B46CCBF90C5 /* Helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D62EA0C49693193D1322AEC /* Helpers.cpp */; };
@@ -135,6 +136,8 @@
 		0885DFEF22B53D8B00583D35 /* SinglePixelScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SinglePixelScene.cpp; path = Scenes/SinglePixelScene.cpp; sourceTree = "<group>"; };
 		0885DFF122B559C800583D35 /* ImageScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageScene.h; path = Scenes/ImageScene.h; sourceTree = "<group>"; };
 		0885DFF222B559C800583D35 /* ImageScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImageScene.cpp; path = Scenes/ImageScene.cpp; sourceTree = "<group>"; };
+		0885DFF422B561E500583D35 /* ColorScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorScene.cpp; path = Scenes/ColorScene.cpp; sourceTree = "<group>"; };
+		0885DFF522B561E500583D35 /* ColorScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorScene.h; path = Scenes/ColorScene.h; sourceTree = "<group>"; };
 		08ABF62AC22730155011D6C2 /* ebcdic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ebcdic.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/ebcdic.h; sourceTree = SOURCE_ROOT; };
 		0940234358464FB1AAA79D18 /* imstb_truetype.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = imstb_truetype.h; path = src/Addons/ofxImGui/libs/imgui/src/imstb_truetype.h; sourceTree = SOURCE_ROOT; };
 		09BB1D7613A1F9D8E8B11D7A /* KeyboardManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = KeyboardManager.h; path = src/I0/KeyboardManager.h; sourceTree = SOURCE_ROOT; };
@@ -1204,6 +1207,8 @@
 				8C488F38001D542DA27140DF /* scenes.h */,
 				E97B079D08ECF0E7E86C1EE1 /* TestScene.cpp */,
 				FD270B76B7B246B4E5CAC8B1 /* TestScene.h */,
+				0885DFF422B561E500583D35 /* ColorScene.cpp */,
+				0885DFF522B561E500583D35 /* ColorScene.h */,
 				0885DFEF22B53D8B00583D35 /* SinglePixelScene.cpp */,
 				0885DFEE22B53D8B00583D35 /* SinglePixelScene.h */,
 				60B34DDDC79DEB0226A04C93 /* VideoScene.cpp */,
@@ -1785,6 +1790,7 @@
 				B55845AEA0868B24D708FABF /* UdpManager.cpp in Sources */,
 				5D33A9513B2A4C6DBD3188C7 /* GuiManager.cpp in Sources */,
 				CAA01BC8B00234FCD86EDB48 /* GuiTheme.cpp in Sources */,
+				0885DFF622B561E500583D35 /* ColorScene.cpp in Sources */,
 				93510377552D47B6620A7586 /* LayoutManager.cpp in Sources */,
 				EB2372CEF0C9D14317E0AC9F /* Led.cpp in Sources */,
 				3FE2F90B109919F6223E9439 /* LedsManager.cpp in Sources */,

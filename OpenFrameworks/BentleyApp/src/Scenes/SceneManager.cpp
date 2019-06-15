@@ -56,6 +56,12 @@ void SceneManager::createScenes()
     m_mySceneManager.addScene(scene);
     m_sceneOffset++;
     
+    //Create Color Scene
+    auto colorScene = ofPtr<ColorScene> (new ColorScene());
+    colorScene->setup();
+    m_mySceneManager.addScene(colorScene);
+    m_sceneOffset++;
+    
     //Create Test Scene
     auto sceneTest = ofPtr<TestScene> (new TestScene());
     sceneTest->setup();
