@@ -59,9 +59,9 @@ void SceneManager::createScenes()
     m_mySceneManager.addScene(sceneTest);
     
     //Create Color Gradient Scene
-    auto colorScene = ofPtr<ColorGradientScene> (new ColorGradientScene());
-    colorScene->setup();
-    m_mySceneManager.addScene(colorScene);
+    auto imageScene = ofPtr<ImageScene> (new ImageScene("ColorGradient"));
+    imageScene->setup();
+    m_mySceneManager.addScene(imageScene);
     
     //Create Single Pixel Scene
     auto singleScene = ofPtr<SinglePixelScene> (new SinglePixelScene());

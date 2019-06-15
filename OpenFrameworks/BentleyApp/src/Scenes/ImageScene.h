@@ -1,8 +1,8 @@
 /*
- *  ColorGradientScene.h
+ *  ImageScene.h
  *  Bentley App
  *
- *  Created by Imanol Gomez on 30/04/19.
+ *  Created by Imanol Gomez on 16/06/19.
  *
  */
 
@@ -10,15 +10,15 @@
 
 #include "ofxScene.h"
 
-class ColorGradientScene : public ofxScene {
+class ImageScene : public ofxScene {
 
 public:
 
     //! Constructor
-    ColorGradientScene();
+    ImageScene(std::string name);
     
     //! Destructor
-    ~ColorGradientScene();
+    ~ImageScene();
     
     //! Set up the scene
     void setup();
@@ -50,8 +50,8 @@ private:
 private:
     
     
-    ofImage 	    m_image;
-    bool            m_initialized;
+    ofPtr<ofTexture>        m_texture;
+    bool                    m_initialized;
 
 };
 

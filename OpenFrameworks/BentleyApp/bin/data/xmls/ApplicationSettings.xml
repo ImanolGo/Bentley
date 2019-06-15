@@ -13,6 +13,7 @@
 
     <texture name="Brush" path="images/general/brush.png"/>
     <texture name="Dot" path="images/general/dot.png"/>
+    <texture name="ColorGradient" path="images/scenes/color_spectrum.png"/>
 
   </textures>
 

@@ -11,5 +11,5 @@
 #include "BlankScene.h"
 #include "VideoScene.h"
 #include "TestScene.h"
-#include "ColorGradientScene.h"
+#include "ImageScene.h"
 #include "SinglePixelScene.h"
