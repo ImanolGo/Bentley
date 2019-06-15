@@ -1,5 +1,5 @@
 /*
- *  TestScene.h
+ *  ColorGradientScene.h
  *  Bentley App
  *
  *  Created by Imanol Gomez on 30/04/19.
@@ -10,49 +10,51 @@
 
 #include "ofxScene.h"
 
-class TestScene : public ofxScene {
-    
+class ColorGradientScene : public ofxScene {
+
 public:
-    
+
     //! Constructor
-    TestScene();
+    ColorGradientScene();
     
     //! Destructor
-    ~TestScene();
+    ~ColorGradientScene();
     
     //! Set up the scene
     void setup();
-    
+
     //! Update the scene
     void update();
-    
+
     //! Draw the scene
     void draw();
     
     //! Called when fading in
     void willFadeIn();
-    
+
     //! Called when to start drawing
     void willDraw();
-    
+
     //! Called fading out
     void willFadeOut();
-    
+
     //! Called when exit
     void willExit();
     
 private:
     
-    void setupVideo();
+    void setupImage();
     
-    void updateVideo();
-    
-    void drawVideo();
+    void drawImage();
     
 private:
     
     
-    ofVideoPlayer     m_videoPlayer;
+    ofImage 	    m_image;
     bool            m_initialized;
-    
+
 };
+
+
+
+

@@ -58,7 +58,12 @@ void SceneManager::createScenes()
     sceneTest->setup();
     m_mySceneManager.addScene(sceneTest);
     
-    m_sceneOffset = 2;
+    //Create Color Gradient Scene
+    auto colorScene = ofPtr<ColorGradientScene> (new ColorGradientScene());
+    colorScene->setup();
+    m_mySceneManager.addScene(colorScene);
+
+    m_sceneOffset = 3;
     
     float width = AppManager::getInstance().getSettingsManager().getAppWidth();
     float height = AppManager::getInstance().getSettingsManager().getAppHeight();
