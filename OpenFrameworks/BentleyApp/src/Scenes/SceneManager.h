@@ -87,7 +87,7 @@ public:
     void setMinOutput(float& value) {m_levels.minOutput = value;}
     
     void setMaxOutput(float& value) {m_levels.maxOutput = value;}
-    
+
     void removeVideos();
     
     void addVideos();

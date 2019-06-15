@@ -11,6 +11,7 @@
 
 #include "ofxScene.h"
 
+
 class BlankScene : public ofxScene {
 
 public:

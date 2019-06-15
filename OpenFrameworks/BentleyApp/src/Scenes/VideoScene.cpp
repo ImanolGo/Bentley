@@ -92,6 +92,7 @@ void VideoScene::willFadeIn() {
         m_videoPlayer.setFrame(0);
         m_videoPlayer.play();
     }
+    
 }
 
 void VideoScene::willDraw() {
