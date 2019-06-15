@@ -55,6 +55,7 @@ void LedsManager::setupLeds()
     //this->createLedPositions();
     this->arrangeLeds();
     this->createLayout();
+    this->map2DpositionsToFbo();
     
     m_meshModel.save("leds/test.ply");
 }
@@ -210,6 +211,7 @@ void LedsManager::createLayout()
     for(auto led: m_points2D){
         float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
         float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
+        
         //ofDrawCircle(x, y, 4);
         ofDrawRectangle(x - size*0.5, y - size*0.5, size, size);
     }
@@ -221,9 +223,22 @@ void LedsManager::createLayout()
     AppManager::getInstance().getSettingsManager().setAppWidth(width);
     AppManager::getInstance().getSettingsManager().setAppHeight(height);
     
+    
+    
 }
 
-
+void LedsManager::map2DpositionsToFbo()
+{
+    float width = AppManager::getInstance().getSettingsManager().getAppWidth();
+    float height = AppManager::getInstance().getSettingsManager().getAppHeight();
+    for (auto& position: m_points2D)
+    {
+        float x = ofMap(position.x, m_minPos.x, m_maxPos.x, 0.0, width-1);
+        float y = ofMap(position.y, m_minPos.y, m_maxPos.y, height-1,0);
+        position.x = x;
+        position.y = y;
+    }
+}
 
 void LedsManager::createLedPositions()
 {
@@ -700,15 +715,15 @@ void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
         return;
     }
     
+    if(m_points2D[index].x < 0 || m_points2D[index].x>=pixels.getWidth()  || m_points2D[index].y < 0 || m_points2D[index].y>=pixels.getHeight()){
+        return;
+    }
     
-    ofPoint pixelPos;
     
-    pixelPos.x = ofMap(m_points2D[index].x, m_minPos.x, m_maxPos.x, 0, pixels.getWidth()-1);
-    pixelPos.y = ofMap(m_points2D[index].y, m_minPos.y, m_maxPos.y,  pixels.getHeight()-1,0);
-    int x = (int)pixelPos.x;
-    int y = (int)pixelPos.y;
+//    int x = (int)m_points2D[index].x;
+//    int y = (int)m_points2D[index].y;
    
-    auto color = pixels.getColor(x, y);
+    auto color = pixels.getColor(m_points2D[index].x, m_points2D[index].y);
     
 //    if(index == 20){
 //        ofLogNotice() << "pixelPos.x = " << x;

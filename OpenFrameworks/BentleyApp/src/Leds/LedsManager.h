@@ -88,6 +88,8 @@ class LedsManager: public Manager
     
         void arrangeLeds();
     
+        void map2DpositionsToFbo();
+    
         bool loadLedPair(string& pathTwoD, string& pathThreeD);
     
         bool loadBrancherPair(string& pathTwoD, string& pathThreeD,  unsigned short _id);
