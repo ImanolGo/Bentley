@@ -49,26 +49,62 @@ void SceneManager::createScenes()
     
     ofPtr<ofxScene> scene;
     
+     m_sceneOffset = 0;
+    
     //Create Blank Scene
     scene = ofPtr<ofxScene> (new BlankScene());
     m_mySceneManager.addScene(scene);
+    m_sceneOffset++;
     
     //Create Test Scene
     auto sceneTest = ofPtr<TestScene> (new TestScene());
     sceneTest->setup();
     m_mySceneManager.addScene(sceneTest);
+    m_sceneOffset++;
     
-    //Create Color Gradient Scene
+    //Create Image Scene
     auto imageScene = ofPtr<ImageScene> (new ImageScene("ColorGradient"));
     imageScene->setup();
     m_mySceneManager.addScene(imageScene);
+    m_sceneOffset++;
+    
+    //Create Image Scene
+    imageScene = ofPtr<ImageScene> (new ImageScene("ColorStripes"));
+    imageScene->setup();
+    m_mySceneManager.addScene(imageScene);
+    m_sceneOffset++;
+    
+    //Create Image Scene
+    imageScene = ofPtr<ImageScene> (new ImageScene("BlackWhiteStripes"));
+    imageScene->setup();
+    m_mySceneManager.addScene(imageScene);
+    m_sceneOffset++;
+    
+    //Create Image Scene
+    imageScene = ofPtr<ImageScene> (new ImageScene("BarcodeV"));
+    imageScene->setup();
+    m_mySceneManager.addScene(imageScene);
+    m_sceneOffset++;
+    
+    //Create Image Scene
+    imageScene = ofPtr<ImageScene> (new ImageScene("BarcodeH"));
+    imageScene->setup();
+    m_mySceneManager.addScene(imageScene);
+    m_sceneOffset++;
+    
+    //Create Image Scene
+    imageScene = ofPtr<ImageScene> (new ImageScene("PaulSmith"));
+    imageScene->setup();
+    m_mySceneManager.addScene(imageScene);
+    m_sceneOffset++;
     
     //Create Single Pixel Scene
     auto singleScene = ofPtr<SinglePixelScene> (new SinglePixelScene());
     singleScene->setup();
     m_mySceneManager.addScene(singleScene);
+    m_sceneOffset++;
 
-    m_sceneOffset = 4;
+
     
     float width = AppManager::getInstance().getSettingsManager().getAppWidth();
     float height = AppManager::getInstance().getSettingsManager().getAppHeight();

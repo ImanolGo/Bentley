@@ -14,6 +14,14 @@
     <texture name="Brush" path="images/general/brush.png"/>
     <texture name="Dot" path="images/general/dot.png"/>
     <texture name="ColorGradient" path="images/scenes/color_spectrum.png"/>
+    <texture name="ColorStripes" path="images/scenes/ColorStripes.png"/>
+    <texture name="BlackWhiteStripes" path="images/scenes/BlackWhiteStripes.png"/>
+    <texture name="BarcodeV" path="images/scenes/BarcodeV.png"/>
+    <texture name="BarcodeH" path="images/scenes/BarcodeH.png"/>
+    <texture name="PaulSmith" path="images/scenes/PaulSmith.png"/>
+
+    
+    
 
   </textures>
 
