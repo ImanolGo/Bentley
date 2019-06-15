@@ -26,6 +26,10 @@ class Brancher {
         void setPixels(const vector<ofFloatColor>& colors);
     
         void addPixel(unsigned int index);
+    
+        int getSize() const {return m_pixels.size();}
+    
+        const vector<unsigned int>& getIndexes() const {return m_indexes;}
 
     private:
             

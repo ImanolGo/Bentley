@@ -315,6 +315,8 @@ bool LedsManager::addBrancherPair(string& pathTwoD, string& pathThreeD, shared_p
         string line2D = *it2d;
         string line3D = *it3d;
         
+        //ofLogNotice() <<"LedsManager::addBrancherPair -> " << line2D;
+        
         if(!line2D.empty() && parseBrancherLine(line2D,ledPosition2D) &&  !line3D.empty() && parseBrancherLine(line3D,ledPosition3D))
         {
             int size = this->createLedPair(ledPosition2D, ledPosition3D);
@@ -1037,5 +1039,30 @@ void LedsManager::timerCompleteHandler( int &args )
 }
 
 
+bool LedsManager::get2dPosition(int index, ofPoint& position)
+{
+    if(index < 0 || index>=m_points2D.size()){
+        return false;
+    }
+    
+    position = m_points2D[index];
+    return true;
+}
+
+
+bool LedsManager::get2dPositionFromBrancher(unsigned short _id, int index, ofPoint& position)
+{
+    if(m_branchers.find(_id) == m_branchers.end()){
+        return false;
+    }
+    
+    auto& indexes =  m_branchers[_id]->getIndexes();
+    if(index < 0 || index>=indexes.size())
+    {
+        return false;
+    }
+    
+    return this->get2dPosition(indexes[index], position);
+}
 
 

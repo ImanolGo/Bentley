@@ -72,7 +72,11 @@ class LedsManager: public Manager
     
         void setLedBrightness(float& value){m_ledsBrightness = value;}
     
-        void timerCompleteHandler( int &args ) ;
+        void timerCompleteHandler( int &args );
+    
+        bool get2dPosition(int index, ofPoint& position);
+    
+        bool get2dPositionFromBrancher(unsigned short _id, int index, ofPoint& position);
     
     private:
     

@@ -60,8 +60,11 @@ private:
 private:
     
     
-    ofxSimpleTimer              m_timer;
-    bool                        m_initialized;
-    vector<RectangleVisual>     m_rectangles;
+    float                                               m_refreshTimeMs;
+    unsigned int                                        m_numPixels;
+    unsigned int                                        m_pixelIndex;
+    ofxSimpleTimer                                      m_timer;
+    bool                                                m_initialized;
+    map<unsigned short, shared_ptr<RectangleVisual>>    m_rectangles;
     
 };

@@ -10,7 +10,7 @@
 #include "SinglePixelScene.h"
 #include "AppManager.h"
 
-SinglePixelScene::SinglePixelScene(): ofxScene("SinglePixelScene"), m_initialized(false)
+SinglePixelScene::SinglePixelScene(): ofxScene("SinglePixelScene"), m_initialized(false), m_numPixels(1000), m_refreshTimeMs(1000), m_pixelIndex(0)
 {
     //Intentionally left empty
 }
@@ -37,7 +37,7 @@ void SinglePixelScene::setup() {
 
 void SinglePixelScene::setupTimer()
 {
-    m_timer.setup( 1000 );
+    m_timer.setup( m_refreshTimeMs );
     m_timer.start( false ) ;
     ofAddListener( m_timer.TIMER_COMPLETE , this, &SinglePixelScene::sceneTimerCompleteHandler ) ;
     
@@ -46,12 +46,32 @@ void SinglePixelScene::setupTimer()
 
 void SinglePixelScene::setupRectangles()
 {
+    
+    unsigned short startId = 100;
+    unsigned short endId = 254;
+    float width = AppManager::getInstance().getSettingsManager().getAppWidth();
+    float height = AppManager::getInstance().getSettingsManager().getAppHeight();
+    float w = 2;
+    float h = 2;
+    
+    for(unsigned short _id = startId; _id<endId; _id++)
+    {
+        auto pos = ofPoint(-width, -height);
+        bool success = AppManager::getInstance().getLedsManager().get2dPositionFromBrancher(_id, m_pixelIndex, pos);
+        if(success){
+            auto rectangle = make_shared<RectangleVisual>(pos,w,h,true);
+            auto pos = ofPoint(-width, -height);
+            m_rectangles[_id] = rectangle;
+            ofLogNotice() <<"SinglePixelScene::setupRectangles << id = : " << _id ;
+        }
+    }
 }
 
 
 void SinglePixelScene::update()
 {
     this->updateTimer();
+   
 }
 
 
@@ -62,6 +82,17 @@ void SinglePixelScene::updateTimer()
 
 void SinglePixelScene::updateRectangles()
 {
+     m_pixelIndex = (m_pixelIndex+1)%m_numPixels;
+    float width = AppManager::getInstance().getSettingsManager().getAppWidth();
+    float height = AppManager::getInstance().getSettingsManager().getAppHeight();
+    
+    //ofLogNotice() <<"SinglePixelScene::setupRectangles << m_pixelIndex  =  " << m_pixelIndex ;
+    for(auto rectangle: m_rectangles){
+        auto pos = ofPoint(-width, -height);
+        bool success = AppManager::getInstance().getLedsManager().get2dPositionFromBrancher(rectangle.first, m_pixelIndex, pos);
+        rectangle.second->setPosition(pos);
+        //ofLogNotice() <<"SinglePixelScene::setupRectangles << pos -> x =  " << pos.x  << ", y = " << pos.y;
+    }
     
 }
 
@@ -74,8 +105,9 @@ void SinglePixelScene::draw()
 
 void SinglePixelScene::drawRectangles()
 {
+    
     for(auto rectangle: m_rectangles){
-        rectangle.draw();
+        rectangle.second->draw();
     }
     
 }
