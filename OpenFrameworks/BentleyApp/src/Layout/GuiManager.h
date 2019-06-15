@@ -105,6 +105,8 @@ private:
     ofParameterGroup m_postProcessingGroup;
     ofParameterGroup m_communicationsGroup;
     
+    ofParameter<int>      m_fps;
+    
     ofParameter<string>     m_videoPath;
     ofParameter<int>        m_viewMode;
     ofParameter<int>        m_sceneMode;

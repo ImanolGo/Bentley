@@ -79,6 +79,13 @@ void GuiManager::setupGuiParameters()
     m_textIP =  "IP Address: " + AppManager::getInstance().getUdpManager().getIpAddress();
     m_textTcp = "TCP Port: " + ofToString(AppManager::getInstance().getSettingsManager().getTcpPortReceive());
     m_textOsc = "OSC Port: " + ofToString(AppManager::getInstance().getSettingsManager().getOscPortReceive());
+    
+    
+    auto appManager = &AppManager::getInstance();
+    
+    m_fps.set("Frame Rate", 60, 0, 60);
+    m_fps.addListener(appManager, &AppManager::changeFrameRate);
+    m_parameters.add(m_fps);
 }
 
 
@@ -260,6 +267,7 @@ void GuiManager::drawGui()
        // ofxImGui::Settings().windowSize = ofVec2f(GUI_WIDTH,ofGetHeight());
         if (ofxImGui::BeginWindow("GUI", mainSettings, false))
         {
+            ofxImGui::AddParameter(m_fps);
             ImGui::Text("%.1f FPS (%.3f ms/frame)", ofGetFrameRate(), 1000.0f / ImGui::GetIO().Framerate);
             
             int oscPort = AppManager::getInstance().getSettingsManager().getOscPortReceive();
@@ -267,6 +275,7 @@ void GuiManager::drawGui()
             ImGui::Text(m_textIP.c_str());
             ImGui::Text(m_textTcp.c_str());
             ImGui::Text(m_textOsc.c_str());
+            
            
             if (ofxImGui::BeginTree(m_scenesGroup, mainSettings))
             {

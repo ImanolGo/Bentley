@@ -79,6 +79,8 @@ public:
     
     //! Returns the OscManager manager
     OscManager&  getOscManager() { return m_oscManager; }
+    
+    void changeFrameRate(int& fps);
 
     
     //==========================================================================

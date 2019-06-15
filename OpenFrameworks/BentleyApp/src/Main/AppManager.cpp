@@ -56,9 +56,6 @@ void AppManager::setupOF()
     //ofSetVerticalSync(true);
     
     ofSetFrameRate(60);
-    #ifdef TARGET_LINUX
-        ofSetFrameRate(30);
-    #endif
     
     
     ofSetEscapeQuitsApp(false);
@@ -165,6 +162,12 @@ void AppManager::setDebugMode(bool showDebug)
     m_guiManager.showGui(m_debugMode);
     
 }
+
+void AppManager::changeFrameRate(int& fps)
+{
+    ofSetFrameRate(fps);
+}
+
 
 
 
