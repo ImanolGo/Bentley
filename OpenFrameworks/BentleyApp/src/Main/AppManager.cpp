@@ -54,7 +54,13 @@ void AppManager::setupOF()
 {
     ofSetLogLevel(OF_LOG_NOTICE);
     //ofSetVerticalSync(true);
+    
     ofSetFrameRate(60);
+    #ifdef TARGET_LINUX
+        ofSetFrameRate(30);
+    #endif
+    
+    
     ofSetEscapeQuitsApp(false);
     //ofSetDataPathRoot("./data/");
     //ofSetDataPathRoot(ofFilePath::getCurrentExeDir() + "./data");

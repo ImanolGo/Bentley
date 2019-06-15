@@ -733,7 +733,8 @@ void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
 //        ofLogNotice() << color;
 //    }
     
-    m_colors[index] = ofFloatColor(color.r/255.0f, color.g/255.0f, color.b/255.0f);
+    //m_colors[index] = ofFloatColor(color.r/255.0f, color.g/255.0f, color.b/255.0f);
+    m_colors[index] = color;
 }
 
 void LedsManager::draw()
