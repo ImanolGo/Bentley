@@ -46,18 +46,18 @@ void StemsScene::setupRectangles()
     float h = 2;
     
     int colorHue = 0;
-    int increaseHue = 36;
+    int increaseHue = 255/3;
     for(unsigned short brancherId = startId; brancherId<endId; brancherId++)
     {
         vector<string> stemIds;
         bool success = AppManager::getInstance().getLedsManager().getStemIdsFromBrancher(brancherId, stemIds);
         if(success){
-            colorHue +=increaseHue;
             ofColor color = ofColor::fromHsb(colorHue, 255, 255);
             
             ofLogNotice() <<"StemsScene::setupRectangles << brancher id = : " << brancherId ;
             ofLogNotice() <<"StemsScene::setupRectangles << brancher color hue = : " << colorHue ;
-            for(auto stemId : stemIds){
+            for(auto stemId : stemIds)
+            {
                 
                 //ofLogNotice() <<"StemsScene::setupRectangles << stemId = : " << stemId ;
                 
@@ -76,6 +76,8 @@ void StemsScene::setupRectangles()
                 }
                
             }
+            
+             colorHue = (colorHue +increaseHue)%256;
             
         }
     }
