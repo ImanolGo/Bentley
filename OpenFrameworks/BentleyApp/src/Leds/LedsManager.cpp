@@ -325,7 +325,7 @@ bool LedsManager::addBrancherPair(string& pathTwoD, string& pathThreeD, shared_p
             
             if(strs.size()>=2){
                 string stem_id = strs[1];
-                ofLogNotice() <<"LedsManager::addBrancherPair-> stem_id : " << stem_id;
+               // ofLogNotice() <<"LedsManager::addBrancherPair-> stem_id : " << stem_id;
                 brancher->addStemPixel(stem_id, size-1);
             }
         }

@@ -92,7 +92,8 @@ void UdpManager::setupHeaders()
     m_sensorHeader.port = 11;
     m_sensorHeader.payload_size = 0;
     
-    m_maxNumPixelsPerPacket = (UDP_MTU_ETHERNET-DATA_HEADER_OVERHEAD)/3;
+    m_maxDataPacketSize = UDP_MTU_ETHERNET;
+    m_maxNumPixelsPerPacket = (m_maxDataPacketSize-DATA_HEADER_OVERHEAD)/3;
     
     ofLogNotice() <<"UdpManager::setupHeaders-> int size : " << sizeof(unsigned int) ;
     ofLogNotice() <<"UdpManager::setupHeaders-> short size : " << sizeof(unsigned short) ;
@@ -446,6 +447,13 @@ void UdpManager::printHex(const string& message)
     
     ofLogNotice() <<"UdpManager::printHex ->  hex: " << mystr;
 }
+
+void UdpManager::setMaxDataPacketSize(int& value )
+{
+    m_maxDataPacketSize = (unsigned short) value;
+    m_maxNumPixelsPerPacket = (m_maxDataPacketSize-DATA_HEADER_OVERHEAD)/3;
+}
+
 
 
 

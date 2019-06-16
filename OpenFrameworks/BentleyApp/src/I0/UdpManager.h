@@ -73,6 +73,8 @@ public:
     
     bool getIsStreaming() const {return m_streaming;}
     
+    void setMaxDataPacketSize(int& value );
+    
 private:
     
     void setupHeaders();
@@ -113,6 +115,7 @@ private:
     udp_header    m_tlcSettingsHeader;
     unsigned int  m_packetID;
     unsigned short  m_maxNumPixelsPerPacket;
+    unsigned short  m_maxDataPacketSize;
     unsigned int    m_frameNumber;
     bool            m_streaming;
     bool            m_nextFrame;

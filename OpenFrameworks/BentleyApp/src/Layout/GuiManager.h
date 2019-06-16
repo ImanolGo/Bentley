@@ -115,7 +115,8 @@ private:
     ofParameter<int>        m_ledsBCG;
     ofParameter<int>        m_ledsBCB;
     
-    ofParameter<bool>       m_streaming;
+    ofParameter<int>    m_maxDataPacketSize;
+    ofParameter<bool>             m_streaming;
     
     ofParameter<ofFloatColor>  m_solidColor;
     

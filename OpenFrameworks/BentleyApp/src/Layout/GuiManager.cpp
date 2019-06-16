@@ -228,6 +228,11 @@ void GuiManager::setupCommunicationsGui()
 {
     auto udpManager = &AppManager::getInstance().getUdpManager();
     
+    m_maxDataPacketSize.set("MaxDataSize", 1450, 100, 1500);
+    m_maxDataPacketSize.addListener(udpManager, &UdpManager::setMaxDataPacketSize);
+    m_communicationsGroup.add(m_maxDataPacketSize);
+    m_parameters.add(m_maxDataPacketSize);
+    
     m_communicationsGroup.setName("Communications");
     m_streaming.set("Streaming", true);
     m_streaming.addListener(udpManager, &UdpManager::setStreaming);
@@ -304,6 +309,8 @@ void GuiManager::drawGui()
             
             if (ofxImGui::BeginTree(m_communicationsGroup, mainSettings))
             {
+                ofxImGui::AddParameter(m_maxDataPacketSize);
+                
                 ofxImGui::AddParameter(m_streaming);
                 if (ImGui::Button("Next Frame..."))
                 {
@@ -367,7 +374,7 @@ void GuiManager::updateSize(const ofxImGui::Settings& settings)
 
 void GuiManager::saveGuiValues(string path)
 {
-    ofLogNotice() <<"GuiManager::saveGuiValues-> loading values from: " << GUI_SETTINGS_FILE_NAME;
+    ofLogNotice() <<"GuiManager::saveGuiValues-> saving values from: " << GUI_SETTINGS_FILE_NAME;
     
     ofXml xml;
     ofSerialize(xml, m_parameters);
