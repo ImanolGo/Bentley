@@ -164,7 +164,7 @@ void UdpManager::setupIP()
     
 
     ofLogNotice() <<"UdpManager::setupIP -> IP address: " << m_ip;
-     //m_ip = "100.100.100.190";
+    // m_ip = "100.100.100.190";
 
     m_broadcast = "";
     auto stringSplit = ofSplitString(m_ip, ".");

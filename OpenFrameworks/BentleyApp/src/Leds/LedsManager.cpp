@@ -245,7 +245,7 @@ void LedsManager::createLedPositions()
     ofLogNotice() <<"LedsManager::createLedPositions" ;
     
     
-    auto brancher = this->createBrancher(100);
+    auto brancher = this->createBrancher(190);
     
 //    int x = 0;
 //    for(int i = 0; i<2; i++){

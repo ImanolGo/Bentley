@@ -48,6 +48,8 @@ private:
     
     void setupRectangles();
     
+    void exportStemsColors();
+    
     void drawRectangles();
     
 private:
@@ -55,5 +57,6 @@ private:
     unsigned int                                        m_numPixels;
     bool                                                m_initialized;
     vector< shared_ptr<RectangleVisual>>                m_rectangles;
+    vector<pair<string, ofColor>>                       m_stemsColorList;
     
 };
