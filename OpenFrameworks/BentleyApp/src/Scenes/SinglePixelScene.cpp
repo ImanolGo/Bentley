@@ -123,6 +123,7 @@ void SinglePixelScene::sceneTimerCompleteHandler( int &args )
 void SinglePixelScene::willFadeIn() {
     ofLogNotice("SinglePixelScene::willFadeIn");
     m_timer.start(false,true);
+    m_pixelIndex = 0;
 }
 
 void SinglePixelScene::willDraw() {
