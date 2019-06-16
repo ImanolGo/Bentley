@@ -47,7 +47,11 @@ void StemsScene::setupRectangles()
     float w = 2;
     float h = 2;
     
-   
+    float hue = 0;
+    float increaseHue = 360.0/3.0;
+    ofColor color = ofColor::fromHsb(0, 255, 255);
+    color.setHueAngle(hue);
+    
     for(unsigned short brancherId = startId; brancherId<endId; brancherId++)
     {
         vector<string> stemIds;
@@ -58,9 +62,6 @@ void StemsScene::setupRectangles()
             ofLogNotice() <<"StemsScene::setupRectangles << brancher id = : " << brancherId ;
             
             
-            float hue = 0;
-            float increaseHue = 360.0/12;
-            ofColor color = ofColor::fromHsb(0, 255, 255);
             
             for(auto stemId : stemIds)
             {
@@ -86,8 +87,12 @@ void StemsScene::setupRectangles()
                     
                 }
                 
-                hue+=increaseHue;
+                hue += increaseHue;
+                hue = fmod(hue, 360);
+                
                 color.setHueAngle(hue);
+                ofLogNotice() <<"StemsScene::setupRectangles << hue = : " << hue ;
+                ofLogNotice() <<"StemsScene::setupRectangles << color = : " << color ;
                
             }
             
@@ -121,8 +126,8 @@ void StemsScene::exportStemsColors()
     
     for(int i = 0; i<m_stemsColorList.size(); i++){
        
-        ofLogNotice() <<"StemsScene::exportStemsColors << stemId = : " << m_stemsColorList[i].first ;
-        ofLogNotice() <<"StemsScene::exportStemsColors << color = : " << m_stemsColorList[i].first ;
+        // ofLogNotice() <<"StemsScene::exportStemsColors << stemId = : " << m_stemsColorList[i].first ;
+        //ofLogNotice() <<"StemsScene::exportStemsColors << color = : " << m_stemsColorList[i].first ;
         
         posRect.y = i*h;
         rect.setColor(m_stemsColorList[i].second);
