@@ -109,6 +109,12 @@ void SceneManager::createScenes()
     singleScene->setup();
     m_mySceneManager.addScene(singleScene);
     m_sceneOffset++;
+    
+    //Create Single Pixel Scene
+    auto stemsScene = ofPtr<StemsScene> (new StemsScene());
+    stemsScene->setup();
+    m_mySceneManager.addScene(stemsScene);
+    m_sceneOffset++;
 
 
     

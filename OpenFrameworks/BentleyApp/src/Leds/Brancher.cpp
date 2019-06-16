@@ -2,7 +2,7 @@
  *  Brancher.h
  *  Bentley App
  *
- *  Created by Imanol Gomez on 16/52/19.
+ *  Created by Imanol Gomez on 16/05/19.
  *
  */
 
@@ -42,6 +42,35 @@ void Brancher::addPixel(unsigned int index)
 {
     m_indexes.push_back(index);
     m_pixels.push_back(ofColor(0));
+}
+
+void Brancher::addStemPixel(const string& _id, unsigned int index)
+{
+    m_stems[_id].push_back(index);
+}
+
+bool Brancher::getIndexFromStem(const string& _id, unsigned int index, unsigned int& returned_index)
+{
+    if(m_stems.find(_id) == m_stems.end()){
+        return false;
+    }
+    
+    if( index >= m_stems[_id].size()){
+        return false;
+    }
+    
+    returned_index =  m_stems[_id][index];
+    return true;
+}
+
+vector<string> Brancher::getStemIds()
+{
+    vector<string> ids;
+    for(auto stem: m_stems)
+    {
+        ids.push_back(stem.first);
+    }
+    return ids;
 }
 
 

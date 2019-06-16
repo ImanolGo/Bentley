@@ -78,6 +78,10 @@ class LedsManager: public Manager
     
         bool get2dPositionFromBrancher(unsigned short _id, int index, ofPoint& position);
     
+        bool get2dPositionFromStem(unsigned short brancher_id, string& stem_id, int index, ofPoint& position);
+    
+        bool getStemIdsFromBrancher(unsigned short _id, vector<string> & stem_ids);
+    
     private:
     
         void setupLeds();

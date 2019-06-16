@@ -14,3 +14,4 @@
 #include "ImageScene.h"
 #include "SinglePixelScene.h"
 #include "ColorScene.h"
+#include "StemsScene.h"

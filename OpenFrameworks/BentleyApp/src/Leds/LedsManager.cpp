@@ -315,12 +315,19 @@ bool LedsManager::addBrancherPair(string& pathTwoD, string& pathThreeD, shared_p
         string line2D = *it2d;
         string line3D = *it3d;
         
+        auto strs = ofSplitString(line2D, "_");
         //ofLogNotice() <<"LedsManager::addBrancherPair -> " << line2D;
         
         if(!line2D.empty() && parseBrancherLine(line2D,ledPosition2D) &&  !line3D.empty() && parseBrancherLine(line3D,ledPosition3D))
         {
             int size = this->createLedPair(ledPosition2D, ledPosition3D);
             brancher->addPixel(size-1);
+            
+            if(strs.size()>=2){
+                string stem_id = strs[1];
+                ofLogNotice() <<"LedsManager::addBrancherPair-> stem_id : " << stem_id;
+                brancher->addStemPixel(stem_id, size-1);
+            }
         }
         
         ++it2d; ++it3d;
@@ -1064,6 +1071,34 @@ bool LedsManager::get2dPositionFromBrancher(unsigned short _id, int index, ofPoi
     }
     
     return this->get2dPosition(indexes[index], position);
+}
+
+bool LedsManager::getStemIdsFromBrancher(unsigned short _id, vector<string> & stem_ids)
+{
+    if(m_branchers.find(_id) == m_branchers.end()){
+        return false;
+    }
+    
+    stem_ids = m_branchers[_id]->getStemIds();
+    
+    return true;
+
+}
+
+bool LedsManager::get2dPositionFromStem(unsigned short brancher_id, string& stem_id, int index, ofPoint& position)
+{
+    if(m_branchers.find(brancher_id) == m_branchers.end()){
+        return false;
+    }
+    
+    unsigned int returned_index = 0;
+    bool success = m_branchers[brancher_id]->getIndexFromStem(stem_id, index, returned_index);
+    if(!success){
+        return false;
+    }
+    
+    return this->get2dPosition(returned_index, position);
+    
 }
 
 
