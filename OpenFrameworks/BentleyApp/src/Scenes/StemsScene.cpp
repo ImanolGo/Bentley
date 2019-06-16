@@ -48,7 +48,7 @@ void StemsScene::setupRectangles()
     float h = 2;
     
     float hue = 0;
-    float increaseHue = 360.0/3.0;
+    float increaseHue = 360.0/6.0;
     ofColor color = ofColor::fromHsb(0, 255, 255);
     color.setHueAngle(hue);
     
@@ -91,8 +91,8 @@ void StemsScene::setupRectangles()
                 hue = fmod(hue, 360);
                 
                 color.setHueAngle(hue);
-                ofLogNotice() <<"StemsScene::setupRectangles << hue = : " << hue ;
-                ofLogNotice() <<"StemsScene::setupRectangles << color = : " << color ;
+                //ofLogNotice() <<"StemsScene::setupRectangles << hue = : " << hue ;
+                //ofLogNotice() <<"StemsScene::setupRectangles << color = : " << color ;
                
             }
             
