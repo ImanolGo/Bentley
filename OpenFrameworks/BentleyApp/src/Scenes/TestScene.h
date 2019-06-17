@@ -9,6 +9,9 @@
 #pragma once
 
 #include "ofxScene.h"
+#include "ofxSimpleTimer.h"
+#include "RectangleVisual.h"
+
 
 class TestScene : public ofxScene {
     
@@ -41,18 +44,28 @@ public:
     //! Called when exit
     void willExit();
     
-private:
-    
-    void setupVideo();
-    
-    void updateVideo();
-    
-    void drawVideo();
+    void sceneTimerCompleteHandler( int &args ) ;
     
 private:
     
+    void setupTimer();
     
-    ofVideoPlayer     m_videoPlayer;
-    bool            m_initialized;
+    void setupRectangles();
+    
+    void updateTimer();
+    
+    void drawRectangles();
+    
+    void deleteAnimations();
+    
+    void startAnimations();
+    
+private:
+    
+    
+    float                                               m_totalTime;
+    ofxSimpleTimer                                      m_timer;
+    bool                                                m_initialized;
+    map<string, shared_ptr<RectangleVisual>>            m_rectangles;
     
 };
