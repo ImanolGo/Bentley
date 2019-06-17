@@ -48,7 +48,7 @@ void StemsScene::setupRectangles()
     float h = 2;
     
     float hue = 0;
-    float increaseHue = 360.0/6.0;
+    float increaseHue = 360.0/12.0;
     ofColor color = ofColor::fromHsb(0, 255, 255);
     color.setHueAngle(hue);
     
