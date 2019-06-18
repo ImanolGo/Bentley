@@ -121,7 +121,7 @@ private:
     
     //! updates the fbo
     void updateFbo();
-    
+
     //! updates the fbo
     void updatePixels();
     

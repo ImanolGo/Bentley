@@ -43,7 +43,7 @@ void AppManager::setup()
     
     this->setupOF();
 	this->setupManagers();
-    //ofSetVerticalSync(false);
+
     
     m_initialized = true;
     ofLogNotice() << "AppManager::initialized";
@@ -53,9 +53,9 @@ void AppManager::setup()
 void AppManager::setupOF()
 {
     ofSetLogLevel(OF_LOG_NOTICE);
-    //ofSetVerticalSync(true);
+   // ofSetVerticalSync(true);
     
-    ofSetFrameRate(60);
+   // ofSetFrameRate(60);
     
     
     ofSetEscapeQuitsApp(false);
@@ -165,7 +165,7 @@ void AppManager::setDebugMode(bool showDebug)
 
 void AppManager::changeFrameRate(int& fps)
 {
-    ofSetFrameRate(fps);
+    //ofSetFrameRate(fps);
 }
 
 

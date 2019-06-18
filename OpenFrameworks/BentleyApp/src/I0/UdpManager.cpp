@@ -188,6 +188,7 @@ void UdpManager::update()
 {
    // this->updateElapsedTime();
     this->updateReveivePackage();
+    this->updatePixels();
 }
 
 void UdpManager::updateElapsedTime()
@@ -350,6 +351,7 @@ void UdpManager::updateTime()
     //m_udpConnection.Send(message.c_str(),message.length());
     
     m_frameNumber++;
+    
 }
 
 
