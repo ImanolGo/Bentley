@@ -132,7 +132,7 @@ class LedsManager: public Manager
     
         bool loadLedSubfolder(ofDirectory& dir);
     
-        bool loadBrancherSubfolder(ofDirectory& dir);
+        bool loadBranch(ofDirectory& dir, int num);
     
         void readLedsPositionFromGroup(const string& groupName, int& id, int numberOfSections);
     

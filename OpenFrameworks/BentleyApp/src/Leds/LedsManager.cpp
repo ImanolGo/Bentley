@@ -85,13 +85,9 @@ bool LedsManager::readBranchers()
     
     this->clearAll();
     
-    for(int i = 0; i < dir.size(); i++)
+    for(int i = 0; i < 100; i++)
     {
-        string pathAux =  dir.getPath(i);
-        ofDirectory dirAux(pathAux);
-        dirAux.listDir();
-        dirAux.sort();
-        this->loadBrancherSubfolder(dirAux);
+        this->loadBranch(dir, i);
     }
     
     return true;
@@ -817,9 +813,9 @@ void LedsManager::setSize(float& value)
 
 
 
-bool LedsManager::loadBrancherSubfolder(ofDirectory& dir)
+bool LedsManager::loadBranch(ofDirectory& dir, int num)
 {
-    ofLogNotice() <<"LedsManager::loading brancher subfolders ..." ;
+    ofLogNotice() <<"LedsManager::loading brancher -> "  << num;
     //only show txt files
     // dir.allowExt("txt");
     //ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Path: " << dir.getAbsolutePath();
@@ -833,40 +829,39 @@ bool LedsManager::loadBrancherSubfolder(ofDirectory& dir)
     dir.allowExt("CSV");
     
     if( dir.listDir() == 0){
-        ofLogNotice() <<"LedsManager::setupLeds -> No led files found in: " << path;
+        ofLogNotice() <<"LedsManager::loadBranch -> No brancher files found in: " << path;
         return false;
     }
     
     
-    unsigned short id = 100 + ( unsigned short) ofToInt(ofSplitString(folder_name, "_").back());
-    
-    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Path: " << path;
-    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Name: " << folder_name;
-    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Id: " << id;
-    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Size: " << dir.size();
-    
     string twodfile = "";
     string threedfile = "";
+    string brancherName = "BRANCHER " + ofToString(num);
     
     //go through and print out all the paths
     for(int i = 0; i < dir.size(); i++){
         string path = dir.getPath(i);
-        if(ofIsStringInString(path, "_2D_")){
+        if(ofIsStringInString(path, brancherName + "_2D_")){
             twodfile = path;
         }
         
-        if(ofIsStringInString(path, "_3D_")){
+        if(ofIsStringInString(path, brancherName + "_3D_")){
             threedfile = path;
         }
     }
     
-    
     if(twodfile.empty() || threedfile.empty()){
-        ofLogNotice()<< "LedsManager::loadLedSubfolder-> No position's pair found ";
+        //ofLogNotice()<< "LedsManager::loadLedSubfolder-> No position's pair found ";
         return false;
     }
     
+    unsigned short id = 100 + ( unsigned short) num;
     
+    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Name " << brancherName;
+    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> 2D Path: " << twodfile;
+    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> 3D Path: " << threedfile;
+    ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Id: " << id;
+
     return this->loadBrancherPair(twodfile, threedfile, id);
     
 }
