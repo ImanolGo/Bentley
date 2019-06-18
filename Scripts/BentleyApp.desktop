@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=true
+Exec=/home/snuc/bentley/OpenFrameworks/BentleyApp/bin/BentleyApp
+Name=BentleyApp
+Comment=BentleyApp
+Icon=/home/snuc/bentley/OpenFrameworks/BentleyApp/bin/data/images/icons/icon.png
