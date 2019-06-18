@@ -381,6 +381,8 @@ string UdpManager::getTlcSettingsHeader(unsigned short _id)
     message+= s[0];  message+= s[1];
     s = (unsigned char*)& m_tlcSettingsHeader.payload_size;
     message+= s[0];  message+= s[1];
+    
+    return message;
 }
 
 void UdpManager::sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb)
