@@ -40,7 +40,7 @@ class UdpManager: public Manager
         unsigned int mbc_hash;
         unsigned int packet_id;
         unsigned int response_time;
-        unsigned int endpoint_id;
+        unsigned int destination;
         unsigned short port;
         unsigned short payload_size;
         
@@ -97,7 +97,11 @@ private:
     
     void receivedIp(char _id);
     
-    string getDataHeader(unsigned int num_pixels);
+    string getDataHeader(unsigned int num_pixels, unsigned short _id);
+    
+    string getTimeHeader(unsigned short _id);
+    
+    string getTlcSettingsHeader(unsigned short _id);
     
     string getDataPayload(unsigned short _id, unsigned int offset, int num_pixels, const vector<ofColor>& pixels);
     

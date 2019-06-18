@@ -58,7 +58,7 @@ void UdpManager::setupHeaders()
     m_timeHeader.mbc_hash  = 0;
     m_timeHeader.packet_id = 0;
     m_timeHeader.response_time = 0;
-    m_timeHeader.endpoint_id = 0;
+    m_timeHeader.destination = 0;
     m_timeHeader.port = 8;
     m_timeHeader.payload_size = 4;
     
@@ -68,7 +68,7 @@ void UdpManager::setupHeaders()
     m_tlcSettingsHeader.mbc_hash  = 0;
     m_tlcSettingsHeader.packet_id = 0;
     m_tlcSettingsHeader.response_time = 0;
-    m_tlcSettingsHeader.endpoint_id = 0;
+    m_tlcSettingsHeader.destination = 0;
     m_tlcSettingsHeader.port = 9;
     m_tlcSettingsHeader.payload_size = 4;
     
@@ -78,7 +78,7 @@ void UdpManager::setupHeaders()
     m_tileDataHeader.mbc_hash  = 0;
     m_tileDataHeader.packet_id = 0;
     m_tileDataHeader.response_time = 0;
-    m_tileDataHeader.endpoint_id = 0;
+    m_tileDataHeader.destination = 0;
     m_tileDataHeader.port = 10;
     m_tileDataHeader.payload_size = 0;
     
@@ -88,7 +88,7 @@ void UdpManager::setupHeaders()
     m_sensorHeader.mbc_hash  = 0;
     m_sensorHeader.packet_id = 0;
     m_sensorHeader.response_time = 0;
-    m_sensorHeader.endpoint_id = 0;
+    m_sensorHeader.destination = 0;
     m_sensorHeader.port = 11;
     m_sensorHeader.payload_size = 0;
     
@@ -188,7 +188,7 @@ void UdpManager::update()
 {
    // this->updateElapsedTime();
     this->updateReveivePackage();
-    this->updatePixels();
+    //this->updatePixels();
 }
 
 void UdpManager::updateElapsedTime()
@@ -204,7 +204,7 @@ void UdpManager::sendTest()
     
     vector<ofColor> pixels;
     pixels.push_back(ofColor(0)); pixels.push_back(ofColor(127)); pixels.push_back(ofColor(255));
-    string message = this->getDataHeader(pixels.size());
+    string message = this->getDataHeader(pixels.size(), 100);
     message+=this->getDataPayload(100, 0, pixels.size(), pixels);
     m_udpConnection.Send(message.c_str(), message.length());
     
@@ -243,7 +243,7 @@ void UdpManager::updatePixels()
            
             for(int i=0; i<division; i++){
                 
-                string message = this->getDataHeader(m_maxNumPixelsPerPacket);
+                string message = this->getDataHeader(m_maxNumPixelsPerPacket, id);
                 message+=this->getDataPayload(id, offset,m_maxNumPixelsPerPacket,pixels);
                 m_udpConnections[id]->Send(message.c_str(), message.length());
                 offset+=m_maxNumPixelsPerPacket;
@@ -252,7 +252,7 @@ void UdpManager::updatePixels()
             
             if(remainder!=0)
             {
-                string message = this->getDataHeader(remainder);
+                string message = this->getDataHeader(remainder,id);
                 message+=this->getDataPayload(id, offset,remainder,pixels);
                 m_udpConnections[id]->Send(message.c_str(), message.length());
                 //this->printHex(message);
@@ -265,7 +265,7 @@ void UdpManager::updatePixels()
     
 }
 
-string UdpManager::getDataHeader(unsigned int num_pixels)
+string UdpManager::getDataHeader(unsigned int num_pixels, unsigned short _id)
 {
     string message="";
     
@@ -284,8 +284,8 @@ string UdpManager::getDataHeader(unsigned int num_pixels)
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     s = (unsigned char*)& m_tileDataHeader.response_time;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
-    s = (unsigned char*)& m_tileDataHeader.endpoint_id;
-    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& _id;
+    message+= s[0];  message+= s[1];  message+=(unsigned char)0;  message+=(unsigned char)0;
     s = (unsigned char*)& m_tileDataHeader.port;
     message+= s[0];  message+= s[1];
     s = (unsigned char*)& m_tileDataHeader.payload_size;
@@ -317,11 +317,10 @@ string UdpManager::getDataPayload(unsigned short _id, unsigned int offset, int n
     return message;
 }
 
-void UdpManager::updateTime()
+string UdpManager::getTimeHeader(unsigned short _id)
 {
-    
     m_timeHeader.packet_id = ++m_packetID;
-   
+    
     string message="";
     unsigned char * s = (unsigned char*)& m_timeHeader.mnudp_ver;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
@@ -335,29 +334,32 @@ void UdpManager::updateTime()
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     s = (unsigned char*)& m_timeHeader.response_time;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
-    s = (unsigned char*)& m_timeHeader.endpoint_id;
-    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& _id;
+    message+= s[0];  message+= s[1];  message+=(unsigned char)0;  message+=(unsigned char)0;
     s = (unsigned char*)& m_timeHeader.port;
     message+= s[0];  message+= s[1];
     s = (unsigned char*)& m_timeHeader.payload_size;
     message+= s[0];  message+= s[1];
-    s = (unsigned char*)& m_frameNumber;
-    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     
+    return message;
+}
+
+void UdpManager::updateTime()
+{
     for(auto& udpConnection: m_udpConnections){
+        string message = this->getTimeHeader(udpConnection.first);
+        unsigned char * s = (unsigned char*)& m_frameNumber;
+        message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
         udpConnection.second->Send(message.c_str(),message.length());
     }
     
     //m_udpConnection.Send(message.c_str(),message.length());
-    
     m_frameNumber++;
-    
 }
 
 
-void UdpManager::sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb)
+string UdpManager::getTlcSettingsHeader(unsigned short _id)
 {
-   
     m_tlcSettingsHeader.packet_id = ++m_packetID;
     
     string message="";
@@ -373,20 +375,22 @@ void UdpManager::sendTlcSettings(const unsigned char& bcr, const unsigned char& 
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     s = (unsigned char*)& m_tlcSettingsHeader.response_time;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
-    s = (unsigned char*)& m_tlcSettingsHeader.endpoint_id;
-    message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
+    s = (unsigned char*)& _id;
+    message+= s[0];  message+= s[1];  message+=(unsigned char)0;  message+=(unsigned char)0;
     s = (unsigned char*)& m_tlcSettingsHeader.port;
     message+= s[0];  message+= s[1];
     s = (unsigned char*)& m_tlcSettingsHeader.payload_size;
     message+= s[0];  message+= s[1];
-    
-    unsigned char global_settings = 2;
-    message+=global_settings;
-    message+=bcr;
-    message+=bcg;
-    message+=bcb;
-    
+}
+
+void UdpManager::sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb)
+{
+   
     for(auto& udpConnection: m_udpConnections){
+        string message = this->getTlcSettingsHeader(udpConnection.first);
+        unsigned char global_settings = 2;
+        message+=global_settings;
+        message+=bcr; message+=bcg;message+=bcb;
         udpConnection.second->Send(message.c_str(),message.length());
     }
 

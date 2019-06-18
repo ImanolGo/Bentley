@@ -184,7 +184,7 @@ void LedsManager::createLayout()
     ofClear(0, 0, 0, 255);
     ofSetColor(255);
     
-    float size = 20;
+    float size = 4;
     for(auto led: m_points2D){
         float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
         float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
@@ -695,7 +695,7 @@ void LedsManager::updateLeds()
     if(m_isNewFrame){
         m_isNewFrame = false;
         this->updateBranches();
-        //AppManager::getInstance().getUdpManager().updatePixels();
+        AppManager::getInstance().getUdpManager().updatePixels();
     }
     
 }

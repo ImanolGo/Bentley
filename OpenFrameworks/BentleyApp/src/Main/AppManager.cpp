@@ -165,7 +165,7 @@ void AppManager::setDebugMode(bool showDebug)
 
 void AppManager::changeFrameRate(int& fps)
 {
-    //ofSetFrameRate(fps);
+    ofSetFrameRate(fps);
 }
 
 
