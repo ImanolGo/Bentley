@@ -68,16 +68,20 @@ void ShaderScene::update()
 
 void ShaderScene::updateTime()
 {
-    m_fbo.begin();
-    ofClear(0);
-    this->drawShader();
-    m_fbo.end();
+    float speed = AppManager::getInstance().getGuiManager().getShaderSpeed();
+    m_elapsedTime += (ofGetLastFrameTime()* speed);
+    if(m_elapsedTime<0){
+        m_elapsedTime = 0;
+    }
     
 }
 
 void ShaderScene::updateFbo()
 {
-   this->drawShader();
+    m_fbo.begin();
+    ofClear(0);
+    this->drawShader();
+    m_fbo.end();
 }
 
 void ShaderScene::draw()
