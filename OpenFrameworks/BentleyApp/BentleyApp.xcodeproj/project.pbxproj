@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00F8DAC81953313F8180A13C /* ofxTextBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1486C841BC2A30DB7CBC449C /* ofxTextBlock.cpp */; };
 		051871DC20FC3FA3494C35B8 /* NetworkingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E9815A3BF35D7D8A49C7C191 /* NetworkingUtils.cpp */; };
+		0814763B22B971360058F44F /* ShaderScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0814763922B971360058F44F /* ShaderScene.cpp */; };
 		082D8DCA22B60B72004BC443 /* StemsScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 082D8DC822B60B72004BC443 /* StemsScene.cpp */; };
 		083C29DE228DA6E100C730EE /* Brancher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 083C29DD228DA6E100C730EE /* Brancher.cpp */; };
 		0885DFF022B53D8C00583D35 /* SinglePixelScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0885DFEF22B53D8B00583D35 /* SinglePixelScene.cpp */; };
@@ -131,6 +132,8 @@
 		0607D43FBA32E9855CC5A982 /* md4.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = md4.h; path = ../../../../../../../../Applications/of_v0.10.1_osx_release/addons/ofxPoco/libs/openssl/include/openssl/md4.h; sourceTree = SOURCE_ROOT; };
 		06A5B3AA5459CC5F29B84644 /* addon_config.mk */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = addon_config.mk; path = src/Addons/ofxImGui/addon_config.mk; sourceTree = SOURCE_ROOT; };
 		06E4699DDD0C907002D10794 /* LICENSE.md */ = {isa = PBXFileReference; explicitFileType = file; fileEncoding = 4; name = LICENSE.md; path = src/Addons/ofxNetworkUtils/LICENSE.md; sourceTree = SOURCE_ROOT; };
+		0814763922B971360058F44F /* ShaderScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShaderScene.cpp; path = Scenes/ShaderScene.cpp; sourceTree = "<group>"; };
+		0814763A22B971360058F44F /* ShaderScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShaderScene.h; path = Scenes/ShaderScene.h; sourceTree = "<group>"; };
 		082D8DC822B60B72004BC443 /* StemsScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StemsScene.cpp; path = Scenes/StemsScene.cpp; sourceTree = "<group>"; };
 		082D8DC922B60B72004BC443 /* StemsScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StemsScene.h; path = Scenes/StemsScene.h; sourceTree = "<group>"; };
 		083C29DC228DA6E000C730EE /* Brancher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Brancher.h; path = Leds/Brancher.h; sourceTree = "<group>"; };
@@ -1210,6 +1213,8 @@
 				8C488F38001D542DA27140DF /* scenes.h */,
 				082D8DC822B60B72004BC443 /* StemsScene.cpp */,
 				082D8DC922B60B72004BC443 /* StemsScene.h */,
+				0814763922B971360058F44F /* ShaderScene.cpp */,
+				0814763A22B971360058F44F /* ShaderScene.h */,
 				E97B079D08ECF0E7E86C1EE1 /* TestScene.cpp */,
 				FD270B76B7B246B4E5CAC8B1 /* TestScene.h */,
 				0885DFF422B561E500583D35 /* ColorScene.cpp */,
@@ -1744,6 +1749,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				76A63EE6C436F4596E9DDE8C /* readme.md in Sources */,
+				0814763B22B971360058F44F /* ShaderScene.cpp in Sources */,
 				333113E71EDD596780D5FC0C /* ofxBlur.cpp in Sources */,
 				B11B6745207ECB40A0008D8D /* ofxFastFboReader.cpp in Sources */,
 				BBC973C5A22BFEED8BC0D2B9 /* addon_config.mk in Sources */,

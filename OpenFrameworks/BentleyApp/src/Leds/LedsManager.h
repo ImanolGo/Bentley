@@ -185,7 +185,7 @@ class LedsManager: public Manager
         vector <ofVec3f> m_sizesModel;
         vector <ofFloatColor> m_colors;
         vector <ofFloatColor> m_colorsBlack;
-    
+
         int         m_offset;
         int         m_bcr, m_bcg, m_bcb; //BC current setting
     

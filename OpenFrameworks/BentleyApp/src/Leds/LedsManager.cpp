@@ -691,7 +691,7 @@ void LedsManager::updateLeds()
     if(m_isNewFrame){
         m_isNewFrame = false;
         this->updateBranches();
-        AppManager::getInstance().getUdpManager().updatePixels();
+        //AppManager::getInstance().getUdpManager().updatePixels();
     }
     
 }

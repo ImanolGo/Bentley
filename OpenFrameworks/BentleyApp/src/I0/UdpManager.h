@@ -65,9 +65,9 @@ public:
     
     void updatePixels();
     
-    void setStreaming(bool& value){m_streaming = value;}
+    void setStreaming(bool& value);
     
-    void nextFrame(){m_nextFrame = true;}
+    void nextFrame();
     
     void sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb);
     
@@ -122,7 +122,8 @@ private:
     unsigned short  m_maxDataPacketSize;
     unsigned int    m_frameNumber;
     bool            m_streaming;
-    bool            m_nextFrame;
+    bool            m_refreshTime;
+    bool            m_refreshPixels;
     double          m_elapsedTime;
     
     

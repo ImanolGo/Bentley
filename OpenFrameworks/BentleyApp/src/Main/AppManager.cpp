@@ -106,6 +106,8 @@ void AppManager::setupManagers()
     m_sceneManager.setup();
     
     m_guiManager.setup();
+    
+    
 }
 
 void AppManager::update()
@@ -123,6 +125,7 @@ void AppManager::update()
     m_ledsManager.update();
     m_modelManager.update();
     m_layoutManager.update();
+    m_udpManager.update();
     m_guiManager.update();
 }
 

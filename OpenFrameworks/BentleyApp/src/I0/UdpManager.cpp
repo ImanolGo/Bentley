@@ -18,7 +18,7 @@ const int UdpManager::DATA_HEADER_OVERHEAD = 60;
 const double UdpManager::UDP_SEND_TIME = 1.0;
 
 
-UdpManager::UdpManager(): Manager(), m_packetID(0), m_maxNumPixelsPerPacket(100), m_frameNumber(1), m_streaming(true), m_elapsedTime(0.0), m_nextFrame(false)
+UdpManager::UdpManager(): Manager(), m_packetID(0), m_maxNumPixelsPerPacket(100), m_frameNumber(1), m_streaming(true), m_refreshPixels(false), m_refreshTime(true)
 {
     //Intentionally left empty
 }
@@ -188,14 +188,17 @@ void UdpManager::update()
 {
    // this->updateElapsedTime();
     this->updateReveivePackage();
-    //this->updatePixels();
+    
+    if(m_refreshPixels){
+        this->updatePixels();
+        
+    }
+    
+    if(m_refreshTime){
+        this->updateTime();
+    }
+   
 }
-
-void UdpManager::updateElapsedTime()
-{
-    m_elapsedTime+=ofGetLastFrameTime();
-}
-
 
 
 void UdpManager::sendTest()
@@ -215,17 +218,7 @@ void UdpManager::sendTest()
 
 void UdpManager::updatePixels()
 {
-//    if(m_streaming && m_elapsedTime<UDP_SEND_TIME){
-//        return;
-//    }
-//    
-//    m_elapsedTime = 0;
-    
-    if(!m_streaming && !m_nextFrame){
-        return;
-    }
-    
-    m_nextFrame = false;
+    //ofLogNotice() <<"UdpManager::updatePixels -> " << ofGetElapsedTimeMillis() << "ms";
     
     const auto & branches = AppManager::getInstance().getLedsManager().getBranchers();
     
@@ -261,7 +254,8 @@ void UdpManager::updatePixels()
     }
     
     
-    this->updateTime();
+    m_refreshTime = true;
+    m_refreshPixels = false;
     
 }
 
@@ -346,6 +340,8 @@ string UdpManager::getTimeHeader(unsigned short _id)
 
 void UdpManager::updateTime()
 {
+    //ofLogNotice() <<"UdpManager::updateTime -> " << ofGetElapsedTimeMillis() << "ms";
+    
     for(auto& udpConnection: m_udpConnections){
         string message = this->getTimeHeader(udpConnection.first);
         unsigned char * s = (unsigned char*)& m_frameNumber;
@@ -355,6 +351,10 @@ void UdpManager::updateTime()
     
     //m_udpConnection.Send(message.c_str(),message.length());
     m_frameNumber++;
+    m_refreshTime = false;
+    if(m_streaming){
+        m_refreshPixels = true;
+    }
 }
 
 
@@ -396,6 +396,17 @@ void UdpManager::sendTlcSettings(const unsigned char& bcr, const unsigned char& 
         udpConnection.second->Send(message.c_str(),message.length());
     }
 
+}
+
+void UdpManager::nextFrame()
+{
+    this->updatePixels();
+}
+
+void UdpManager::setStreaming(bool& value)
+{
+    m_streaming = value;
+    this->updatePixels();
 }
 
 void UdpManager::updateReveivePackage()
