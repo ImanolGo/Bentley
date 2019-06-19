@@ -105,7 +105,7 @@ void GuiManager::setupScenesGui()
         m_sceneNames.push_back(scenesManager->getSceneName(i));
     }
     
-    m_solidColor.set( "Color", ofFloatColor::gray );
+    m_solidColor.set( "Color", ofFloatColor::white );
     m_parameters.add(m_solidColor);
 }
 
