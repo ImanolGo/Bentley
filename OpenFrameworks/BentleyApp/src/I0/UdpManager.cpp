@@ -193,8 +193,7 @@ void UdpManager::update()
         this->updatePixels();
         
     }
-    
-    if(m_refreshTime){
+    else if(m_refreshTime){
         this->updateTime();
     }
    
