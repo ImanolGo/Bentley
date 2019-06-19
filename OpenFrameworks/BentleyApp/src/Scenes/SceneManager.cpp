@@ -139,6 +139,12 @@ void SceneManager::createScenes()
     shaderScene->setup();
     m_mySceneManager.addScene(shaderScene);
     m_sceneOffset++;
+    
+    //Create shader Scene
+    shaderScene = ofPtr<ShaderScene> (new ShaderScene("CloudsShader"));
+    shaderScene->setup();
+    m_mySceneManager.addScene(shaderScene);
+    m_sceneOffset++;
 
 
     
