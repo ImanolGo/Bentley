@@ -68,7 +68,13 @@ public:
     
     void onVideoChange(int videoIndex);
     
-    ofFloatColor getSolidColor() {return m_solidColor.get();}
+    ofFloatColor getSolidColor() const{return m_solidColor.get();}
+    
+    float getShaderSpeed() const {return m_shaderSpeed.get();}
+    
+    float getShaderParameter() const{return m_shaderParameter.get();}
+    
+    int getShaderDirection() const {return m_shaderDirection.get();}
     
 private:
     
@@ -79,6 +85,8 @@ private:
     void drawGui();
     
     void setupVideoGui();
+    
+    void setupShadersGui();
     
     void setupModesGui();
     
@@ -103,9 +111,14 @@ private:
     ofParameterGroup m_communications;
     ofParameterGroup m_scenesGroup;
     ofParameterGroup m_postProcessingGroup;
+    ofParameterGroup m_shadersGroup;
     ofParameterGroup m_communicationsGroup;
     
     ofParameter<int>      m_fps;
+    
+    ofParameter<float>      m_shaderSpeed;
+    ofParameter<float>      m_shaderParameter;
+    ofParameter<int>        m_shaderDirection;
     
     ofParameter<string>     m_videoPath;
     ofParameter<int>        m_viewMode;

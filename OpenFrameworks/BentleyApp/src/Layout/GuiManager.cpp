@@ -48,6 +48,7 @@ void GuiManager::setup()
     this->setupLedsGui();
     this->setupVideoGui();
     this->setupProcessingGroup();
+    this->setupShadersGui();
     this->loadGuiValues();
     
     //this->drawGui();
@@ -104,7 +105,8 @@ void GuiManager::setupScenesGui()
         m_sceneNames.push_back(scenesManager->getSceneName(i));
     }
     
-    m_solidColor.set( "Color", ofFloatColor::black );
+    m_solidColor.set( "Color", ofFloatColor::gray );
+    m_parameters.add(m_solidColor);
 }
 
 void GuiManager::onSceneChange(int sceneIndex)
@@ -146,6 +148,25 @@ void GuiManager::setupVideoGui()
     m_videoPath.addListener(videoManager, &VideoManager::loadVideos);
     m_parameters.add(m_videoPath);
     m_videoGroup.add(m_videoPath);
+    
+}
+
+
+void GuiManager::setupShadersGui()
+{
+    m_shadersGroup.setName("Shaders");
+    
+    m_shaderSpeed.set("Speed", 1.0, 0.0, 2.0);
+    m_parameters.add(m_shaderSpeed);
+    m_shadersGroup.add(m_shaderSpeed);
+    
+    m_shaderParameter.set("Parameter", 1.0, 0.0, 5.0);
+    m_parameters.add(m_shaderParameter);
+    m_shadersGroup.add(m_shaderParameter);
+    
+    m_shaderDirection.set("Direction", 0, 0, 3);
+    m_parameters.add(m_shaderDirection);
+    m_shadersGroup.add(m_shaderDirection);
     
 }
 
@@ -345,6 +366,16 @@ void GuiManager::drawGui()
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MaxInput"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MinOutput"));
                 ofxImGui::AddParameter(m_postProcessingGroup.getFloat("MaxOutput"));
+                ofxImGui::EndTree(mainSettings);
+            }
+            
+            if (ofxImGui::BeginTree(m_shadersGroup, mainSettings))
+            {
+                //auto & group =
+                
+                ofxImGui::AddParameter(m_shadersGroup.getFloat("Speed"));
+                ofxImGui::AddParameter(m_shadersGroup.getFloat("Parameter"));
+                ofxImGui::AddParameter(m_shadersGroup.getInt("Direction"));
                 ofxImGui::EndTree(mainSettings);
             }
             

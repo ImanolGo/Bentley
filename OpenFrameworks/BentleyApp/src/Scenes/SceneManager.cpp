@@ -110,10 +110,16 @@ void SceneManager::createScenes()
     m_mySceneManager.addScene(singleScene);
     m_sceneOffset++;
     
-    //Create Single Pixel Scene
+    //Create Stem Scene
     auto stemsScene = ofPtr<StemsScene> (new StemsScene());
     stemsScene->setup();
     m_mySceneManager.addScene(stemsScene);
+    m_sceneOffset++;
+    
+    //Create shader Scene
+    auto shaderScene = ofPtr<ShaderScene> (new ShaderScene("NoiseShader"));
+    shaderScene->setup();
+    m_mySceneManager.addScene(shaderScene);
     m_sceneOffset++;
 
 

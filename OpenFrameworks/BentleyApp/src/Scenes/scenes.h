@@ -15,3 +15,4 @@
 #include "SinglePixelScene.h"
 #include "ColorScene.h"
 #include "StemsScene.h"
+#include "ShaderScene.h"
