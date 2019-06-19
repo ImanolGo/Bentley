@@ -121,6 +121,18 @@ void SceneManager::createScenes()
     shaderScene->setup();
     m_mySceneManager.addScene(shaderScene);
     m_sceneOffset++;
+    
+    //Create shader Scene
+    shaderScene = ofPtr<ShaderScene> (new ShaderScene("CirclesShader"));
+    shaderScene->setup();
+    m_mySceneManager.addScene(shaderScene);
+    m_sceneOffset++;
+    
+    //Create shader Scene
+    shaderScene = ofPtr<ShaderScene> (new ShaderScene("SparklesShader"));
+    shaderScene->setup();
+    m_mySceneManager.addScene(shaderScene);
+    m_sceneOffset++;
 
 
     

@@ -45,14 +45,21 @@ private:
     
     void setupShader();
     
-    void updateShader();
+    void setupFbo();
+    
+    void updateTime();
+    
+    void updateFbo();
     
     void drawShader();
+    
+    void drawFbo();
     
 private:
     
     
     ofShader 	m_shader;
+    ofFbo       m_fbo;
     float       m_elapsedTime;
     bool        m_initialized;
 
