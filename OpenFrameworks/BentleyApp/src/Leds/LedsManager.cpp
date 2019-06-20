@@ -184,10 +184,15 @@ void LedsManager::createLayout()
     for(auto led: m_points2D){
         float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
         float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
-        //ofDrawCircle(x, y, 4);
         ofDrawRectangle(x - size*0.5, y - size*0.5, size, size);
     }
     
+    float x = ofMap(m_posServo.x, m_minPos.x, m_maxPos.x, 0.0, width);
+    float y = ofMap(m_posServo.y, m_minPos.y, m_maxPos.y, 0.0, height);
+    
+    ofSetColor(255, 255, 0);
+    ofDrawRectangle(x - size, y - size, size*2, size*2);
+    //ofDrawRectangle(x - size, y - size, 100, 100);
     
     fbo.end();
     
@@ -234,6 +239,11 @@ void LedsManager::map2DpositionsToFbo()
         position.x = x;
         position.y = y;
     }
+    
+    
+    m_posServo.x =  ofMap(m_posServo.x, m_minPos.x, m_maxPos.x, 0.0, width-1);
+    m_posServo.y =  ofMap(m_posServo.y, m_minPos.y, m_maxPos.y, height-1,0);
+    
 }
 
 void LedsManager::createLedPositions()
@@ -323,6 +333,10 @@ bool LedsManager::addBrancherPair(string& pathTwoD, string& pathThreeD, shared_p
                 string stem_id = strs[1];
                // ofLogNotice() <<"LedsManager::addBrancherPair-> stem_id : " << stem_id;
                 brancher->addStemPixel(stem_id, size-1);
+                if(stem_id == "servo"){
+                    m_posServo = ledPosition2D;
+                    ofLogNotice() <<"LedsManager::addBrancherPair-> servo found : " << m_posServo;
+                }
             }
         }
         
@@ -589,6 +603,8 @@ void LedsManager::centre2DLeds(float margin_percentage)
     {
         position-=shift;
     }
+    
+    m_posServo-=shift;
 
     m_maxPos -=shift;
     m_minPos -=shift;
