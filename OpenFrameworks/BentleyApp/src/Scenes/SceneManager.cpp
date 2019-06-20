@@ -86,23 +86,6 @@ void SceneManager::createScenes()
     m_mySceneManager.addScene(imageScene);
     m_sceneOffset++;
     
-    //Create Image Scene
-    imageScene = ofPtr<ImageScene> (new ImageScene("BarcodeV"));
-    imageScene->setup();
-    m_mySceneManager.addScene(imageScene);
-    m_sceneOffset++;
-    
-    //Create Image Scene
-    imageScene = ofPtr<ImageScene> (new ImageScene("BarcodeH"));
-    imageScene->setup();
-    m_mySceneManager.addScene(imageScene);
-    m_sceneOffset++;
-    
-    //Create Image Scene
-    imageScene = ofPtr<ImageScene> (new ImageScene("PaulSmith"));
-    imageScene->setup();
-    m_mySceneManager.addScene(imageScene);
-    m_sceneOffset++;
     
     //Create Single Pixel Scene
     auto singleScene = ofPtr<SinglePixelScene> (new SinglePixelScene());

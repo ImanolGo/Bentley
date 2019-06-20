@@ -10,7 +10,7 @@
 #include "TestScene.h"
 #include "AppManager.h"
 
-TestScene::TestScene(): ofxScene("Test"), m_initialized(false), m_totalTime(60)
+TestScene::TestScene(): ofxScene("Test"), m_initialized(false), m_totalTime(100)
 {
     //Intentionally left empty
 }
@@ -118,7 +118,7 @@ void TestScene::startAnimations()
     float height = AppManager::getInstance().getSettingsManager().getAppHeight();
     
     EffectSettings settings;
-    settings.function = SINUSOIDAL;
+    settings.function = LINEAR;
     settings.startAnimation = 0.0;
     settings.animationTime = m_totalTime/(2*m_rectangles.size());
     
@@ -148,6 +148,7 @@ void TestScene::startAnimations()
     settings.startAnimation += settings.animationTime;
     AppManager::getInstance().getVisualEffectsManager().createScaleEffect(m_rectangles["Blue"], ofVec2f(1.0,1.0), ofVec2f(0.0,0.0), settings);
     
+    settings.function = SINUSOIDAL;
     settings.startAnimation += settings.animationTime;
     settings.type = EASE_OUT;
     m_rectangles["White"]->setAlpha(0.0);
