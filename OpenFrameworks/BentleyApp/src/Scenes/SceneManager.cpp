@@ -272,12 +272,12 @@ void SceneManager::addVideos()
      
     this->removeVideos();
     
-    auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoResourcesPath();
+    auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoNames();
   
     for(auto& path : videoPaths){
-        auto videoScene = ofPtr<VideoScene>(new VideoScene(path.first));
+        auto videoScene = ofPtr<VideoScene>(new VideoScene(path));
         videoScene->setup();
-        ofLogNotice() <<"SceneManager::add video scene -> " << path.first;
+        ofLogNotice() <<"SceneManager::add video scene -> " << path;
         m_mySceneManager.addScene(videoScene);
     }
     

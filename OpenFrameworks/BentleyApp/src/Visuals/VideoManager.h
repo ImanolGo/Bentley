@@ -89,6 +89,8 @@ public:
     int getCurrentStatus() const {return m_status;}
     
     const ResourcesPathMap& getVideoResourcesPath() const {return m_videoResourcesPath;}
+    
+    const vector<string>& getVideoNames() const {return m_videoNames;}
 
 
 private:

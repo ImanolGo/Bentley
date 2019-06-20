@@ -815,7 +815,7 @@ void LedsManager::setSize(float& value)
 
 bool LedsManager::loadBranch(ofDirectory& dir, int num)
 {
-    ofLogNotice() <<"LedsManager::loading brancher -> "  << num;
+    //ofLogNotice() <<"LedsManager::loading brancher -> "  << num;
     //only show txt files
     // dir.allowExt("txt");
     //ofLogNotice()<< "LedsManager::loadBrancherSubfolder-> Path: " << dir.getAbsolutePath();
