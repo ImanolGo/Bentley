@@ -138,6 +138,7 @@
 		082D8DC922B60B72004BC443 /* StemsScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StemsScene.h; path = Scenes/StemsScene.h; sourceTree = "<group>"; };
 		083C29DC228DA6E000C730EE /* Brancher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Brancher.h; path = Leds/Brancher.h; sourceTree = "<group>"; };
 		083C29DD228DA6E100C730EE /* Brancher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Brancher.cpp; path = Leds/Brancher.cpp; sourceTree = "<group>"; };
+		0851CBFF22BBA8B500B1FF04 /* natural_sort.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = natural_sort.hpp; path = Utils/natural_sort.hpp; sourceTree = "<group>"; };
 		0885DFEE22B53D8B00583D35 /* SinglePixelScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SinglePixelScene.h; path = Scenes/SinglePixelScene.h; sourceTree = "<group>"; };
 		0885DFEF22B53D8B00583D35 /* SinglePixelScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SinglePixelScene.cpp; path = Scenes/SinglePixelScene.cpp; sourceTree = "<group>"; };
 		0885DFF122B559C800583D35 /* ImageScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageScene.h; path = Scenes/ImageScene.h; sourceTree = "<group>"; };
@@ -617,6 +618,14 @@
 				B7F86ACC7BC26AAC8E9BB8D8 /* UdpManager.h */,
 			);
 			name = I0;
+			sourceTree = "<group>";
+		};
+		0851CBFE22BBA8A100B1FF04 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				0851CBFF22BBA8B500B1FF04 /* natural_sort.hpp */,
+			);
+			name = Utils;
 			sourceTree = "<group>";
 		};
 		08E16ED5FD8D48C6776B1270 /* ofxEasing */ = {
@@ -1606,6 +1615,7 @@
 				AF4FDCF7E02C59FCC5FE54A2 /* Main */,
 				C9A8C2EA34B35E4BED69D33C /* Scenes */,
 				C02C33831C66F04FEBAE29DE /* Visuals */,
+				0851CBFE22BBA8A100B1FF04 /* Utils */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
