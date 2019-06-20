@@ -261,6 +261,7 @@ void UdpManager::updatePixels()
 string UdpManager::getDataHeader(unsigned int num_pixels, unsigned short _id)
 {
     string message="";
+	unsigned char zero_character = 0;
     
     m_tileDataHeader.packet_id = ++m_packetID;
     m_tileDataHeader.payload_size = 10 + num_pixels*3;
@@ -278,7 +279,7 @@ string UdpManager::getDataHeader(unsigned int num_pixels, unsigned short _id)
     s = (unsigned char*)& m_tileDataHeader.response_time;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     s = (unsigned char*)& _id;
-    message+= s[0];  message+= s[1];  message+=(unsigned char)0;  message+=(unsigned char)0;
+    message+= s[0];  message+= s[1];  message+= zero_character;  message+= zero_character;
     s = (unsigned char*)& m_tileDataHeader.port;
     message+= s[0];  message+= s[1];
     s = (unsigned char*)& m_tileDataHeader.payload_size;
@@ -313,6 +314,7 @@ string UdpManager::getDataPayload(unsigned short _id, unsigned int offset, int n
 string UdpManager::getTimeHeader(unsigned short _id)
 {
     m_timeHeader.packet_id = ++m_packetID;
+	unsigned char zero_character = 0;
     
     string message="";
     unsigned char * s = (unsigned char*)& m_timeHeader.mnudp_ver;
@@ -328,7 +330,7 @@ string UdpManager::getTimeHeader(unsigned short _id)
     s = (unsigned char*)& m_timeHeader.response_time;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     s = (unsigned char*)& _id;
-    message+= s[0];  message+= s[1];  message+=(unsigned char)0;  message+=(unsigned char)0;
+    message+= s[0];  message+= s[1];  message+= zero_character;  message+= zero_character;
     s = (unsigned char*)& m_timeHeader.port;
     message+= s[0];  message+= s[1];
     s = (unsigned char*)& m_timeHeader.payload_size;
@@ -360,6 +362,8 @@ void UdpManager::updateTime()
 string UdpManager::getTlcSettingsHeader(unsigned short _id)
 {
     m_tlcSettingsHeader.packet_id = ++m_packetID;
+
+	unsigned char zero_character = 0;
     
     string message="";
     unsigned char * s = (unsigned char*)& m_tlcSettingsHeader.mnudp_ver;
@@ -375,7 +379,7 @@ string UdpManager::getTlcSettingsHeader(unsigned short _id)
     s = (unsigned char*)& m_tlcSettingsHeader.response_time;
     message+= s[0];  message+= s[1];  message+= s[2];  message+= s[3];
     s = (unsigned char*)& _id;
-    message+= s[0];  message+= s[1];  message+=(unsigned char)0;  message+=(unsigned char)0;
+    message+= s[0];  message+= s[1];  message+= zero_character;  message+= zero_character;
     s = (unsigned char*)& m_tlcSettingsHeader.port;
     message+= s[0];  message+= s[1];
     s = (unsigned char*)& m_tlcSettingsHeader.payload_size;
