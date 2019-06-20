@@ -114,5 +114,5 @@ void main()
     
     vec3 result = mix(skycolour, clamp(skytint * skycolour + cloudcolour, 0.0, 1.0), clamp(parameter*(f + c), 0.0, 1.0));
 
-    gl_FragColor = vec4(result, iColor.a );
+    gl_FragColor = vec4(iColor.rgb*result, iColor.a );
 }
