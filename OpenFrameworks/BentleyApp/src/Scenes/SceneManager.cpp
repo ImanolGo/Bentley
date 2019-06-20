@@ -13,7 +13,7 @@
 #include "scenes.h"
 #include "AppManager.h"
 
-SceneManager::SceneManager(): Manager(), m_alpha(-1), m_transitionTime(1.0), m_sceneOffset(2), m_currentVideoIndex(0), m_status(false)
+SceneManager::SceneManager(): Manager(), m_alpha(-1), m_transitionTime(1.0), m_sceneOffset(2), m_currentVideoIndex(0), m_status(false), m_servoColor(ofColor::white)
 {
 	//Intentionally left empty
 }
@@ -36,6 +36,8 @@ void SceneManager::setup()
     this->setupFbo();
     this->setupLevels();
    // this->setupTimer();
+    
+    m_servoColor.a = 0;
 
     ofLogNotice() <<"SceneManager::initialized";
 
@@ -199,6 +201,7 @@ void SceneManager::updateFbo()
         ofSetColor(255);
         ofEnableAlphaBlending();
             m_levels.draw();
+            this->drawServo();
         ofDisableAlphaBlending();
 		ofPopStyle();
     m_fbo.end();
@@ -243,7 +246,17 @@ void SceneManager::draw()
     frame.y = rect->getHeight()*0.5 - frame.height*0.5;
     
     m_fbo.draw(frame);
+}
+
+void SceneManager::drawServo()
+{
+    const auto & pos = AppManager::getInstance().getLedsManager().getServoPosition();
+    float size = 20;
+    ofPushStyle();
+    ofSetColor(m_servoColor);
+    ofDrawRectangle(pos.x - size*0.5, pos.y - size*0.5, size, size);
     
+    ofPopStyle();
 }
 
 void SceneManager::draw(const ofRectangle& rect)
@@ -378,6 +391,21 @@ void SceneManager::sendSceneChange()
 }
 
 
+void SceneManager::setServoPosition(float & value)
+{
+    float brightness =  ofMap(value, 0.0, 1.0, 0.0, 255.0);
+    m_servoColor.setBrightness(brightness);
+}
+
+void SceneManager::setManualServo(bool & value)
+{
+    if(value){
+        m_servoColor.a = 255;
+    }
+    else{
+        m_servoColor.a = 0;
+    }
+}
 
 
 

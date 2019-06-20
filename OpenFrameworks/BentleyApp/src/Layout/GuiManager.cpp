@@ -222,6 +222,7 @@ void GuiManager::setupProcessingGroup()
 void GuiManager::setupLedsGui()
 {
     auto ledsManager = &AppManager::getInstance().getLedsManager();
+    auto sceneManager = &AppManager::getInstance().getSceneManager();
     
     m_ledsGroup.setName("Leds");
     m_ledsSize.set("Size", 1.0, 0.0, 20.0);
@@ -229,6 +230,16 @@ void GuiManager::setupLedsGui()
     m_ledsGroup.add(m_ledsSize);
     m_parameters.add(m_ledsSize);
     
+    m_manualServo.set("Manual Servo", false);
+    m_manualServo.addListener(sceneManager, &SceneManager::setManualServo);
+    m_ledsGroup.add(m_manualServo);
+    m_parameters.add(m_manualServo);
+    
+    m_servoPosition.set("Servo", 0.0, 0.0, 1.0);
+    m_servoPosition.addListener(sceneManager, &SceneManager::setServoPosition);
+    m_ledsGroup.add(m_servoPosition);
+    m_parameters.add(m_servoPosition);
+  
     m_ledsBCR.set("BCR", 10, 0, 127);
     m_ledsBCR.addListener(ledsManager, &LedsManager::setBCR);
     m_ledsGroup.add(m_ledsBCR);
@@ -346,6 +357,8 @@ void GuiManager::drawGui()
             if (ofxImGui::BeginTree(m_ledsGroup, mainSettings))
             {
                 ofxImGui::AddParameter(m_ledsSize);
+                ofxImGui::AddParameter(m_manualServo);
+                ofxImGui::AddParameter(m_servoPosition);
                 ofxImGui::AddParameter(m_ledsBCR);
                 ofxImGui::AddParameter(m_ledsBCG);
                 ofxImGui::AddParameter(m_ledsBCB);

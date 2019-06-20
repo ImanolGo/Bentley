@@ -100,6 +100,10 @@ public:
     
     bool getCurrentStatus() const {return m_status;}
     
+    void setServoPosition(float & value);
+    
+    void setManualServo(bool & value);
+    
 private:
     
     //! Create the scenes
@@ -126,6 +130,8 @@ private:
     void updatePixels();
     
     void sendSceneChange();
+    
+    void drawServo();
 
 private:
 
@@ -143,7 +149,7 @@ private:
     int                      m_sceneOffset;
     bool                     m_status;
     int                      m_currentVideoIndex;
-    
+    ofColor                  m_servoColor;
 };
 
 //==========================================================================

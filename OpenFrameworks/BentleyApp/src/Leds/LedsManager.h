@@ -82,6 +82,8 @@ class LedsManager: public Manager
     
         bool getStemIdsFromBrancher(unsigned short _id, vector<string> & stem_ids);
     
+        const ofPoint& getServoPosition() const {return m_posServo;}
+    
     private:
     
         void setupLeds();

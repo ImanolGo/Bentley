@@ -124,6 +124,8 @@ private:
     ofParameter<int>        m_viewMode;
     ofParameter<int>        m_sceneMode;
     ofParameter<float>      m_ledsSize;
+    ofParameter<float>      m_servoPosition;
+    ofParameter<bool>       m_manualServo;
     ofParameter<int>        m_ledsBCR;
     ofParameter<int>        m_ledsBCG;
     ofParameter<int>        m_ledsBCB;
