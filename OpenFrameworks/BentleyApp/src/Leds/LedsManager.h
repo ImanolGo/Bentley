@@ -70,6 +70,8 @@ class LedsManager: public Manager
     
         void setBCB(int& value);
     
+        void setDotStars(int& value);
+    
         void setLedBrightness(float& value){m_ledsBrightness = value;}
     
         void timerCompleteHandler( int &args );
@@ -158,6 +160,8 @@ class LedsManager: public Manager
     
         void clearAll();
     
+        void sendTlcSettings();
+    
     private:
     
         ofPoint            m_minPos;
@@ -190,7 +194,7 @@ class LedsManager: public Manager
         ofVec3f m_posServo;
 
         int         m_offset;
-        int         m_bcr, m_bcg, m_bcb; //BC current setting
+        int         m_bcr, m_bcg, m_bcb, m_dotStar; //BC current setting
     
     
 };

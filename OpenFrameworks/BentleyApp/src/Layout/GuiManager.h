@@ -129,6 +129,7 @@ private:
     ofParameter<int>        m_ledsBCR;
     ofParameter<int>        m_ledsBCG;
     ofParameter<int>        m_ledsBCB;
+    ofParameter<int>        m_dotstarsBC;
     
     ofParameter<int>    m_maxDataPacketSize;
     ofParameter<bool>             m_streaming;

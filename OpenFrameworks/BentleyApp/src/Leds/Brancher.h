@@ -13,9 +13,17 @@
 
 
 
+
+
 class Brancher {
     
     public:
+    
+        typedef enum  {
+            TLC,
+            DOTSTAR,
+            NEOPIXEL
+        } LedType;
     
         Brancher(unsigned short _id);
     
@@ -38,6 +46,10 @@ class Brancher {
         bool getIndexFromStem(const string& _id, unsigned int index, unsigned int& returned_index);
     
         vector<string> getStemIds();
+    
+        LedType getLedType() const {return m_ledType;}
+    
+        void setLedType(LedType value) {m_ledType = value;}
 
     private:
             
@@ -45,6 +57,7 @@ class Brancher {
         vector<ofColor> m_pixels;
         vector<unsigned int> m_indexes;
         map<string, vector<int>>   m_stems;
+        LedType                    m_ledType;
 
 };
 

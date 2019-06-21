@@ -71,6 +71,8 @@ public:
     
     void sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb);
     
+    void sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb, const unsigned short& _id);
+    
     bool getIsStreaming() const {return m_streaming;}
     
     void setMaxDataPacketSize(int& value );

@@ -19,7 +19,7 @@ const string LedsManager::BRANCHERS_FOLDER_PATH = "branchers/";
 
 
 
-LedsManager::LedsManager(): Manager(), m_isNewFrame(false), m_is3D(true), m_ledsBrightness(1.0), m_offset(100), m_bcr(10), m_bcg(10), m_bcb(10)
+LedsManager::LedsManager(): Manager(), m_isNewFrame(false), m_is3D(true), m_ledsBrightness(1.0), m_offset(100), m_bcr(10), m_bcg(10), m_bcb(10), m_dotStar(4)
 {
 	//Intentionally left empty
 }
@@ -316,12 +316,15 @@ bool LedsManager::addBrancherPair(string& pathTwoD, string& pathThreeD, shared_p
     ofPoint ledPosition3D;
     int id = 0;
     
+    bool isDotStar = false;
+    
     while(it2d != buffer2D.getLines().end() ||  it3d != buffer3D.getLines().end()){
         
         string line2D = *it2d;
         string line3D = *it3d;
         
         auto strs = ofSplitString(line2D, "_");
+        
         //ofLogNotice() <<"LedsManager::addBrancherPair -> " << line2D;
         
         if(!line2D.empty() && parseBrancherLine(line2D,ledPosition2D) &&  !line3D.empty() && parseBrancherLine(line3D,ledPosition3D))
@@ -329,13 +332,27 @@ bool LedsManager::addBrancherPair(string& pathTwoD, string& pathThreeD, shared_p
             int size = this->createLedPair(ledPosition2D, ledPosition3D);
             brancher->addPixel(size-1);
             
-            if(strs.size()>=2){
+            if(strs.size()>=2)
+            {
                 string stem_id = strs[1];
                // ofLogNotice() <<"LedsManager::addBrancherPair-> stem_id : " << stem_id;
                 brancher->addStemPixel(stem_id, size-1);
                 if(stem_id == "servo"){
                     m_posServo = ledPosition2D;
                     ofLogNotice() <<"LedsManager::addBrancherPair-> servo found : " << m_posServo;
+                }
+                
+            }
+            
+            if(strs.size()>=3)
+            {
+                string led_type = strs[2];
+                if(ofIsStringInString(led_type, "DOTSTAR") || ofIsStringInString(led_type, "APA102") ){
+                    brancher->setLedType(Brancher::DOTSTAR);
+                    isDotStar = true;
+                }
+                else if(ofIsStringInString(led_type, "NEOPIXEL")){
+                    brancher->setLedType(Brancher::NEOPIXEL);
                 }
             }
         }
@@ -345,6 +362,12 @@ bool LedsManager::addBrancherPair(string& pathTwoD, string& pathThreeD, shared_p
     }
     
     ofLogNotice() <<"LedsManager::addBrancherPair -> brancher size : " << brancher->getPixels().size();
+    if(isDotStar){
+        ofLogNotice() <<"LedsManager::addBrancherPair -> brancher type-> DOTSTAR " ;
+    }
+    else{
+        ofLogNotice() <<"LedsManager::addBrancherPair -> brancher type-> TLC " ;
+    }
     
     return true;
 }
@@ -1029,22 +1052,28 @@ bool LedsManager::isValidLedFile(const string& path)
     return true;
 }
 
+void LedsManager::setDotStars(int& value)
+{
+   m_dotStar = ofClamp(value, 0, 127);
+   this->sendTlcSettings();
+}
+
 void LedsManager::setBCR(int& value)
 {
-     m_bcr = ofClamp(value, 0, 127);
-     AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
+    m_bcr = ofClamp(value, 0, 127);
+    this->sendTlcSettings();
 }
 
 void LedsManager::setBCG(int& value)
 {
     m_bcg = ofClamp(value, 0, 127);
-    AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
+    this->sendTlcSettings();
 }
 
 void LedsManager::setBCB(int& value)
 {
     m_bcb = ofClamp(value, 0, 127);
-    AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
+    this->sendTlcSettings();
 }
 
 
@@ -1053,7 +1082,19 @@ void LedsManager::timerCompleteHandler( int &args )
     m_timer.start(false);
     bool isStreaming =  AppManager::getInstance().getUdpManager().getIsStreaming();
     if(isStreaming){
-        AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb);
+        this->sendTlcSettings();
+    }
+}
+
+void LedsManager::sendTlcSettings()
+{
+    for(auto& brancher: m_branchers){
+        if(brancher.second->getLedType() == Brancher::TLC){
+            AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb, brancher.second->getId());
+        }
+        else{
+            AppManager::getInstance().getUdpManager().sendTlcSettings(m_dotStar,m_dotStar,m_dotStar, brancher.second->getId());
+        }
     }
 }
 

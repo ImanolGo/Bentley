@@ -401,6 +401,21 @@ void UdpManager::sendTlcSettings(const unsigned char& bcr, const unsigned char& 
 
 }
 
+void UdpManager::sendTlcSettings(const unsigned char& bcr, const unsigned char& bcg, const unsigned char& bcb, const unsigned short& _id)
+{
+    if(m_udpConnections.find(_id) == m_udpConnections.end()){
+        return;
+    }
+    
+    string message = this->getTlcSettingsHeader(_id);
+    unsigned char global_settings = 2;
+    message+=global_settings;
+    message+=bcr; message+=bcg;message+=bcb;
+    m_udpConnections[_id]->Send(message.c_str(),message.length());
+    
+}
+
+
 void UdpManager::nextFrame()
 {
     this->updatePixels();

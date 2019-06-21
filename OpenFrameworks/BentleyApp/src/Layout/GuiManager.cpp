@@ -239,7 +239,12 @@ void GuiManager::setupLedsGui()
     m_servoPosition.addListener(sceneManager, &SceneManager::setServoPosition);
     m_ledsGroup.add(m_servoPosition);
     m_parameters.add(m_servoPosition);
-  
+    
+    m_dotstarsBC.set("DOTSTARS", 4, 0, 127);
+    m_dotstarsBC.addListener(ledsManager, &LedsManager::setDotStars);
+    m_ledsGroup.add(m_dotstarsBC);
+    m_parameters.add(m_dotstarsBC);
+    
     m_ledsBCR.set("BCR", 10, 0, 127);
     m_ledsBCR.addListener(ledsManager, &LedsManager::setBCR);
     m_ledsGroup.add(m_ledsBCR);
@@ -359,6 +364,7 @@ void GuiManager::drawGui()
                 ofxImGui::AddParameter(m_ledsSize);
                 ofxImGui::AddParameter(m_manualServo);
                 ofxImGui::AddParameter(m_servoPosition);
+                ofxImGui::AddParameter(m_dotstarsBC);
                 ofxImGui::AddParameter(m_ledsBCR);
                 ofxImGui::AddParameter(m_ledsBCG);
                 ofxImGui::AddParameter(m_ledsBCB);
