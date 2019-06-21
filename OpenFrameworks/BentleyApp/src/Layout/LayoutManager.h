@@ -25,17 +25,10 @@
  *	\details It creates an places al the text and elements regarding the layout
  */
 
-enum ScreenMode{
-    DRAW_NORMAL = 0,
-    DRAW_VIDEO,
-    DRAW_3D,
-    DRAW_2D
-};
-
-
 
 class LayoutManager: public Manager
 {
+
     
 public:
     
@@ -43,6 +36,15 @@ public:
     static const int FRAME_MARGIN;
     static const string LAYOUT_FONT;
     static const string LAYOUT_FONT_LIGHT;
+    
+    
+    
+    typedef enum  {
+        DRAW_SCENE = 0,
+        DRAW_3D,
+        DRAW_2D
+    } DrawMode;
+    
 
     //! Constructor
     LayoutManager();
@@ -69,11 +71,9 @@ public:
     
     void end(string& name);
     
-    void setDrawMode(int mode) {m_drawMode = mode;}
-
-    void toggleDrawMode();
+    void setDrawMode(DrawMode mode);
     
-    int getDrawMode() {return m_drawMode;}
+    DrawMode getDrawMode() {return m_drawMode;}
     
 
 private:
@@ -145,7 +145,7 @@ private:
     FboFrames           m_windowFrames;
     FboMap              m_fbos;
     
-    int                 m_drawMode;
+    DrawMode            m_drawMode;
 
 };
 

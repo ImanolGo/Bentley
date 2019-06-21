@@ -24,7 +24,7 @@ const int LayoutManager::FRAME_MARGIN = 2;
 const string LayoutManager::LAYOUT_FONT =  "fonts/roboto/Roboto-Medium.ttf";
 const string LayoutManager::LAYOUT_FONT_LIGHT =  "fonts/roboto/Roboto-Light.ttf";
 
-LayoutManager::LayoutManager(): Manager(), m_drawMode(0)
+LayoutManager::LayoutManager(): Manager(), m_drawMode(LayoutManager::DRAW_3D)
 {
 	//Intentionally left empty
 }
@@ -109,27 +109,64 @@ void LayoutManager::resetWindowRects()
     float frame_width = ofGetWindowWidth() - gui_offset;
     float frame_height= ofGetWindowHeight();
     
+    if(m_drawMode==DRAW_SCENE){
+        
+        m_windowRects["Scene"]->width = 2*frame_width/3 - 2*MARGIN;
+        m_windowRects["Scene"]->height = frame_height - 2*MARGIN;
+        m_windowRects["Scene"]->x = gui_offset  + 2*MARGIN;
+        m_windowRects["Scene"]->y = MARGIN;
+        
+        m_windowRects["2D"]->width = frame_width/3 - 2*MARGIN;
+        m_windowRects["2D"]->height = frame_height/2 - 2*MARGIN;
+        m_windowRects["2D"]->x = m_windowRects["Scene"]->x + m_windowRects["Scene"]->width + MARGIN;
+        m_windowRects["2D"]->y = MARGIN;
+        
+        m_windowRects["3D"]->width = m_windowRects["2D"]->width;
+        m_windowRects["3D"]->height = m_windowRects["2D"]->height;
+        m_windowRects["3D"]->x = m_windowRects["2D"]->x;
+        m_windowRects["3D"]->y = m_windowRects["2D"]->y + m_windowRects["2D"]->height + 2*MARGIN;
+        
+    }
     
-    m_windowRects["3D"]->width = 2*frame_width/3 - 2*MARGIN;
-    m_windowRects["3D"]->height = frame_height - 2*MARGIN;
-    m_windowRects["3D"]->x = gui_offset  + 2*MARGIN;
-    m_windowRects["3D"]->y = MARGIN;
+    else if(m_drawMode==DRAW_2D){
+        m_windowRects["2D"]->width = 2*frame_width/3 - 2*MARGIN;
+        m_windowRects["2D"]->height = frame_height - 2*MARGIN;
+        m_windowRects["2D"]->x = gui_offset  + 2*MARGIN;
+        m_windowRects["2D"]->y = MARGIN;
+        
+        m_windowRects["3D"]->width = frame_width/3 - 2*MARGIN;
+        m_windowRects["3D"]->height = frame_height/2 - 2*MARGIN;
+        m_windowRects["3D"]->x = m_windowRects["2D"]->x + m_windowRects["2D"]->width + MARGIN;
+        m_windowRects["3D"]->y = MARGIN;
+        
+        m_windowRects["Scene"]->width = m_windowRects["3D"]->width;
+        m_windowRects["Scene"]->height = m_windowRects["3D"]->height;
+        m_windowRects["Scene"]->x = m_windowRects["3D"]->x;
+        m_windowRects["Scene"]->y = m_windowRects["3D"]->y + m_windowRects["3D"]->height + 2*MARGIN;
+        
+  }
+    
+    else {
+        
+        m_windowRects["3D"]->width = 2*frame_width/3 - 2*MARGIN;
+        m_windowRects["3D"]->height = frame_height - 2*MARGIN;
+        m_windowRects["3D"]->x = gui_offset  + 2*MARGIN;
+        m_windowRects["3D"]->y = MARGIN;
+        
+        m_windowRects["2D"]->width = frame_width/3 - 2*MARGIN;
+        m_windowRects["2D"]->height = frame_height/2 - 2*MARGIN;
+        m_windowRects["2D"]->x = m_windowRects["3D"]->x + m_windowRects["3D"]->width + MARGIN;
+        m_windowRects["2D"]->y = MARGIN;
+        
+        m_windowRects["Scene"]->width = m_windowRects["2D"]->width;
+        m_windowRects["Scene"]->height = m_windowRects["2D"]->height;
+        m_windowRects["Scene"]->x = m_windowRects["2D"]->x;
+        m_windowRects["Scene"]->y = m_windowRects["2D"]->y + m_windowRects["2D"]->height + 2*MARGIN;
+    }
+    
     
     ofRectangle rect(m_windowRects["3D"]->x, m_windowRects["3D"]->y, m_windowRects["3D"]->getWidth(), m_windowRects["3D"]->getHeight());
     AppManager::getInstance().getModelManager().setControlArea(rect);
-    
-    m_windowRects["2D"]->width = frame_width/3 - 2*MARGIN;
-    m_windowRects["2D"]->height = frame_height/2 - 2*MARGIN;
-    m_windowRects["2D"]->x = m_windowRects["3D"]->x + m_windowRects["3D"]->width + MARGIN;
-    m_windowRects["2D"]->y = MARGIN;
-    
-    m_windowRects["Scene"]->width = m_windowRects["2D"]->width;
-    m_windowRects["Scene"]->height = m_windowRects["2D"]->height;
-    m_windowRects["Scene"]->x = m_windowRects["2D"]->x;
-    m_windowRects["Scene"]->y = m_windowRects["2D"]->y + m_windowRects["2D"]->height + 2*MARGIN;
-    
-    
-   
     
     
 }
@@ -282,15 +319,7 @@ void LayoutManager::draw()
     if(!m_initialized)
         return;
     
-    switch (m_drawMode)
-    {
-        case DRAW_NORMAL:  this->drawNormal(); break;
-        case DRAW_3D:  this->drawThreeD(); break;
-        case DRAW_2D:  this->drawTwoD(); break;
-        case DRAW_VIDEO:  this->drawScene(); break;
-        default: this->drawNormal(); break;
-    }
-
+    this->drawNormal();
 }
 
 void LayoutManager::drawThreeD()
@@ -348,6 +377,12 @@ void LayoutManager::windowResized(int w, int h)
 }
 
 
+void LayoutManager::setDrawMode(DrawMode mode)
+{
+    m_drawMode = mode;
+    this->windowResized(ofGetWidth(), ofGetHeight());
+}
+
 void LayoutManager::begin(string& name)
 {
     if(m_fbos.find(name) == m_fbos.end()){
@@ -366,18 +401,6 @@ void LayoutManager::end(string& name)
     }
     
     m_fbos[name]->end();
-}
-
-void LayoutManager::toggleDrawMode()
-{
-    if(m_drawMode == 0)
-    {
-        m_drawMode = 1;
-    }
-    else{
-        m_drawMode = 0;
-    }
-    
 }
 
 

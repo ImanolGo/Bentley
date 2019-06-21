@@ -46,6 +46,17 @@ void KeyboardManager::keyPressed(ofKeyEventArgs &e)
     
     //ofLogVerbose() <<"KeyboardManager::keyPressed-> " + ofToString(key);
     
+    if(key == '1'){
+        AppManager::getInstance().getLayoutManager().setDrawMode(LayoutManager::DRAW_3D);
+    }
+    else if(key == '2'){
+        AppManager::getInstance().getLayoutManager().setDrawMode(LayoutManager::DRAW_2D);
+    }
+    else if(key == '3'){
+        AppManager::getInstance().getLayoutManager().setDrawMode(LayoutManager::DRAW_SCENE);
+    }
+   
+    
     
 }
 

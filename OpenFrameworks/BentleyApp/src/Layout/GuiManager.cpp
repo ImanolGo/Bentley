@@ -288,8 +288,6 @@ void GuiManager::update()
     //m_gui.update();
     m_gui.setTheme(new GuiTheme());
 
-    AppManager::getInstance().getLayoutManager().setDrawMode(m_viewMode);
-
 }
 
 
