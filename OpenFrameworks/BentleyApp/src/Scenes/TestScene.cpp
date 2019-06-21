@@ -10,7 +10,7 @@
 #include "TestScene.h"
 #include "AppManager.h"
 
-TestScene::TestScene(): ofxScene("Test"), m_initialized(false), m_totalTime(100)
+TestScene::TestScene(): ofxScene("Test"), m_initialized(false), m_totalTime(100), m_speed(-1.0)
 {
     //Intentionally left empty
 }
@@ -74,6 +74,7 @@ void TestScene::setupRectangles()
 void TestScene::update()
 {
     this->updateTimer();
+    this->checkTiming();
     
 }
 
@@ -163,6 +164,7 @@ void TestScene::startAnimations()
 void TestScene::willFadeIn()
 { ofLogNotice() <<"TestScene::setupTimer << Time = : " << time << "s";
     ofLogNotice("TestScene::willFadeIn");
+    this->checkTiming();
     m_timer.start(false,true);
     this->deleteAnimations();
     this->startAnimations();
@@ -180,3 +182,19 @@ void TestScene::willExit() {
     this->deleteAnimations();
     ofLogNotice("TestScene::willExit");
 }
+
+void TestScene::checkTiming()
+{
+    float value = AppManager::getInstance().getGuiManager().getShaderSpeed();
+    if (m_speed != value)
+    {
+        m_speed = value;
+        m_totalTime = ofMap(m_speed, 0.0, 2.0, 360, 5.0, true);
+        m_timer.setup( m_totalTime * 1000);
+        m_timer.start(false,true);
+        this->deleteAnimations();
+        this->startAnimations();
+    }
+}
+
+

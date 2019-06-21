@@ -211,8 +211,8 @@ void SceneManager::updateFbo()
 void SceneManager::updatePixels()
 {
     ofPixels pixels;
-   //m_reader.readToPixels(m_fbo, pixels, OF_IMAGE_COLOR_ALPHA);
-    m_fbo.readToPixels(pixels);
+    m_reader.readToPixels(m_fbo, pixels, OF_IMAGE_COLOR_ALPHA);
+    //m_fbo.readToPixels(pixels);
     AppManager::getInstance().getLedsManager().setPixels(pixels);
 }
 

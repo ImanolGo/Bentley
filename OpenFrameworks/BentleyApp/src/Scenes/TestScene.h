@@ -54,6 +54,8 @@ private:
     
     void updateTimer();
     
+    void checkTiming();
+    
     void drawRectangles();
     
     void deleteAnimations();
@@ -67,5 +69,6 @@ private:
     ofxSimpleTimer                                      m_timer;
     bool                                                m_initialized;
     map<string, shared_ptr<RectangleVisual>>            m_rectangles;
+    float                                               m_speed;
     
 };
