@@ -70,6 +70,8 @@ class LedsManager: public Manager
     
         void setBCB(int& value);
     
+        void setAI(int& value);
+    
         void setDotStars(int& value);
     
         void setLedBrightness(float& value){m_ledsBrightness = value;}
@@ -194,7 +196,7 @@ class LedsManager: public Manager
         ofVec3f m_posServo;
 
         int         m_offset;
-        int         m_bcr, m_bcg, m_bcb, m_dotStar; //BC current setting
+        int         m_bcr, m_bcg, m_bcb, m_dotStar, m_ai; //BC current setting
     
     
 };

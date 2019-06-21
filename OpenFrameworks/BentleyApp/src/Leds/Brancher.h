@@ -22,6 +22,7 @@ class Brancher {
         typedef enum  {
             TLC,
             DOTSTAR,
+            AI,
             NEOPIXEL
         } LedType;
     
