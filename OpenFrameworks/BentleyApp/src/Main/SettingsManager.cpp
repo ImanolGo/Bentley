@@ -105,7 +105,7 @@ void SettingsManager::setNetworkProperties()
     auto xml = m_xml.findFirst(path);
     if(xml) {
     
-        m_ipAddress  = xml.getAttribute("ipAddress").getValue();
+        m_ipAddress  = xml.getAttribute("ip").getValue();
         m_portUdpSend = xml.getAttribute("portUdpSend").getIntValue();
         m_portUdpReceive = xml.getAttribute("portUdpReceive").getIntValue();
         m_portOscSend = xml.getAttribute("portOscSend").getIntValue();
