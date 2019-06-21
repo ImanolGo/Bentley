@@ -241,12 +241,12 @@ void GuiManager::setupLedsGui()
     m_parameters.add(m_servoPosition);
     
     m_aiBC.set("AI", 3, 0, 127);
-    m_aiBC.addListener(ledsManager, &LedsManager::setDotStars);
+    m_aiBC.addListener(ledsManager, &LedsManager::setAI);
     m_ledsGroup.add(m_aiBC);
     m_parameters.add(m_aiBC);
     
     m_dotstarsBC.set("DOTSTARS", 10, 0, 127);
-    m_dotstarsBC.addListener(ledsManager, &LedsManager::setAI);
+    m_dotstarsBC.addListener(ledsManager, &LedsManager::setDotStars);
     m_ledsGroup.add(m_dotstarsBC);
     m_parameters.add(m_dotstarsBC);
     
