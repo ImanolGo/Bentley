@@ -157,8 +157,8 @@ void LedsManager::setupShader()
 
 void LedsManager::createLayout()
 {
-    float resolution = 3000;
-    float percentage = 0.4;
+    float resolution = 1500;
+    float percentage = 1.0;
     float width = m_maxPos.x - m_minPos.x;
     float height = m_maxPos.y - m_minPos.y;
     float ratio = width/height;
@@ -182,13 +182,14 @@ void LedsManager::createLayout()
     
     float size = 1;
     for(auto led: m_points2D){
-        float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
-        float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
+        float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width-1);
+        float y = ofMap(led.y, m_minPos.y, m_maxPos.y, height-1,0);
         ofDrawRectangle(x - size*0.5, y - size*0.5, size, size);
     }
     
-    float x = ofMap(m_posServo.x, m_minPos.x, m_maxPos.x, 0.0, width);
-    float y = ofMap(m_posServo.y, m_minPos.y, m_maxPos.y, 0.0, height);
+    
+    float x = ofMap(m_posServo.x, m_minPos.x, m_maxPos.x, 0.0, width-1);
+    float y = ofMap(m_posServo.y, m_minPos.y, m_maxPos.y, height-1,0);
     
     ofSetColor(255, 255, 0);
     ofDrawRectangle(x - size, y - size, size*2, size*2);
@@ -206,12 +207,13 @@ void LedsManager::createLayout()
     m_fbo.allocate(width, height, GL_RGB);
     m_fboMaskee.allocate(width, height, GL_RGB);
     
+    size = 4;
     m_fboMask.begin();
     ofSetColor(255);
     
     for(auto led: m_points2D){
-        float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width);
-        float y = ofMap(led.y, m_minPos.y, m_maxPos.y, 0.0, height);
+        float x = ofMap(led.x, m_minPos.x, m_maxPos.x, 0.0, width-1);
+        float y = ofMap(led.y, m_minPos.y, m_maxPos.y, height-1,0);
         
         //ofDrawCircle(x, y, 4);
         ofDrawRectangle(x - size*0.5, y - size*0.5, size, size);
@@ -235,14 +237,14 @@ void LedsManager::map2DpositionsToFbo()
     for (auto& position: m_points2D)
     {
         float x = ofMap(position.x, m_minPos.x, m_maxPos.x, 0.0, width-1);
-        float y = ofMap(position.y, m_minPos.y, m_maxPos.y, height-1,0);
+        float y = ofMap(position.y, m_minPos.y, m_maxPos.y, height-1, 0);
         position.x = x;
         position.y = y;
     }
     
     
     m_posServo.x =  ofMap(m_posServo.x, m_minPos.x, m_maxPos.x, 0.0, width-1);
-    m_posServo.y =  ofMap(m_posServo.y, m_minPos.y, m_maxPos.y, height-1,0);
+    m_posServo.y =  ofMap(m_posServo.y, m_minPos.y, m_maxPos.y, height-1, 0);
     
 }
 
@@ -514,7 +516,7 @@ void LedsManager::normalize3DLeds()
 
 void LedsManager::centreLeds()
 {
-    this->centre2DLeds(5);
+    this->centre2DLeds(2);
     this->centre3DLeds();
 }
 

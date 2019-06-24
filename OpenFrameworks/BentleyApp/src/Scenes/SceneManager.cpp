@@ -135,9 +135,12 @@ void SceneManager::createScenes()
     
     float width = AppManager::getInstance().getSettingsManager().getAppWidth();
     float height = AppManager::getInstance().getSettingsManager().getAppHeight();
-
+    
     m_mySceneManager.run(width, height);
     this->onTransitionTimeChange(m_transitionTime);
+    
+    ofLogNotice() <<"SceneManager::createScenes-> w = " << width << ", h = " << height;
+    ofLogNotice() <<"SceneManager::createScenes-> transition time = " << m_transitionTime << "s";
 }
 
 
