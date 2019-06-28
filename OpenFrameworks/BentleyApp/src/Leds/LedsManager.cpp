@@ -53,6 +53,7 @@ void LedsManager::setupLeds()
     //this->readLeds();
     this->readBranchers();
     //this->createLedPositions();
+    this->setBranchIdList();
     this->arrangeLeds();
     this->createLayout();
     this->map2DpositionsToFbo();
@@ -90,8 +91,10 @@ bool LedsManager::readBranchers()
         this->loadBranch(dir, i);
     }
     
+    
     return true;
 }
+
 
 bool LedsManager::readLeds()
 {
@@ -1088,19 +1091,32 @@ void LedsManager::setAI(int& value)
 void LedsManager::setBCR(int& value)
 {
     m_bcr = ofClamp(value, 0, 127);
+    this->setCurrentSettings();
     this->sendTlcSettings();
 }
 
 void LedsManager::setBCG(int& value)
 {
     m_bcg = ofClamp(value, 0, 127);
+    this->setCurrentSettings();
     this->sendTlcSettings();
 }
 
 void LedsManager::setBCB(int& value)
 {
     m_bcb = ofClamp(value, 0, 127);
+    this->setCurrentSettings();
     this->sendTlcSettings();
+}
+
+void LedsManager::setCurrentSettings()
+{
+    if(m_currentBrancher==NULL){
+        return;
+    }
+    
+    m_currentBrancher->setCurrentSettings(m_bcr, m_bcg, m_bcb);
+    
 }
 
 
@@ -1113,18 +1129,44 @@ void LedsManager::timerCompleteHandler( int &args )
     }
 }
 
+void LedsManager::changeBrancher(int& value)
+{
+    if(0 > value>=m_brancherIds.size()){
+        return;
+    }
+    
+    auto _id = m_brancherIds[value];
+    if(m_branchers.find(_id) != m_branchers.end()){
+        
+        if(m_currentBrancher!=NULL){
+            m_currentBrancher->saveCurrentSettings();
+        }
+        
+        m_currentBrancher = m_branchers[_id];
+        m_currentBrancher->getCurrentSettings(m_bcr, m_bcg, m_bcb);
+        AppManager::getInstance().getGuiManager().setCurrentSettings(m_bcr, m_bcg, m_bcb);
+    }
+
+    ofLogNotice() <<"LedsManager::changeBrancher -> Current Brancher ID: " << m_currentBrancher->getId();
+}
+
 void LedsManager::sendTlcSettings()
 {
     for(auto& brancher: m_branchers){
-        if (brancher.second->getLedType() == Brancher::DOTSTAR){
-            AppManager::getInstance().getUdpManager().sendTlcSettings(m_dotStar,m_dotStar,m_dotStar, brancher.second->getId());
-        }
-        else if (brancher.second->getLedType() == Brancher::AI){
-            AppManager::getInstance().getUdpManager().sendTlcSettings(m_ai,m_ai,m_ai, brancher.second->getId());
-        }
-        else{
-            AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb, brancher.second->getId());
-        }
+        
+        int bcr, bcg, bcb;
+        brancher.second->getCurrentSettings(bcr, bcg, bcb);
+        AppManager::getInstance().getUdpManager().sendTlcSettings(bcr, bcg, bcb, brancher.second->getId());
+       
+//        if (brancher.second->getLedType() == Brancher::DOTSTAR){
+//            AppManager::getInstance().getUdpManager().sendTlcSettings(m_dotStar,m_dotStar,m_dotStar, brancher.second->getId());
+//        }
+//        else if (brancher.second->getLedType() == Brancher::AI){
+//            AppManager::getInstance().getUdpManager().sendTlcSettings(m_ai,m_ai,m_ai, brancher.second->getId());
+//        }
+//        else{
+//            AppManager::getInstance().getUdpManager().sendTlcSettings(m_bcr,m_bcg,m_bcb, brancher.second->getId());
+//        }
     }
 }
 
@@ -1182,5 +1224,21 @@ bool LedsManager::get2dPositionFromStem(unsigned short brancher_id, string& stem
     return this->get2dPosition(returned_index, position);
     
 }
+
+void LedsManager::setBranchIdList()
+{
+    m_brancherIds.clear();
+    
+    for(auto brancher: m_branchers){
+        m_brancherIds.push_back(brancher.first);
+    }
+    
+    std::sort(m_brancherIds.begin(), m_brancherIds.end());
+    
+    if(!m_branchers.empty()){
+        m_currentBrancher = m_branchers.begin()->second;
+    }
+}
+
 
 

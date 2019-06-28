@@ -51,6 +51,21 @@ class Brancher {
         LedType getLedType() const {return m_ledType;}
     
         void setLedType(LedType value) {m_ledType = value;}
+    
+        void getCurrentSettings(int & bcr, int& bcg, int& bcb);
+    
+        void setCurrentSettings(int bcr, int bcg, int bcb);
+    
+        void saveCurrentSettings();
+    
+        void loadCurrentSettings();
+    
+    private:
+    
+        void setup();
+    
+        void setupCurrentSettings();
+    
 
     private:
             
@@ -59,6 +74,9 @@ class Brancher {
         vector<unsigned int> m_indexes;
         map<string, vector<int>>   m_stems;
         LedType                    m_ledType;
+        string                      m_path;
+        ofParameterGroup            m_parameters;
+        ofParameter<int>           m_bcr, m_bcg, m_bcb;
 
 };
 

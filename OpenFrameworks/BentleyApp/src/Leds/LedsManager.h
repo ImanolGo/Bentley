@@ -74,6 +74,8 @@ class LedsManager: public Manager
     
         void setDotStars(int& value);
     
+        void changeBrancher(int& value);
+    
         void setLedBrightness(float& value){m_ledsBrightness = value;}
     
         void timerCompleteHandler( int &args );
@@ -87,6 +89,8 @@ class LedsManager: public Manager
         bool getStemIdsFromBrancher(unsigned short _id, vector<string> & stem_ids);
     
         const ofPoint& getServoPosition() const {return m_posServo;}
+    
+        const vector<unsigned short> gerBrancherIds() {return m_brancherIds;}
     
     private:
     
@@ -140,6 +144,8 @@ class LedsManager: public Manager
     
         bool loadBranch(ofDirectory& dir, int num);
     
+        void setBranchIdList();
+    
         void readLedsPositionFromGroup(const string& groupName, int& id, int numberOfSections);
     
         void readLasersPositionFromGroup(const string& groupName, int& id, vector<int>& sections);
@@ -164,6 +170,8 @@ class LedsManager: public Manager
     
         void sendTlcSettings();
     
+        void setCurrentSettings();
+    
     private:
     
         ofPoint            m_minPos;
@@ -173,6 +181,7 @@ class LedsManager: public Manager
         float              m_ledsBrightness;
     
         map<unsigned short, shared_ptr<Brancher>>    m_branchers;
+        vector<unsigned short>                       m_brancherIds;
     
         ofFbo   m_fbo;
         ofFbo   m_fboMaskee;
@@ -187,6 +196,7 @@ class LedsManager: public Manager
         ofxSimpleTimer  m_timer;
     
     
+        shared_ptr<Brancher> m_currentBrancher;
         vector <ofVec3f> m_points3D;
         vector <ofVec3f> m_points2D;
         vector <ofVec3f> m_sizes;
@@ -195,10 +205,8 @@ class LedsManager: public Manager
         vector <ofFloatColor> m_colorsBlack;
         ofVec3f m_posServo;
 
-        int         m_offset;
-        int         m_bcr, m_bcg, m_bcb, m_dotStar, m_ai; //BC current setting
-    
-    
+        int             m_offset;
+        int             m_bcr, m_bcg, m_bcb, m_dotStar, m_ai; //BC current settings
 };
 
 

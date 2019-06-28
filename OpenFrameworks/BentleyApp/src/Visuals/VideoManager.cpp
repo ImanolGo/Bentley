@@ -60,10 +60,10 @@ void VideoManager::loadVideos(string& path)
     dir.allowExt("mp4");
     dir.allowExt("mov");
     
-    if( dir.listDir() == 0){
-        ofLogNotice() <<"VideoManager::loadVideos -> No video files found in: " << path;
-        return;
-    }
+//    if( dir.listDir() == 0){
+//        ofLogNotice() <<"VideoManager::loadVideos -> No video files found in: " << path;
+//        return;
+//    }
     
     dir.sort();
    

@@ -253,17 +253,33 @@ void GuiManager::setupLedsGui()
     m_ledsBCR.set("BCR", 10, 0, 127);
     m_ledsBCR.addListener(ledsManager, &LedsManager::setBCR);
     m_ledsGroup.add(m_ledsBCR);
-    m_parameters.add(m_ledsBCR);
+   // m_parameters.add(m_ledsBCR);
     
     m_ledsBCG.set("BCG", 10, 0, 127);
     m_ledsBCG.addListener(ledsManager, &LedsManager::setBCG);
     m_ledsGroup.add(m_ledsBCG);
-    m_parameters.add(m_ledsBCG);
+    //m_parameters.add(m_ledsBCG);
     
     m_ledsBCB.set("BCB", 10, 0, 127);
     m_ledsBCB.addListener(ledsManager, &LedsManager::setBCB);
     m_ledsGroup.add(m_ledsBCB);
-    m_parameters.add(m_ledsBCB);
+    //m_parameters.add(m_ledsBCB);
+    
+    
+    auto brancherIds = AppManager::getInstance().getLedsManager().gerBrancherIds();
+    
+    for(auto id: brancherIds){
+        string name = "Brancher " + ofToString(id-100);
+        m_brancherNames.push_back(name);
+    }
+    
+    m_brancherMode.set("Brancher", 0);
+    m_brancherMode.addListener(ledsManager, &LedsManager::changeBrancher);
+    m_ledsGroup.add(m_brancherMode);
+    
+    int brancherIndex = m_brancherMode.get();
+    AppManager::getInstance().getLedsManager().changeBrancher(brancherIndex);
+
 }
 
 void GuiManager::setupCommunicationsGui()
@@ -367,8 +383,9 @@ void GuiManager::drawGui()
                 ofxImGui::AddParameter(m_ledsSize);
                 ofxImGui::AddParameter(m_manualServo);
                 ofxImGui::AddParameter(m_servoPosition);
-                ofxImGui::AddParameter(m_aiBC);
-                ofxImGui::AddParameter(m_dotstarsBC);
+                ofxImGui::AddCombo(m_brancherMode, m_brancherNames);
+                //ofxImGui::AddParameter(m_aiBC);
+                //ofxImGui::AddParameter(m_dotstarsBC);
                 ofxImGui::AddParameter(m_ledsBCR);
                 ofxImGui::AddParameter(m_ledsBCG);
                 ofxImGui::AddParameter(m_ledsBCB);
@@ -440,10 +457,7 @@ void GuiManager::saveGuiValues(string path)
     else{
         xml.save(path);
     }
-    
-    
-    
-    
+   
 }
 
 void GuiManager::loadGuiValues(string path)
@@ -476,6 +490,13 @@ void GuiManager::drawRectangle()
     ofSetColor(15);
     ofDrawRectangle( 0, 0, this->getWidth(), ofGetHeight());
     ofPopStyle();
+}
+
+void GuiManager::setCurrentSettings(int bcr, int bcg, int bcb)
+{
+    m_ledsBCR = bcr;
+    m_ledsBCG = bcg;
+    m_ledsBCB = bcb;
 }
 
 

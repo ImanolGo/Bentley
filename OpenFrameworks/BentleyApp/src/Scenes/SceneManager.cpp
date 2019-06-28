@@ -331,11 +331,14 @@ void SceneManager::changeSceneIndex(int& sceneIndex)
         return;
     }
     
-    ofLogNotice() <<"SceneManager::changeSceneIndex << scene index" << sceneIndex;
+    ofLogNotice() <<"SceneManager::changeSceneIndex << scene index " << sceneIndex;
 
      m_mySceneManager.changeScene(sceneIndex);
      m_sceneTimer.start(false,true);
      m_currentSceneName = this->getSceneName(sceneIndex);
+    
+     ofLogNotice() <<"SceneManager::changeSceneIndex << scene name " << m_currentSceneName;
+    
     
     if(sceneIndex < m_sceneOffset){
         m_status = false;

@@ -15,12 +15,35 @@
 
 Brancher::Brancher( unsigned short _id): m_id(_id), m_ledType(Brancher::TLC)
 {
-    //Intentionaly left empty
+    this->setup();
 }
 
 Brancher::~Brancher()
 {
     //Intentionaly left empty
+}
+
+
+
+void Brancher::setup()
+{
+    this->setupCurrentSettings();
+}
+
+void Brancher::setupCurrentSettings()
+{
+    m_path = "xmls/brancher" + ofToString(m_id - 100) + ".xml";
+    
+    m_bcr.set("BCR", 17, 0, 127);
+    m_bcg.set("BCG", 17, 0, 127);
+    m_bcb.set("BCB", 17, 0, 127);
+
+    m_parameters.add(m_bcr);
+    m_parameters.add(m_bcg);
+    m_parameters.add(m_bcb);
+    
+    this->loadCurrentSettings();
+    
 }
 
 
@@ -73,6 +96,39 @@ vector<string> Brancher::getStemIds()
     return ids;
 }
 
+
+void Brancher::getCurrentSettings(int & bcr, int& bcg, int& bcb)
+{
+    bcr = m_bcr.get();
+    bcg = m_bcg.get();
+    bcb = m_bcb.get();
+}
+
+void Brancher::setCurrentSettings(int bcr, int bcg, int bcb)
+{
+    m_bcr = bcr;
+    m_bcg = bcg;
+    m_bcb = bcb;
+    
+    this->saveCurrentSettings();
+}
+
+void Brancher::saveCurrentSettings()
+{
+    ofXml xml;
+    ofSerialize(xml, m_parameters);
+    xml.save(m_path);
+    
+    ofLogNotice() <<"Brancher::saveCurrentSettings -> path: " << m_path;
+}
+
+void Brancher::loadCurrentSettings()
+{
+    ofXml xml;
+    xml.load(m_path);
+    ofDeserialize(xml, m_parameters);
+    ofLogNotice() <<"Brancher::loadCurrentSettings -> path: " << m_path;
+}
 
 
 

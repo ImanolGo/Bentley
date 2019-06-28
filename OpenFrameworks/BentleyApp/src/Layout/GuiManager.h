@@ -76,6 +76,10 @@ public:
     
     int getShaderDirection() const {return m_shaderDirection.get();}
     
+    const vector<string>& getBrancherNames() const {return m_brancherNames;}
+    
+    void setCurrentSettings(int bcr, int bcg, int bcb);
+    
 private:
     
     void setupGuiParameters();
@@ -120,9 +124,12 @@ private:
     ofParameter<float>      m_shaderParameter;
     ofParameter<int>        m_shaderDirection;
     
+    std::vector<std::string>    m_brancherNames;
+    
     ofParameter<string>     m_videoPath;
     ofParameter<int>        m_viewMode;
     ofParameter<int>        m_sceneMode;
+    ofParameter<int>        m_brancherMode;
     ofParameter<float>      m_ledsSize;
     ofParameter<float>      m_servoPosition;
     ofParameter<bool>       m_manualServo;

@@ -17,7 +17,9 @@ VideoScene::VideoScene(std::string name): ofxScene(name), m_initialized(false)
 
 VideoScene::~VideoScene()
 {
+    m_videoPlayer.stop();
     m_videoPlayer.close();
+   // m_videoPlayer.closeMovie();
 }
 
 
