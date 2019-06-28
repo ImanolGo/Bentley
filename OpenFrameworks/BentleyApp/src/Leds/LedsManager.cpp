@@ -191,11 +191,12 @@ void LedsManager::createLayout()
     }
     
     
+    size = 4 ;
     float x = ofMap(m_posServo.x, m_minPos.x, m_maxPos.x, 0.0, width-1);
     float y = ofMap(m_posServo.y, m_minPos.y, m_maxPos.y, height-1,0);
     
     ofSetColor(255, 255, 0);
-    ofDrawRectangle(x - size, y - size, size*2, size*2);
+    ofDrawRectangle(x - size*0.5, y - size*0.5, size, size);
     //ofDrawRectangle(x - size, y - size, 100, 100);
     
     fbo.end();
@@ -343,7 +344,7 @@ bool LedsManager::addBrancherPair(string& pathTwoD, string& pathThreeD, shared_p
                 string stem_id = strs[1];
                // ofLogNotice() <<"LedsManager::addBrancherPair-> stem_id : " << stem_id;
                 brancher->addStemPixel(stem_id, size-1);
-                if(stem_id == "servo"){
+                if(stem_id == "AI servo"){
                     m_posServo = ledPosition2D;
                     ofLogNotice() <<"LedsManager::addBrancherPair-> servo found : " << m_posServo;
                 }
