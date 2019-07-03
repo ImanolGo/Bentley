@@ -9,6 +9,19 @@
 
 #include "ofxSceneManager.h"
 
+ofxSceneManager::~ofxSceneManager(){
+    ofRemoveListener(ofEvents().keyPressed, this, &ofxSceneManager::_keyPressed);
+    ofRemoveListener(ofEvents().keyReleased, this, &ofxSceneManager::_keyReleased);
+    ofRemoveListener(ofEvents().mouseMoved, this, &ofxSceneManager::_mouseMoved);
+    ofRemoveListener(ofEvents().mouseDragged, this, &ofxSceneManager::_mouseDragged);
+    ofRemoveListener(ofEvents().mousePressed, this, &ofxSceneManager::_mousePressed);
+    ofRemoveListener(ofEvents().mouseReleased, this, &ofxSceneManager::_mouseReleased);
+    ofRemoveListener(ofEvents().windowResized, this, &ofxSceneManager::_windowResized);
+    ofRemoveListener(ofEvents().fileDragEvent, this, &ofxSceneManager::_dragEvent);
+    ofRemoveListener(ofEvents().messageEvent, this, &ofxSceneManager::_gotMessage);
+}
+
+
 void ofxSceneManager::run() {
     
     _fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);

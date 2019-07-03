@@ -56,7 +56,7 @@ public:
     void onTransitionTimeChange(float value);
     
     //! Returns the number of total secenes
-    int getNumberScenes(){return m_mySceneManager.scenes.size();};
+    int getNumberScenes();
     
     //! Returns the name of a scene given the index
     string getSceneName(int sceneIndex);
@@ -88,8 +88,6 @@ public:
     
     void setMaxOutput(float& value) {m_levels.maxOutput = value;}
 
-    void removeVideos();
-    
     void addVideos();
     
     void setVideoIndex(int value);
@@ -132,10 +130,14 @@ private:
     void sendSceneChange();
     
     void drawServo();
-
+    
+    void removeVideos();
+    
+    void removeScenes();
+    
 private:
 
-    ofxSceneManager          m_mySceneManager;
+    shared_ptr<ofxSceneManager>          m_mySceneManager;
     ofFbo                    m_fbo;
     ofxSimpleTimer           m_sceneTimer;
     float                    m_alpha;

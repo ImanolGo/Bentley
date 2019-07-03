@@ -46,8 +46,12 @@ void SceneManager::setup()
 
 void SceneManager::createScenes()
 {
-    //m_mySceneManager.setTransitionFade();
-	m_mySceneManager.setTransitionDissolve();
+    m_mySceneManager = make_shared<ofxSceneManager>();
+    //m_mySceneManager = shared_ptr<ofxSceneManager>(new ofxSceneManager());
+    
+    //std::shared_ptr<Lhs>(new Lhs("foo"));
+    //m_mySceneManager->setTransitionFade();
+	m_mySceneManager->setTransitionDissolve();
     
     ofPtr<ofxScene> scene;
     
@@ -55,80 +59,80 @@ void SceneManager::createScenes()
     
     //Create Blank Scene
     scene = ofPtr<ofxScene> (new BlankScene());
-    m_mySceneManager.addScene(scene);
+    m_mySceneManager->addScene(scene);
     m_sceneOffset++;
     
     //Create Color Scene
     auto colorScene = ofPtr<ColorScene> (new ColorScene());
     colorScene->setup();
-    m_mySceneManager.addScene(colorScene);
+    m_mySceneManager->addScene(colorScene);
     m_sceneOffset++;
     
     //Create Test Scene
     auto sceneTest = ofPtr<TestScene> (new TestScene());
     sceneTest->setup();
-    m_mySceneManager.addScene(sceneTest);
+    m_mySceneManager->addScene(sceneTest);
     m_sceneOffset++;
     
     //Create Image Scene
     auto imageScene = ofPtr<ImageScene> (new ImageScene("ColorGradient"));
     imageScene->setup();
-    m_mySceneManager.addScene(imageScene);
+    m_mySceneManager->addScene(imageScene);
     m_sceneOffset++;
     
     //Create Image Scene
     imageScene = ofPtr<ImageScene> (new ImageScene("ColorStripes"));
     imageScene->setup();
-    m_mySceneManager.addScene(imageScene);
+    m_mySceneManager->addScene(imageScene);
     m_sceneOffset++;
     
     //Create Image Scene
     imageScene = ofPtr<ImageScene> (new ImageScene("BlackWhiteStripes"));
     imageScene->setup();
-    m_mySceneManager.addScene(imageScene);
+    m_mySceneManager->addScene(imageScene);
     m_sceneOffset++;
     
     
     //Create Single Pixel Scene
     auto singleScene = ofPtr<SinglePixelScene> (new SinglePixelScene());
     singleScene->setup();
-    m_mySceneManager.addScene(singleScene);
+    m_mySceneManager->addScene(singleScene);
     m_sceneOffset++;
     
     //Create Stem Scene
     auto stemsScene = ofPtr<StemsScene> (new StemsScene());
     stemsScene->setup();
-    m_mySceneManager.addScene(stemsScene);
+    m_mySceneManager->addScene(stemsScene);
     m_sceneOffset++;
     
     //Create shader Scene
     auto shaderScene = ofPtr<ShaderScene> (new ShaderScene("NoiseShader"));
     shaderScene->setup();
-    m_mySceneManager.addScene(shaderScene);
+    m_mySceneManager->addScene(shaderScene);
     m_sceneOffset++;
     
     //Create shader Scene
     shaderScene = ofPtr<ShaderScene> (new ShaderScene("CirclesShader"));
     shaderScene->setup();
-    m_mySceneManager.addScene(shaderScene);
+    m_mySceneManager->addScene(shaderScene);
     m_sceneOffset++;
     
     //Create shader Scene
     shaderScene = ofPtr<ShaderScene> (new ShaderScene("SparklesShader"));
     shaderScene->setup();
-    m_mySceneManager.addScene(shaderScene);
+    m_mySceneManager->addScene(shaderScene);
     m_sceneOffset++;
     
     //Create shader Scene
     shaderScene = ofPtr<ShaderScene> (new ShaderScene("BreathShader"));
     shaderScene->setup();
-    m_mySceneManager.addScene(shaderScene);
+    m_mySceneManager->addScene(shaderScene);
     m_sceneOffset++;
     
     //Create shader Scene
     shaderScene = ofPtr<ShaderScene> (new ShaderScene("CloudsShader"));
     shaderScene->setup();
-    m_mySceneManager.addScene(shaderScene);
+    m_mySceneManager->addScene(shaderScene);
     m_sceneOffset++;
 
 
@@ -136,7 +140,7 @@ void SceneManager::createScenes()
     float width = AppManager::getInstance().getSettingsManager().getAppWidth();
     float height = AppManager::getInstance().getSettingsManager().getAppHeight();
     
-    m_mySceneManager.run(width, height);
+    m_mySceneManager->run(width, height);
     this->onTransitionTimeChange(m_transitionTime);
     
     ofLogNotice() <<"SceneManager::createScenes-> w = " << width << ", h = " << height;
@@ -194,7 +198,7 @@ void SceneManager::updateFbo()
     m_levels.begin();
         ofClear(0);
         ofEnableAlphaBlending();
-         m_mySceneManager.draw();
+         m_mySceneManager->draw();
          ofDisableAlphaBlending();
     m_levels.end();
     
@@ -222,7 +226,7 @@ void SceneManager::updatePixels()
 
 void SceneManager::updateScenes()
 {
-    m_mySceneManager.update();
+    m_mySceneManager->update();
 }
 
 void SceneManager::updateTimer()
@@ -272,21 +276,46 @@ void SceneManager::removeVideos()
 {
     ofLogNotice() <<"SceneManager::removeVideos";
 
-    AppManager::getInstance().getGuiManager().onSceneChange(0);
+    int index = 0;
+    //this->changeSceneIndex(index);
+    //AppManager::getInstance().getGuiManager().onSceneChange(0);
+    //changeSceneIndex
     
     auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoResourcesPath();
-    auto scenes = m_mySceneManager.scenes;
+    auto scenes = m_mySceneManager->scenes;
 
     for(int i=m_sceneOffset ; i < scenes.size(); i++){
         ofLogNotice() <<"SceneManager::remove video -> " << scenes[i]->getName();
-        m_mySceneManager.removeScene(scenes[i]);
+        m_mySceneManager->removeScene(scenes[i]);
     }
 }
+
+
+void SceneManager::removeScenes()
+{
+    ofLogNotice() <<"SceneManager::removeScenes";
+    
+    int index = 0;
+    //this->changeSceneIndex(index);
+    //AppManager::getInstance().getGuiManager().onSceneChange(0);
+    //changeSceneIndex
+    
+    auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoResourcesPath();
+    auto scenes = m_mySceneManager->scenes;
+    
+    for(int i=0 ; i < scenes.size(); i++){
+        ofLogNotice() <<"SceneManager::remove video -> " << scenes[i]->getName();
+        m_mySceneManager->removeScene(scenes[i]);
+    }
+}
+
 
 void SceneManager::addVideos()
 {
      
-    this->removeVideos();
+    //this->removeVideos();
+    this->removeScenes();
+    this->createScenes();
     
     auto& videoPaths = AppManager::getInstance().getVideoManager().getVideoNames();
   
@@ -294,7 +323,7 @@ void SceneManager::addVideos()
         auto videoScene = ofPtr<VideoScene>(new VideoScene(path));
         videoScene->setup();
         ofLogNotice() <<"SceneManager::add video scene -> " << path;
-        m_mySceneManager.addScene(videoScene);
+        m_mySceneManager->addScene(videoScene);
     }
     
     AppManager::getInstance().getGuiManager().setupScenesGui();
@@ -304,10 +333,10 @@ void SceneManager::addVideos()
 
 void SceneManager::changeScene(string sceneName)
 {
-    for(auto scene: m_mySceneManager.scenes){
+    for(auto scene: m_mySceneManager->scenes){
         if(scene->getName() == sceneName){
             ofLogNotice() <<"SceneManager::changeScene -> " << sceneName;
-            m_mySceneManager.changeScene(sceneName);
+            m_mySceneManager->changeScene(sceneName);
             m_sceneTimer.start(false,true);
             m_currentSceneName = sceneName;
             //this->sendSceneChange();
@@ -319,7 +348,7 @@ void SceneManager::changeScene(string sceneName)
 
 void SceneManager::setVideoIndex(int value)
 {
-    int size = m_mySceneManager.scenes.size() - m_sceneOffset;
+    int size = m_mySceneManager->scenes.size() - m_sceneOffset;
     if(value >= 0  &&  value<size){
         m_currentVideoIndex = value;
     }
@@ -327,13 +356,13 @@ void SceneManager::setVideoIndex(int value)
 
 void SceneManager::changeSceneIndex(int& sceneIndex)
 {
-    if(sceneIndex < 0 || sceneIndex >= m_mySceneManager.scenes.size()){
+    if(sceneIndex < 0 || sceneIndex >= m_mySceneManager->scenes.size()){
         return;
     }
     
     ofLogNotice() <<"SceneManager::changeSceneIndex << scene index " << sceneIndex;
 
-     m_mySceneManager.changeScene(sceneIndex);
+     m_mySceneManager->changeScene(sceneIndex);
      m_sceneTimer.start(false,true);
      m_currentSceneName = this->getSceneName(sceneIndex);
     
@@ -352,25 +381,25 @@ void SceneManager::changeSceneIndex(int& sceneIndex)
 
 void SceneManager::onTransitionTimeChange(float value)
 {
-   m_mySceneManager.setSceneDuration(value,value);
+   m_mySceneManager->setSceneDuration(value,value);
    m_sceneTimer.start(false,true);
 }
 
 string SceneManager::getSceneName(int sceneIndex)
 {
     string name = "";
-    if(sceneIndex < 0 || sceneIndex >= m_mySceneManager.scenes.size()){
+    if(sceneIndex < 0 || sceneIndex >= m_mySceneManager->scenes.size()){
         return name;
     }
     
-    return m_mySceneManager.scenes[sceneIndex]->getName();
+    return m_mySceneManager->scenes[sceneIndex]->getName();
    
 }
 
 int SceneManager::getIndex(string& sceneName)
 {
-    for(int i = 0; i< m_mySceneManager.scenes.size(); i++){
-        if(m_mySceneManager.scenes[i]->getName() == sceneName){
+    for(int i = 0; i< m_mySceneManager->scenes.size(); i++){
+        if(m_mySceneManager->scenes[i]->getName() == sceneName){
             return i;
         }
     }
@@ -414,4 +443,10 @@ void SceneManager::setManualServo(bool & value)
 }
 
 
-
+int SceneManager::getNumberScenes(){
+    
+    if(m_mySceneManager){
+        return m_mySceneManager->scenes.size();
+    }
+    return 0;
+}

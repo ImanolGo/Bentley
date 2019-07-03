@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<group>
+	<Frame_Rate>60</Frame_Rate>
+	<Color>1, 1, 1, 1</Color>
+	<MaxDataSize>1447</MaxDataSize>
+	<Streaming>1</Streaming>
+	<Size>4.034</Size>
+	<Manual_Servo>0</Manual_Servo>
+	<Servo>0.5</Servo>
+	<AI>3</AI>
+	<DOTSTARS>3</DOTSTARS>
+	<VideoPath>/home/morilondon/Desktop/MASTER_PLAYLIST/TESTS</VideoPath>
+	<Contrast>1</Contrast>
+	<Saturation>1</Saturation>
+	<Brightness>1</Brightness>
+	<Gamma>1</Gamma>
+	<MinInput>0</MinInput>
+	<MaxInput>1</MaxInput>
+	<MinOutput>0</MinOutput>
+	<MaxOutput>1</MaxOutput>
+	<Speed>1.017</Speed>
+	<Parameter>0.546</Parameter>
+	<Direction>0</Direction>
+</group>

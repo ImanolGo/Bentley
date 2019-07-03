@@ -21,7 +21,7 @@ public:
     
     ofxSceneManager(): alpha(1.0f){}
     
-    ~ofxSceneManager(){}
+    ~ofxSceneManager();
     
     void run();
     
