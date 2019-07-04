@@ -789,10 +789,15 @@ void LedsManager::setPixelColor(ofPixelsRef pixels, int index)
     }
     
     
+    
 //    int x = (int)m_points2D[index].x;
 //    int y = (int)m_points2D[index].y;
    
     auto color = pixels.getColor(m_points2D[index].x, m_points2D[index].y);
+    
+    if(m_points2D[index] == m_posServo && color.getBrightness()>102){
+        color.setBrightness(102);
+    }
     
 //    if(index == 20){
 //        ofLogNotice() << "pixelPos.x = " << x;
