@@ -107,6 +107,10 @@ void GuiManager::setupScenesGui()
     
     m_solidColor.set( "Color", ofFloatColor::white );
     m_parameters.add(m_solidColor);
+    
+    m_sceneTransitionTime.set("TransitionTime", 0.5, 0.0, 10);
+    m_sceneTransitionTime.addListener(scenesManager, &SceneManager::onTransitionTimeChange);
+    m_parameters.add(m_sceneTransitionTime);
 }
 
 void GuiManager::onSceneChange(int sceneIndex)
@@ -340,6 +344,7 @@ void GuiManager::drawGui()
            
             if (ofxImGui::BeginTree(m_scenesGroup, mainSettings))
             {
+                ofxImGui::AddParameter(m_sceneTransitionTime);
                 ofxImGui::AddParameter(m_solidColor);
                 ofxImGui::AddCombo(m_sceneMode, m_sceneNames);
                 ofxImGui::EndTree(mainSettings);

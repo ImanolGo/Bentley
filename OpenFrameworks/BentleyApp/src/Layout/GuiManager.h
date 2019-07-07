@@ -80,6 +80,8 @@ public:
     
     void setCurrentSettings(int bcr, int bcg, int bcb);
     
+    void setSceneTransitionTime(float value) {m_sceneTransitionTime = value;}
+    
 private:
     
     void setupGuiParameters();
@@ -119,6 +121,7 @@ private:
     ofParameterGroup m_communicationsGroup;
     
     ofParameter<int>      m_fps;
+    ofParameter<float>    m_sceneTransitionTime;
     
     ofParameter<float>      m_shaderSpeed;
     ofParameter<float>      m_shaderParameter;

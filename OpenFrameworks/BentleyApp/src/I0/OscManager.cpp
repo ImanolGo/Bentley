@@ -106,6 +106,12 @@ void OscManager::update()
             AppManager::getInstance().getGuiManager().onVideoChange(value);
         }
         
+        else if(m.getAddress() == OSC_PARENT_ADDRESS + "/TransitionTime")
+        {
+            float value = m.getArgAsFloat(0);
+            AppManager::getInstance().getGuiManager().setSceneTransitionTime(value);
+        }
+        
         int portReceive = AppManager::getInstance().getSettingsManager().getOscPortReceive();
         string text = "OSC Receive (port: " +  ofToString(portReceive) + ")-> " + this->getMessageAsString(m);
         if(m_receivingInformation){

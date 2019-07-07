@@ -13,7 +13,7 @@
 #include "scenes.h"
 #include "AppManager.h"
 
-SceneManager::SceneManager(): Manager(), m_alpha(-1), m_transitionTime(1.0), m_sceneOffset(2), m_currentVideoIndex(0), m_status(false), m_servoColor(ofColor::white)
+SceneManager::SceneManager(): Manager(), m_alpha(-1), m_transitionTime(0.5), m_sceneOffset(2), m_currentVideoIndex(0), m_status(false), m_servoColor(ofColor::white)
 {
 	//Intentionally left empty
 }
@@ -379,10 +379,12 @@ void SceneManager::changeSceneIndex(int& sceneIndex)
 }
 
 
-void SceneManager::onTransitionTimeChange(float value)
+void SceneManager::onTransitionTimeChange(float& value)
 {
-   m_mySceneManager->setSceneDuration(value,value);
+   m_transitionTime = value;
+   m_mySceneManager->setSceneDuration(m_transitionTime,m_transitionTime);
    m_sceneTimer.start(false,true);
+    
 }
 
 string SceneManager::getSceneName(int sceneIndex)

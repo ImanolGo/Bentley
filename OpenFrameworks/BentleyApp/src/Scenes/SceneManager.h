@@ -53,7 +53,7 @@ public:
     void changeSceneIndex(int& sceneIndex);
     
     //! changes transition time
-    void onTransitionTimeChange(float value);
+    void onTransitionTimeChange(float& value);
     
     //! Returns the number of total secenes
     int getNumberScenes();
